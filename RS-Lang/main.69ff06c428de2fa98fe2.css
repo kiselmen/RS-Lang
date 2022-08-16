@@ -1,0 +1,1 @@
+*{box-sizing:border-box;margin:0;padding:0}*::before,*::after{box-sizing:border-box}::-webkit-scrollbar{width:0}:root{--body-color: rgba(48,197,255,0.1);--text-color: white;--button-color: gray;--active-color: #4275D8;--border-color: black;--shadow-color: #30c5ff;--select-color: #5ad67d;--alert-color: red}body{height:100%;width:100%}
