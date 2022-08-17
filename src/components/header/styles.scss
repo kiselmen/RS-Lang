@@ -1,0 +1,22 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 5px 0 10px;
+    position: relative;
+  }
+  
+  .nav__item {
+    display: inline-block;
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    transition: transform 0.2s ease-in-out;
+    &--active {
+      transform: translateY(4px);
+    }
+    &:not(:first-child) {
+      margin: 0 10px;
+    }
+  }
+  
