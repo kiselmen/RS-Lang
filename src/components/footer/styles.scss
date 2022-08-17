@@ -1,0 +1,24 @@
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  font-size: 18px;
+  font-weight: 700;
+}
+.footer a {
+  text-decoration: none;
+  color: #000000;
+  transition: 0.5s ease;
+}
+.footer a:hover, .footer img:hover {
+  transition: 0.5s ease;
+  -webkit-filter: invert(16%) sepia(87%) saturate(4665%) hue-rotate(276deg) brightness(70%) contrast(122%);
+          filter: invert(16%) sepia(87%) saturate(4665%) hue-rotate(276deg) brightness(70%) contrast(122%);
+}
+.footer-left, .footer-right {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  -moz-column-gap: 15px;
+       column-gap: 15px;
+}
