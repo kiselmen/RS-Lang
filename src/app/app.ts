@@ -1,10 +1,19 @@
-export class App {
+import { Component } from "../utils/component";
+import { Router } from "../router/index";
+// import { Header } from "./components/header/header";
 
-  constructor(){
-    console.log();
+export class App {
+  private main;
+  private router;
+
+  constructor(private rootElement: HTMLElement) {
+    // const header = new Header(this.rootElement);
+    this.main = new Component(this.rootElement, "main", ["main"]);
+
+    this.router = new Router(this.main.element);
   }
 
-  render(){
-    console.log();
+  init(): void {
+    this.router.initRouter();
   }
 }
