@@ -1,4 +1,6 @@
-{
+{ "[shellscript]": {
+  "files.eol": "\r\n"
+  },
   "name": "online-store",
   "version": "1.0.0",
   "description": "",

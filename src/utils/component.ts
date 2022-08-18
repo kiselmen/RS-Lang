@@ -20,4 +20,3 @@ export class Component {
     this.element.remove();
   }
 }
-  
