@@ -4,6 +4,7 @@ import { About } from "../pages/about";
 import { Dictionary } from "../pages/dictionary";
 import { AudioCall } from "../pages/audiocall";
 import { Sprint } from "../pages/sprint";
+import { Login } from "../pages/login";
 
 export class Router {
   private readonly routes: Array<IRoute>;
@@ -14,6 +15,7 @@ export class Router {
   dictionaryPage: Component | undefined;
   audiocallPage: Component | undefined;
   sprintPage: Component | undefined;
+  loginPage: Component | undefined;
 
   constructor(private rootElement: HTMLElement) {
     this.aboutPage = new About(this.rootElement);
@@ -44,6 +46,13 @@ export class Router {
         component: () => {
           this.sprintPage = new Sprint(this.rootElement);
           this.rootElement.append(this.sprintPage.element);
+        },
+      },
+      {
+        name: "/login",
+        component: () => {
+          this.loginPage = new Login(this.rootElement);
+          this.rootElement.append(this.loginPage.element);
         },
       },
     ];

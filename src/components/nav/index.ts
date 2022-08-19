@@ -8,6 +8,7 @@ export class Nav extends Component {
   private linkToDictionary: Component;
   private linkToAudioCall: Component;
   private linkToSprint: Component;
+  private linkToLogin: Component;
   
   navItems: Component[] = [];
   
@@ -18,15 +19,17 @@ export class Nav extends Component {
     this.linkToDictionary = new Component(this.navBody.element, "a", ["nav-link"], "Dictionary");
     this.linkToAudioCall = new Component(this.navBody.element, "a", ["nav-link"], "Audio call");
     this.linkToSprint = new Component(this.navBody.element, "a", ["nav-link"], "Sprint");
+    this.linkToLogin = new Component(this.navBody.element, "a", ["nav-link"], "Login");
 
     this.linkToAbout.element.setAttribute("href", "#/");
     this.linkToDictionary.element.setAttribute("href", "#/dictionary");
     this.linkToAudioCall.element.setAttribute("href", "#/audiocall");
     this.linkToSprint.element.setAttribute("href", "#/sprint");
+    this.linkToLogin.element.setAttribute("href", "#/login");
 
     // this.element.addEventListener("click", (e: Event) => this.onNavClick(e));
 
-    this.navItems = [this.linkToAbout, this.linkToDictionary, this.linkToAudioCall, this.linkToSprint];
+    this.navItems = [this.linkToAbout, this.linkToDictionary, this.linkToAudioCall, this.linkToSprint, this.linkToLogin];
 
     window.addEventListener("hashchange", () => this.updateActive(this.navItems));
     window.addEventListener("load", () => this.updateActive(this.navItems));
