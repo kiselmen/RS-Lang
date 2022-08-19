@@ -3,7 +3,7 @@ import "./styles.scss";
 
 export class Nav extends Component {
 
-  private navBody: Component;  
+  navBody: Component;  
   private linkToAbout: Component;
   private linkToDictionary: Component;
   private linkToAudioCall: Component;

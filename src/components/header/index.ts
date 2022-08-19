@@ -23,7 +23,7 @@ export class Header extends Component {
 
   onNavClick = (e: Event) => {
     const target = e.target as HTMLElement;
-    if (target === this.nav.element) {
+    if (target === this.nav.element || target === this.nav.navBody.element) {
       this.burger.onBurgerClick();
       this.nav.onNavClose();
     }
