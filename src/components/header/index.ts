@@ -1,40 +1,44 @@
 import { Component } from "../../utils/component";
+import { Burger } from "../burger";
+import { Logo } from "../logo";
+import { Nav } from "../nav";
 import "./styles.scss";
 
 export class Header extends Component {
-  private navItems: Component[] = [];
-  private linkToAbout: Component;
-  private linkToDictionary: Component;
-  private linkToAudioCall: Component;
-  private linkToSprint: Component;
+  private logo: Logo;
+  private burger: Burger;
+  private nav: Nav;
   
   constructor(parentNode: HTMLElement) {
     super(parentNode, "div", ["header"]);
-  
-    this.linkToAbout = new Component(this.element, "a", ["nav__item"], "About");
-    this.linkToDictionary = new Component(this.element, "a", ["nav__item"], "Dictionary");
-    this.linkToAudioCall = new Component(this.element, "a", ["nav__item"], "Audio call");
-    this.linkToSprint = new Component(this.element, "a", ["nav__item"], "Sprint");
+    
+    this.logo = new Logo(this.element);
+    this.nav = new Nav(this.element);
+    this.burger = new Burger(this.element);
 
-    this.linkToAbout.element.setAttribute("href", "#/");
-    this.linkToDictionary.element.setAttribute("href", "#/dictionary");
-    this.linkToAudioCall.element.setAttribute("href", "#/audiocall");
-    this.linkToSprint.element.setAttribute("href", "#/sprint");
-  
-    this.navItems = [this.linkToAbout, this.linkToDictionary, this.linkToAudioCall, this.linkToSprint];
-
-    window.addEventListener("hashchange", () => this.updateActive(this.navItems));
-    window.addEventListener("load", () => this.updateActive(this.navItems));
+    this.nav.element.addEventListener("click", (e) => this.onNavClick(e));
+    this.burger.element.addEventListener("click", () => this.onBurgerClick());
+    this.nav.navItems.map(item => item.element.addEventListener("click", (e: Event) => this.onLinkClick(e)));
   }
 
-  private updateActive(navItems: Component[]): void {
-    this.navItems = navItems.map((item) => {
-      item.element.classList.remove("nav__item--active");
-      if (item.element.getAttribute("href") === window.location.hash) {
-        item.element.classList.add("nav__item--active");
-      }
+  onNavClick = (e: Event) => {
+    const target = e.target as HTMLElement;
+    if (target === this.nav.element) {
+      this.burger.onBurgerClick();
+      this.nav.onNavClose();
+    }
+  };
 
-      return item;
-    });
-  }
+  onBurgerClick = () => {
+    this.burger.onBurgerClick();
+    this.nav.onNavToggle();
+  };
+
+  onLinkClick = (e: Event) => {
+    this.burger.onBurgerClose();
+    this.nav.onNavClose();
+    const target = e.target as HTMLElement;
+    console.log(target);
+    
+  };
 }
