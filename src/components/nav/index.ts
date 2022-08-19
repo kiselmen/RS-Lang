@@ -13,7 +13,7 @@ export class Nav extends Component {
   navItems: Component[] = [];
   
   constructor(parentNode: HTMLElement) {
-    super(parentNode, "nav", ["nav", "close"], "");
+    super(parentNode, "nav", ["nav"], "");
     this.navBody = new Component(this.element, "div", ["nav-body"]);
     this.linkToAbout = new Component(this.navBody.element, "a", ["nav-link"], "About");
     this.linkToDictionary = new Component(this.navBody.element, "a", ["nav-link"], "Dictionary");
@@ -53,7 +53,11 @@ export class Nav extends Component {
   };
 
   onNavToggle: () => void = () => {
-    this.element.classList.toggle("open");
-    this.element.classList.toggle("close");
+    if (this.element.classList.contains("open") || this.element.classList.contains("close")) {
+      this.element.classList.toggle("open");
+      this.element.classList.toggle("close");
+    } else {
+      this.element.classList.add("open");
+    }
   };
 }

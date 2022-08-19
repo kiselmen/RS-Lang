@@ -5,6 +5,5 @@ export class LoginForm extends Component {
 
   constructor(parentNode: HTMLElement) {
     super(parentNode, "div", ["login"], "");
-    
   }
 }
