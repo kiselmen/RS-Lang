@@ -1,6 +1,7 @@
 .sprint {
   height: calc(100vh - 83px);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
@@ -12,11 +13,11 @@
   align-items: center;
   max-width: 650px;
   min-height: 350px;
-  background: rgb(238, 117, 117);
+  background: rgb(255 237 119);
   border-radius: 40px;
   padding: 30px;
   font-size: 30px;
-  box-shadow: 0px 0px 10px 10px rgb(255 208 208);
+  box-shadow: 0px 0px 10px 10px rgb(241 238 215);
 }
 .sprintIntro-card__content {
   font-size: 1.4rem;
@@ -42,4 +43,63 @@
   border: 2px solid gold;
   border-radius: 15px;
   cursor: pointer;
+}
+
+/***** Sprint Game *****/
+
+.sprint-game__wrap {
+  background: url("../../public/sprint-images/sprint-bg.jpg") no-repeat center;
+  background-size: 600px 450px;
+  width: 600px;
+  height: 450px;
+  border-radius: 40px;
+  position: relative;
+}
+.sprintControlsBtns-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  -moz-column-gap: 20px;
+       column-gap: 20px;
+  position: absolute;
+  top: -50px;
+  left: -50px;
+}
+.toSprintIntroPage-btn {
+  justify-self: flex-end;
+  width: 30px;
+  height: 30px;
+  background: url(../../public/sprint-images/close-page-X.svg) no-repeat top;
+  background-size: 30px 30px;
+}
+.sprintSoundToggle-btn {
+  width: 30px;
+  height: 30px;
+  background: url(../../public/sprint-images/sound-off.svg) no-repeat top;
+  background-size: 30px 30px;
+}
+.sprintSoundToggle-btn.active {
+  background: url(../../public/sprint-images/sound-on.svg) no-repeat top;
+}
+.sprintToFullScreen-btn {
+  width: 30px;
+  height: 30px;
+  background: url(../../public/sprint-images/full-screen.svg) no-repeat top;
+  background-size: 30px 30px;
+}
+.sprintCounters-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sprint-timer, .sprint-points {
+   width: 70px;
+   height: 70px;
+   border: 2px solid #ff9f00;
+   border-radius: 50%;
+   background-color: #ffff;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 2.5em;
 }

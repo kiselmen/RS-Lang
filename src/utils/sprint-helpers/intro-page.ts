@@ -1,6 +1,6 @@
 import {Component} from "../component";
 
-class SprintIntroCard extends Component{
+class SprintIntro extends Component{
 
   private cardTitle;
   private cardTextContent;
@@ -25,6 +25,13 @@ class SprintIntroCard extends Component{
     this.cardBtn4 = new Component(this.cardBtnsContainer.element, "button", ["sprintIntro-card__Btn", "btn-4"], "4");
     this.cardBtn5 = new Component(this.cardBtnsContainer.element, "button", ["sprintIntro-card__Btn", "btn-5"], "5");
     this.cardBtn6 = new Component(this.cardBtnsContainer.element, "button", ["sprintIntro-card__Btn", "btn-6"], "6");
+
+    this.cardBtn1.element.style.background = "#FA8072";
+    this.cardBtn2.element.style.background = "#00FFFF";
+    this.cardBtn3.element.style.background = "#DC143C";
+    this.cardBtn4.element.style.background = "#FF00FF";
+    this.cardBtn5.element.style.background = "#FF4500";
+    this.cardBtn6.element.style.background = "#FFA500";
   }
 
   private startSprint() {
@@ -33,4 +40,4 @@ class SprintIntroCard extends Component{
 
 }
 
-export default SprintIntroCard;
+export default SprintIntro;
