@@ -53,7 +53,7 @@ export class Router {
       {
         name: "/login",
         component: () => {
-          this.loginPage = new Login(this.rootElement, () => this.updateRouter());
+          this.loginPage = new Login(this.rootElement, () => this.initRouter());
           this.rootElement.append(this.loginPage.element);
           // this.loginPage.onUpdateRouter = () => this.updateRouter();
         },
@@ -76,6 +76,8 @@ export class Router {
   }
 
   updateRouter(): void {
+    console.log("Router");
+    
     this.rootElement.innerHTML = "";
     const currentRouteName = window.location.hash.slice(1);
     const currentRoute = this.routes.find(
@@ -90,6 +92,7 @@ export class Router {
       window.location.hash = "#/";
     }
 
+    window.onpopstate = () => this.updateRouter();
     this.updateRouter();
   }
 }

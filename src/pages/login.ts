@@ -5,13 +5,11 @@ import { elementData } from "../interfaces";
 
 const EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
 
-export type eventCallBack = (e: Event) => void;
-
 export class Login extends Component{
   loginForm : LoginForm;
   onUpdateRouter: (e: Event) => void = (e) => e;
 
-  constructor(parentNode: HTMLElement, updateRouter : (e: Event) => void) {
+  constructor(parentNode: HTMLElement, updateRouter: (e: Event) => void) {
     super(parentNode, "div", ["container"], "");
     this.onUpdateRouter = (e) => updateRouter(e);
 
