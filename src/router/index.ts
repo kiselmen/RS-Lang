@@ -79,9 +79,9 @@ export class Router {
     }
 
     this.defaultRoute = {
-      name: "Default router",
+      name: "/",
       component: () => {
-        this.rootElement.innerHTML = "Default Page";
+        this.rootElement.append(this.aboutPage.element);
       },
     };
   }
@@ -94,6 +94,8 @@ export class Router {
     const currentRoute = this.routes.find(
       (page) => page.name === currentRouteName,
     );
+    
+    window.location.hash = (currentRoute || this.defaultRoute).name;
 
     (currentRoute || this.defaultRoute).component();
   }
