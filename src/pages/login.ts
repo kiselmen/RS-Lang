@@ -50,10 +50,7 @@ export class Login extends Component{
       const userData = this.onDataConstruct(eMailElement, passElement);
       
       const response = await this.onRegisterUser(userData);
-      // console.log(response);
-      // 6300d094b6e08c4e204166b5
       if (response.status !== 200) {
-        // console.log("Error ---", response);
         eMailElement.value = "";
         eMailElement.placeholder = "This email is in use by another user";
       } else {

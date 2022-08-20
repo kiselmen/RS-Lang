@@ -6,10 +6,14 @@ import { AudioCall } from "../pages/audiocall";
 import { Sprint } from "../pages/sprint";
 import { Login } from "../pages/login";
 import { Profile } from "../pages/profile";
+// import { Header } from "../components/header";
 
 export class Router {
-  private readonly routes: Array<IRoute>;
+  private routes: Array<IRoute>;
+  private readonly allRoutes: Array<IRoute>;
   private defaultRoute: IRoute;
+
+  onInitNavSignUser: () => void;
 
   // Pages
   aboutPage: Component;
@@ -19,9 +23,9 @@ export class Router {
   loginPage: Component | undefined;
   profilePage: Component | undefined;
 
-  constructor(private rootElement: HTMLElement) {
+  constructor(private rootElement: HTMLElement, onInitNav: () => void ) {
     this.aboutPage = new About(this.rootElement);
-
+    this.onInitNavSignUser = () => onInitNav();
     this.routes = [
       {
         name: "/",
@@ -53,9 +57,8 @@ export class Router {
       {
         name: "/login",
         component: () => {
-          this.loginPage = new Login(this.rootElement, () => this.initRouter());
+          this.loginPage = new Login(this.rootElement, () => this.onSignOnUser("/login", "/profile"));
           this.rootElement.append(this.loginPage.element);
-          // this.loginPage.onUpdateRouter = () => this.updateRouter();
         },
       },
       {
@@ -66,6 +69,14 @@ export class Router {
         },
       },
     ];
+
+    this.allRoutes = [...this.routes];
+
+    if (localStorage.getItem("token")) {
+      this.routes = this.routes.filter( item => item.name !== "/login");
+    } else {
+      this.routes = this.routes.filter( item => item.name !== "/profile");
+    }
 
     this.defaultRoute = {
       name: "Default router",
@@ -94,5 +105,16 @@ export class Router {
 
     window.onpopstate = () => this.updateRouter();
     this.updateRouter();
+  }
+
+  onSignOnUser(removeRoute: string, addRoute: string): void {
+    if (localStorage.getItem("token")) {
+      this.routes = this.allRoutes.filter( item => item.name !== removeRoute);
+    } else {
+      const route = this.allRoutes.filter( item => item.name === addRoute);
+      this.routes = [...this.routes, ...route];
+    }
+    this.initRouter();
+    this.onInitNavSignUser();
   }
 }

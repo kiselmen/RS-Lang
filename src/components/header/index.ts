@@ -7,7 +7,7 @@ import "./styles.scss";
 export class Header extends Component {
   private logo: Logo;
   private burger: Burger;
-  private nav: Nav;
+  nav: Nav;
   
   constructor(parentNode: HTMLElement) {
     super(parentNode, "div", ["header"]);
@@ -18,7 +18,7 @@ export class Header extends Component {
 
     this.nav.element.addEventListener("click", (e) => this.onNavClick(e));
     this.burger.element.addEventListener("click", () => this.onBurgerClick());
-    this.nav.navItems.map(item => item.element.addEventListener("click", (e: Event) => this.onLinkClick(e)));
+    this.nav.navItems.map(item => item.element.addEventListener("click", () => this.onLinkClick()));
   }
 
   onNavClick = (e: Event) => {
@@ -34,8 +34,7 @@ export class Header extends Component {
     this.nav.onNavToggle();
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  onLinkClick = (e: Event) => {
+  onLinkClick = () => {
     this.burger.onBurgerClose();
     this.nav.onNavClose();
   };
