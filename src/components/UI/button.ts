@@ -2,8 +2,7 @@ import "./button.scss";
 import { Component } from "../../utils/component";
 
 export class UIButton extends Component {
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onClickButton: () => void = () => {};
+  onClickButton: (e: Event) => void = (e) => e;
 
   constructor(
     parentNode: HTMLElement,
@@ -14,7 +13,7 @@ export class UIButton extends Component {
     super(parentNode, "button", ["btn"], content);
 
     this.element.classList.add(...styles);
-    this.element.addEventListener("click", () => this.onClickButton());
+    this.element.addEventListener("click", (e) => this.onClickButton(e));
 
     if (disabled) {
       this.setDisabled(true);
