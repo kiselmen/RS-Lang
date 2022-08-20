@@ -24,6 +24,7 @@ class SprintGamePage extends Component{
 
   constructor(parentNode: HTMLElement) {
     super(parentNode, "div", ["sprint-game__wrap"]);
+    this.element.style.display = "none";
 
     this.gamePageControlsBtnsContainer = new Component(this.element, "div", ["sprintControlsBtns-container"]);
     this.soundToggleBtn = new Component(this.gamePageControlsBtnsContainer.element, "div", ["sprintSoundToggle-btn"]);
