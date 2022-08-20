@@ -48,12 +48,16 @@
 /***** Sprint Game *****/
 
 .sprint-game__wrap {
-  background: url("../../public/sprint-images/sprint-bg.jpg") no-repeat center;
+  // background: url("../../public/sprint-images/sprint-bg.jpg") no-repeat center;
+  background-color: rgb(255 246 186);
   background-size: 600px 450px;
   width: 600px;
   height: 450px;
   border-radius: 40px;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  color: #6a4747;
 }
 .sprintControlsBtns-container {
   display: flex;
@@ -102,4 +106,96 @@
    align-items: center;
    justify-content: center;
    font-size: 2.5em;
+}
+.sprintGameCardSignals-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  -moz-column-gap: 30px;
+       column-gap: 30px;
+  margin-top: -50px;
+}
+.sprintGameCardSignal {
+  width: 50px;
+  height: 50px;
+}
+.signal-lamp {
+  fill: #ff9f00;
+}
+.signal-lamp.activate {
+  fill: rgb(255 0 0);
+}
+.sprintPronounceWord-btn {
+  margin-top: 30px;
+  width: 30px;
+  height: 30px;
+  align-self: center;
+  fill: aqua;
+}
+.sprintWordInEng-container, .sprintWordInRu-container {
+  align-self: center;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: #6a4747;
+}
+.sprintWordInRu-container {
+  margin-top: 0;
+}
+.sprintWordInRu {
+  margin-top: 30px;
+  font-size: 30px;
+}
+.sprintAnswersBtns-container {
+  align-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 100px;
+  -moz-column-gap: 60px;
+       column-gap: 60px;
+}
+.sprintAnswerFalse-btn, .sprintAnswerTrue-btn {
+  width: 170px;
+  height: 40px;
+  font-size: 24px;
+  background: #fee249;
+  border-radius: 10px;
+  border: 2px solid #e4c102;
+  color: #6a4747;
+  position: relative;
+  padding: 0 10px;
+}
+.sprintAnswerFalse-btn {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.sprintAnswerTrue-btn {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.sprintAnswerFalse-btn::before {
+  content: "";
+  position: absolute;
+  top: 7.5px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background: url(../../public/sprint-images/left-arrow.svg);
+}
+.sprintAnswerTrue-btn::before {
+  content: "";
+  position: absolute;
+  top: 7.5px;
+  right: 2px;
+  width: 20px;
+  height: 20px;
+  background: url(../../public/sprint-images/right-arrow.svg);
 }
