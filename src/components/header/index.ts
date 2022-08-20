@@ -34,11 +34,9 @@ export class Header extends Component {
     this.nav.onNavToggle();
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onLinkClick = (e: Event) => {
     this.burger.onBurgerClose();
     this.nav.onNavClose();
-    const target = e.target as HTMLElement;
-    console.log(target);
-    
   };
 }

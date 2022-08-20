@@ -5,11 +5,16 @@ import { elementData } from "../interfaces";
 
 const EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
 
+export type eventCallBack = (e: Event) => void;
+
 export class Login extends Component{
   loginForm : LoginForm;
+  onUpdateRouter: (e: Event) => void = (e) => e;
 
-  constructor(parentNode: HTMLElement) {
+  constructor(parentNode: HTMLElement, updateRouter : (e: Event) => void) {
     super(parentNode, "div", ["container"], "");
+    this.onUpdateRouter = (e) => updateRouter(e);
+
     this.loginForm = new LoginForm(this.element);
 
     this.loginForm.buttonLogin.onClickButton = async (e: Event) => this.onLogin(e);
@@ -31,6 +36,8 @@ export class Login extends Component{
         passElement.placeholder = "Wrong password or EMail";
       } else {
         localStorage.setItem("token", response.data.token);
+        window.location.hash = "#/profile";
+        this.onUpdateRouter(e);
       }
     }  
   };

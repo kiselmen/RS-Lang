@@ -5,6 +5,7 @@ import { Dictionary } from "../pages/dictionary";
 import { AudioCall } from "../pages/audiocall";
 import { Sprint } from "../pages/sprint";
 import { Login } from "../pages/login";
+import { Profile } from "../pages/profile";
 
 export class Router {
   private readonly routes: Array<IRoute>;
@@ -16,6 +17,7 @@ export class Router {
   audiocallPage: Component | undefined;
   sprintPage: Component | undefined;
   loginPage: Component | undefined;
+  profilePage: Component | undefined;
 
   constructor(private rootElement: HTMLElement) {
     this.aboutPage = new About(this.rootElement);
@@ -51,8 +53,16 @@ export class Router {
       {
         name: "/login",
         component: () => {
-          this.loginPage = new Login(this.rootElement);
+          this.loginPage = new Login(this.rootElement, () => this.updateRouter());
           this.rootElement.append(this.loginPage.element);
+          // this.loginPage.onUpdateRouter = () => this.updateRouter();
+        },
+      },
+      {
+        name: "/profile",
+        component: () => {
+          this.profilePage = new Profile(this.rootElement);
+          this.rootElement.append(this.profilePage.element);
         },
       },
     ];
@@ -80,7 +90,6 @@ export class Router {
       window.location.hash = "#/";
     }
 
-    window.onpopstate = () => this.updateRouter();
     this.updateRouter();
   }
 }
