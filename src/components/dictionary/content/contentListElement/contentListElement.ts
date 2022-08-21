@@ -36,10 +36,10 @@ export class DictionaryContentElement extends Component {
     this.elementEngExample = new Component(this.elementExample.element, "p", ["example-en"],);
     this.elementRusExample = new Component(this.elementExample.element, "p", ["example-rus"], `Человек не должен водить машину после того, как он выпил алкоголь`);
     this.elementBtns = new Component(this.elementDiscription.element, "div", ["element-btns"],);
-    this.elementBtnListen = new Component(this.elementBtns.element, "button", ["element-btn", "btn"], "Listen");
-    this.elementBtnAdd = new Component(this.elementBtns.element, "button", ["element-btn", "btn"], "Hard");
-    this.elementBtnRemove = new Component(this.elementBtns.element, "button", ["element-btn", "btn"], "Remove");
-    this.elementBtnStudied = new Component(this.elementBtns.element, "button", ["element-btn", "btn"], "Studied");
+    this.elementBtnListen = new Component(this.elementBtns.element, "button", ["element-btn", "btn-dictionary"], "Listen");
+    this.elementBtnAdd = new Component(this.elementBtns.element, "button", ["element-btn", "btn-dictionary"], "Hard");
+    this.elementBtnRemove = new Component(this.elementBtns.element, "button", ["element-btn", "btn-dictionary"], "Remove");
+    this.elementBtnStudied = new Component(this.elementBtns.element, "button", ["element-btn", "btn-dictionary"], "Studied");
     this.elementBtnImg = new Component(this.elementBtnListen.element, "img", ["element-btn__img"],);
 
     this.elementEngExplain.element.innerHTML = `<i>Alcohol</i> is a type of drink that can make people drunk.`;

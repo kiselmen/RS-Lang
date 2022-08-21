@@ -8,7 +8,8 @@ export class Nav extends Component {
   private linkToDictionary: Component;
   private linkToAudioCall: Component;
   private linkToSprint: Component;
-  private linkToLogin: Component;
+  private linkToLogin: Component | null;
+  private linkToProfile: Component | null;
   
   navItems: Component[] = [];
   
@@ -19,17 +20,18 @@ export class Nav extends Component {
     this.linkToDictionary = new Component(this.navBody.element, "a", ["nav-link"], "Dictionary");
     this.linkToAudioCall = new Component(this.navBody.element, "a", ["nav-link"], "Audio call");
     this.linkToSprint = new Component(this.navBody.element, "a", ["nav-link"], "Sprint");
-    this.linkToLogin = new Component(this.navBody.element, "a", ["nav-link"], "Login");
+    this.linkToLogin = null;
+    this.linkToProfile = null;
 
     this.linkToAbout.element.setAttribute("href", "#/");
     this.linkToDictionary.element.setAttribute("href", "#/dictionary");
     this.linkToAudioCall.element.setAttribute("href", "#/audiocall");
     this.linkToSprint.element.setAttribute("href", "#/sprint");
-    this.linkToLogin.element.setAttribute("href", "#/login");
 
     // this.element.addEventListener("click", (e: Event) => this.onNavClick(e));
+    this.onInitNavSignUser();
 
-    this.navItems = [this.linkToAbout, this.linkToDictionary, this.linkToAudioCall, this.linkToSprint, this.linkToLogin];
+    // this.navItems = [this.linkToAbout, this.linkToDictionary, this.linkToAudioCall, this.linkToSprint, this.linkToLogin, this.linkToProfile];
 
     window.addEventListener("hashchange", () => this.updateActive(this.navItems));
     window.addEventListener("load", () => this.updateActive(this.navItems));
@@ -58,6 +60,28 @@ export class Nav extends Component {
       this.element.classList.toggle("close");
     } else {
       this.element.classList.add("open");
+    }
+  };
+
+  onInitNavSignUser: () => void = () => {
+    console.log("!!!!!!!!!!");
+    
+    if (localStorage.getItem("token")) {
+      this.linkToProfile = new Component(this.navBody.element, "a", ["nav-link"], "Profile");
+      this.linkToProfile.element.setAttribute("href", "#/profile");
+      if (this.linkToLogin) {
+        this.linkToLogin.element.remove();
+        this.linkToLogin = null;
+      }
+      this.navItems = [this.linkToAbout, this.linkToDictionary, this.linkToAudioCall, this.linkToSprint, this.linkToProfile];
+    } else {
+      this.linkToLogin = new Component(this.navBody.element, "a", ["nav-link"], "Login");
+      this.linkToLogin.element.setAttribute("href", "#/login");
+      if (this.linkToProfile) {
+        this.linkToProfile.element.remove();
+        this.linkToProfile = null;
+      }
+      this.navItems = [this.linkToAbout, this.linkToDictionary, this.linkToAudioCall, this.linkToSprint, this.linkToLogin,];
     }
   };
 }

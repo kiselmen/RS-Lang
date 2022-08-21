@@ -3,4 +3,7 @@ export interface IRoute {
   component: () => void;
 }
   
+export type elementData = {
+  [key: string] : string 
+}
   

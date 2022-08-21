@@ -12,8 +12,8 @@ export class Games extends Component {
 
     this.dictionaryHeading = new Component(this.element, "h2", ["dictionary-heading"], "Play the game:");
     this.dictionaryGames = new Component(this.element, "div", ["dictionary-games", "games"]);
-    this.dictionaryGamesAudio = new Component(this.dictionaryGames.element, "a", ["dictionary-games__audio", "game", "btn"], "Audio call");
-    this.dictionaryGamesSprint = new Component(this.dictionaryGames.element, "a", ["dictionary-games__sprint", "game", "btn"], "Sprint");
+    this.dictionaryGamesAudio = new Component(this.dictionaryGames.element, "a", ["dictionary-games__audio", "game", "btn-dictionary"], "Audio call");
+    this.dictionaryGamesSprint = new Component(this.dictionaryGames.element, "a", ["dictionary-games__sprint", "game", "btn-dictionary"], "Sprint");
     this.dictionaryGamesAudio.element.setAttribute("href", "#/audiocall");
     this.dictionaryGamesSprint.element.setAttribute("href", "#/sprint");
   }
