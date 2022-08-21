@@ -1,3 +1,6 @@
+h3 {
+  font-size: 2rem;
+}
 .sprint {
   height: calc(100vh - 83px);
   display: flex;
@@ -198,4 +201,53 @@
   width: 20px;
   height: 20px;
   background: url(../../public/sprint-images/right-arrow.svg);
+}
+
+/***** Sprint Game Results *****/
+
+.sprint-resultsPage__container {
+  min-width: 500px;
+  background: rgb(255 246 186);
+  text-align: center;
+  padding: 30px 20px;
+  border-radius: 30px;
+}
+.sprint-results__container {
+  margin-top: 30px;
+  border: 2px solid #dd8e8e;
+  border-radius: 30px;
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+  flex-direction: column;
+  padding: 20px;
+  gap: 10px;
+  max-height: 65vh;
+  min-height: 400px;
+  overflow-y: scroll;
+}
+.sprint-result__wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 15px;
+  font-size: 16px;
+}
+.sprintReultSound-btn {
+  width: 30px;
+  height: 30px;
+  background: url(../../public/sprint-images/speaker-inSprint-result.svg) no-repeat top;
+  background-size: 30px 30px;
+}
+.sprintResultWordCheckingResult-img.true {
+  width: 30px;
+  height: 30px;
+  background: url(../../public/sprint-images/true-check.svg) no-repeat top;
+  background-size: 30px 30px;
+}
+.sprintResultWordCheckingResult-img.false {
+  width: 30px;
+  height: 30px;
+  background: url(../../public/sprint-images/false-check.svg) no-repeat top;
+  background-size: 30px 30px;
 }

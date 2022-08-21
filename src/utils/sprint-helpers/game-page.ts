@@ -1,6 +1,6 @@
 import {Component} from "../component";
 
-class SprintGamePage extends Component{
+class SprintGamePage extends Component {
   gamePageControlsBtnsContainer;
   toSprintIntroPageBtn;
   soundToggleBtn;

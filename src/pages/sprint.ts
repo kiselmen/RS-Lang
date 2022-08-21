@@ -1,18 +1,21 @@
 import { Component } from "../utils/component";
 import SprintIntro from "../utils/sprint-helpers/intro-page";
 import SprintGamePage from "../utils/sprint-helpers/game-page";
+import {SprintResultesPage} from "../utils/sprint-helpers/sprint-results-page";
 
 import "../pages/sprint.scss";
 
 export class Sprint extends Component {
   private sprintIntroCard;
   private sprintGamePage;
+  private sprintResultsPage;
 
   constructor(parentNode: HTMLElement) {
     super(parentNode, "div", ["sprint"]);
 
     this.sprintIntroCard = new SprintIntro(this.element);
     this.sprintGamePage = new SprintGamePage(this.element);
+    this.sprintResultsPage = new SprintResultesPage(this.element);
 
     //** Sprint intro page **//
 
@@ -36,7 +39,7 @@ export class Sprint extends Component {
       if(typeof rfs!="undefined" && rfs){
         rfs.call(el);
       }
-      if(document.fullscreen) {
+      if(document.fullscreenElement !== null) {
         document.exitFullscreen();
       }
     });
