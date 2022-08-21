@@ -1,0 +1,45 @@
+.chapters {
+  width: rem(220);
+  border: rem(2) solid var(--shadow-color);
+  padding: rem(3.2) rem(16) rem(3.2) rem(3.2);
+  position: relative;
+  cursor: pointer;
+  &-list {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: calc(100% + rem(2));
+    background: var(--active-color) 100%;
+    z-index: 2;
+    border: 1px solid var(--active-color);
+    display: none;
+    & li {
+      padding: rem(3.2);
+      border-bottom: rem(1) solid var(--chapter-itm-border-color);
+      cursor: pointer;
+      &:hover {
+        background: var(--text-color);
+      }
+      &:last-child {
+        border: none;
+      }
+      &.active {
+        background: var(--text-color);
+        position: relative;
+        &::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          right: rem(5);
+          bottom: 0;
+          width: rem(5);
+          display: block;
+          background: url(../../../../public/dot.svg) no-repeat 50% 50%;
+        }
+      }
+    }
+    &.open {
+      display: block;
+    }
+  }
+}
