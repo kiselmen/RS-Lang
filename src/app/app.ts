@@ -13,7 +13,7 @@ export class App {
     this.header = new Header(this.rootElement);
     this.main = new Component(this.rootElement, "main", ["main"]);
 
-    this.router = new Router(this.main.element);
+    this.router = new Router(this.main.element, () => this.header.nav.onInitNavSignUser());
     this.footer = new Footer(this.rootElement);
   }
 

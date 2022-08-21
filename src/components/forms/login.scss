@@ -1,0 +1,22 @@
+.form{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+    border: 2px solid var(--border-color);
+    &-item{
+      margin: 5px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+}
+
+.item{
+  &-label{
+    margin-right: 20px;
+  }  
+}
