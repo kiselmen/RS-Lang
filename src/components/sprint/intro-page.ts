@@ -1,6 +1,6 @@
-import {Component} from "../component";
+import {Component} from "../../utils/component";
 
-class SprintIntro extends Component{
+class SprintIntro extends Component {
 
   private cardTitle;
   private cardTextContent;

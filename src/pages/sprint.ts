@@ -1,7 +1,7 @@
 import { Component } from "../utils/component";
-import SprintIntro from "../utils/sprint-helpers/intro-page";
-import SprintGamePage from "../utils/sprint-helpers/game-page";
-import {SprintResultesPage} from "../utils/sprint-helpers/sprint-results-page";
+import SprintIntro from "../components/sprint/intro-page";
+import SprintGamePage from "../components/sprint/game-page";
+import {SprintResultesPage} from "../components/sprint/sprint-results-page";
 
 import "../pages/sprint.scss";
 

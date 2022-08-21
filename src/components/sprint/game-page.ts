@@ -1,4 +1,4 @@
-import {Component} from "../component";
+import {Component} from "../../utils/component";
 
 class SprintGamePage extends Component {
   gamePageControlsBtnsContainer;
