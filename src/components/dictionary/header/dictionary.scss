@@ -1,0 +1,53 @@
+@import "../../../styles/functions.scss";
+@import "./chapters/chapters.scss";
+@import "./games/games.scss";
+@import "../content/contentListElement/contentListElement.scss";
+
+.dictionary {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: rem(100) rem(10) rem(30) rem(10);
+  &-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    column-gap: rem(60);
+    padding-bottom: rem(20);
+  }
+  &-separator {
+    padding: rem(0) rem(30);
+    font-size: rem(18);
+  }
+  &-heading {
+    font-size: rem(18);
+    font-weight: 700;
+    padding: rem(10) rem(5);
+    text-align: center;
+  }
+  &-chapter__name {
+    &::after {
+      content: "";
+      position: absolute;
+      width: rem(9.6);
+      height: rem(9.6);
+      right: rem(4);
+      top: calc(50% - rem(4));
+      background: url(../../../../public/downarrow.svg) no-repeat;
+    }
+  }
+  &-content {
+    padding: rem(20) rem(0);
+    border-top: 1px solid rgba(128, 128, 128, 0.253);
+  }
+  &-pagination {
+    display: flex;
+    justify-content: center;
+    column-gap: rem(30);
+  }
+  &-wrapper__games {
+    max-width: rem(200);
+    width: 100%;
+  }
+}
