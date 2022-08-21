@@ -39,23 +39,7 @@ export class Sprint extends Component {
       if(document.fullscreen) {
         document.exitFullscreen();
       }
-
-
-
-      // this.cancelFullScreen() {
-      //   const el = document;
-      //   const requestMethod = el.cancelFullScreen
-      //   if (requestMethod) { // cancel full screen.
-      //     requestMethod.call(el);
-      //   } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
-      //     const wscript = new ActiveXObject("WScript.Shell");
-      //     if (wscript !== null) {
-      //       wscript.SendKeys("{F11}");
-      //     }
-      //   }
-      // }
     });
-
 
     this.sprintGamePage.toSprintIntroPageBtn.element.addEventListener("click", () => {
       this.sprintIntroCard.element.style.display = "flex";
