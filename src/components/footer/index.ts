@@ -27,7 +27,10 @@ export class Footer extends Component {
     this.schoolLink.element.setAttribute("href", "https://rs.school/");
     this.schoolLinkImg.element.setAttribute("src", "./public/rs-logo.svg");
     this.firstTeamMemberLink.element.setAttribute("href", "https://github.com/kiselmen");
+    this.firstTeamMemberLink.element.setAttribute("target", "_blank");
     this.secondTeamMemberLink.element.setAttribute("href", "https://github.com/maxomeleneckii");
+    this.secondTeamMemberLink.element.setAttribute("target", "_blank");
     this.thirdTeamMemberLink.element.setAttribute("href", "https://github.com/pitbrest");
+    this.thirdTeamMemberLink.element.setAttribute("target", "_blank");
   }
 }

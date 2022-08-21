@@ -1,0 +1,253 @@
+h3 {
+  font-size: 2rem;
+}
+.sprint {
+  height: calc(100vh - 83px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.sprintIntro-card__wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  row-gap: 20px;
+  align-items: center;
+  max-width: 650px;
+  min-height: 350px;
+  background: rgb(255 246 186);
+  border-radius: 40px;
+  padding: 30px;
+  font-size: 30px;
+  box-shadow: 0px 0px 10px 10px rgb(241 238 215);
+}
+.sprintIntro-card__content {
+  font-size: 1.4rem;
+  text-align: center;
+  margin-bottom: 40px;
+}
+.sprintIntro-card__Btns {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  -moz-column-gap: 15px;
+       column-gap: 15px;
+}
+.sprintIntro-card__Btn {
+  height: 35px;
+  min-width: 35px;
+  padding: 20px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(255, 24, 24);
+  font-size: 25px;
+  border: 2px solid gold;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+/***** Sprint Game *****/
+
+.sprint-game__wrap {
+  // background: url("../../public/sprint-images/sprint-bg.jpg") no-repeat center;
+  background-color: rgb(255 246 186);
+  background-size: 600px 450px;
+  width: 600px;
+  height: 450px;
+  border-radius: 40px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  color: #6a4747;
+}
+.sprintControlsBtns-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  -moz-column-gap: 20px;
+       column-gap: 20px;
+  position: absolute;
+  top: -50px;
+  left: -50px;
+}
+.toSprintIntroPage-btn {
+  justify-self: flex-end;
+  width: 30px;
+  height: 30px;
+  background: url(../../public/sprint-images/close-page-X.svg) no-repeat top;
+  background-size: 30px 30px;
+}
+.sprintSoundToggle-btn {
+  width: 30px;
+  height: 30px;
+  background: url(../../public/sprint-images/sound-off.svg) no-repeat top;
+  background-size: 30px 30px;
+}
+.sprintSoundToggle-btn.active {
+  background: url(../../public/sprint-images/sound-on.svg) no-repeat top;
+}
+.sprintToFullScreen-btn {
+  width: 30px;
+  height: 30px;
+  background: url(../../public/sprint-images/full-screen.svg) no-repeat top;
+  background-size: 30px 30px;
+}
+.sprintCounters-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sprint-timer, .sprint-points {
+   width: 70px;
+   height: 70px;
+   border: 2px solid #ff9f00;
+   border-radius: 50%;
+   background-color: #ffff;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 2.5em;
+}
+.sprintGameCardSignals-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  -moz-column-gap: 30px;
+       column-gap: 30px;
+  margin-top: -50px;
+}
+.sprintGameCardSignal {
+  width: 50px;
+  height: 50px;
+}
+.signal-lamp {
+  fill: #ff9f00;
+}
+.signal-lamp.activate {
+  fill: rgb(255 0 0);
+}
+.sprintPronounceWord-btn {
+  margin-top: 30px;
+  width: 30px;
+  height: 30px;
+  align-self: center;
+  fill: aqua;
+}
+.sprintWordInEng-container, .sprintWordInRu-container {
+  align-self: center;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: #6a4747;
+}
+.sprintWordInRu-container {
+  margin-top: 0;
+}
+.sprintWordInRu {
+  margin-top: 30px;
+  font-size: 30px;
+}
+.sprintAnswersBtns-container {
+  align-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 100px;
+  -moz-column-gap: 60px;
+       column-gap: 60px;
+}
+.sprintAnswerFalse-btn, .sprintAnswerTrue-btn {
+  width: 170px;
+  height: 40px;
+  font-size: 24px;
+  background: #fee249;
+  border-radius: 10px;
+  border: 2px solid #e4c102;
+  color: #6a4747;
+  position: relative;
+  padding: 0 10px;
+}
+.sprintAnswerFalse-btn {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.sprintAnswerTrue-btn {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.sprintAnswerFalse-btn::before {
+  content: "";
+  position: absolute;
+  top: 7.5px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background: url(../../public/sprint-images/left-arrow.svg);
+}
+.sprintAnswerTrue-btn::before {
+  content: "";
+  position: absolute;
+  top: 7.5px;
+  right: 2px;
+  width: 20px;
+  height: 20px;
+  background: url(../../public/sprint-images/right-arrow.svg);
+}
+
+/***** Sprint Game Results *****/
+
+.sprint-resultsPage__container {
+  min-width: 500px;
+  background: rgb(255 246 186);
+  text-align: center;
+  padding: 30px 20px;
+  border-radius: 30px;
+}
+.sprint-results__container {
+  margin-top: 30px;
+  border: 2px solid #dd8e8e;
+  border-radius: 30px;
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+  flex-direction: column;
+  padding: 20px;
+  gap: 10px;
+  max-height: 65vh;
+  min-height: 400px;
+  overflow-y: scroll;
+}
+.sprint-result__wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 15px;
+  font-size: 16px;
+}
+.sprintReultSound-btn {
+  width: 30px;
+  height: 30px;
+  background: url(../../public/sprint-images/speaker-inSprint-result.svg) no-repeat top;
+  background-size: 30px 30px;
+}
+.sprintResultWordCheckingResult-img.true {
+  width: 30px;
+  height: 30px;
+  background: url(../../public/sprint-images/true-check.svg) no-repeat top;
+  background-size: 30px 30px;
+}
+.sprintResultWordCheckingResult-img.false {
+  width: 30px;
+  height: 30px;
+  background: url(../../public/sprint-images/false-check.svg) no-repeat top;
+  background-size: 30px 30px;
+}
