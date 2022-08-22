@@ -1,0 +1,54 @@
+.about {
+  min-height: calc(100vh - 165px);
+  height: 100%;
+  padding: 120px 20px 20px 20px;  
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;    
+}
+.aboutControls-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 20px;
+}
+.aboutProgect-btn {
+  padding: 15px;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  font-size: 15px;
+  background: #47a3f6;
+  border-color: #3498db;
+  color: #fff;
+  box-shadow: 0 0 40px 40px #3498db inset, 0 0 0 0 #3498db;
+  -webkit-transition: all 200ms ease-in-out;
+  transition: all 200ms ease-in-out;
+  -moz-transition: all 200ms ease-in-out;
+  -ms-transition: all 200ms ease-in-out;
+  -o-transition: all 200ms ease-in-out;
+}
+.aboutProgect-btn:first-child {
+  background: #49b9ff;
+}
+.aboutProgect-btn:hover {
+  color: black;
+  background: #ffff;
+  box-shadow: 0 0 10px 0 #3498db inset, 0 0 10px 4px #3498db;
+  transition: all 200ms ease-in-out;
+  -webkit-transition: all 200ms ease-in-out;
+  -moz-transition: all 200ms ease-in-out;
+  -ms-transition: all 200ms ease-in-out;
+  -o-transition: all 200ms ease-in-out;
+}
+.aboutProgect-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 0 10px 0 #3498db inset, 0 0 10px 4px #3498db;
+  transition: all 200ms ease-in-out;
+  -webkit-transition: all 200ms ease-in-out;
+  -moz-transition: all 200ms ease-in-out;
+  -ms-transition: all 200ms ease-in-out;
+  -o-transition: all 200ms ease-in-out;
+}
