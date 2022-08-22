@@ -67,12 +67,6 @@ module.exports = ({ development }) => ({
       ],
     }),
     new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
-    new CopyPlugin({
-      patterns: [
-        { from: "public/sprint-images", to: "public/sprint-images" },
-      ],
-    }),
-    new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
   ],
   resolve: {
     extensions: [".ts", ".js"],
