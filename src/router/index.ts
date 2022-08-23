@@ -87,8 +87,6 @@ export class Router {
   }
 
   updateRouter(): void {
-    console.log("Router");
-    
     this.rootElement.innerHTML = "";
     const currentRouteName = window.location.hash.slice(1);
     const currentRoute = this.routes.find(

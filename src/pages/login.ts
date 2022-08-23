@@ -7,7 +7,7 @@ const EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@((
 
 export class Login extends Component{
   loginForm : LoginForm;
-  onUpdateRouter: (e: Event) => void = (e) => e;
+  onUpdateRouter: (e: Event) => void;
 
   constructor(parentNode: HTMLElement, updateRouter: (e: Event) => void) {
     super(parentNode, "div", ["container"], "");
@@ -91,7 +91,7 @@ export class Login extends Component{
   };
 
   async onRegisterUser(userData: elementData) {
-    const url = "/users";
+    const url = "users";
     const method = {
       method : "POST",
       headers: {
@@ -103,7 +103,7 @@ export class Login extends Component{
   }
 
   async onSignInUser(userData: elementData) {
-    const url = "/signin";
+    const url = "signin";
     const method = {
       method : "POST",
       headers: {

@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8081";
+import { BASE_URL } from "../interfaces";
 
 async function load(endpoint = "", method = { method : "GET" }) {
   try {
