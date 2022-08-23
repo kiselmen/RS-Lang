@@ -19,6 +19,8 @@ class AboutTeam extends Component {
       ["Анализ проекта", "Каркас Dictionary", "Каркас Audio Call"]);
     this.thirdMemberCard = new TeamMemberCard(this.contentWrapper.element, "Александр", "pitbrest",
       ["Футер", "Каркас Sprint", "Страница About"]);
+
+    this.element.style.display = "none";
   }
 }
 
