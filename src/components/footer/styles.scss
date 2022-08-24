@@ -4,7 +4,35 @@
   justify-content: space-around;
   font-size: 18px;
   font-weight: 700;
+  padding: 10px;
 }
+@media (max-width: 660px) {
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column-reverse;
+    flex-wrap: wrap;
+    row-gap: 15px ;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 10px;
+  }
+  .about {
+    padding: 120px 0 10px 0;
+  }
+}
+@media (max-width: 400px) {
+  .footer-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+    row-gap: 5px;
+  }
+}
+
 .footer a {
   text-decoration: none;
   color: #000000;

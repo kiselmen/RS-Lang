@@ -1,5 +1,6 @@
-h3 {
+.sprint h3 {
   font-size: 2rem;
+  font-weight: bold;
 }
 .sprint {
   height: calc(100vh - 83px);
@@ -50,8 +51,7 @@ h3 {
 
 /***** Sprint Game *****/
 
-.sprint-game__wrap {
-  // background: url("../../public/sprint-images/sprint-bg.jpg") no-repeat center;
+.sprint-game__wrap {  
   background-color: rgb(255 246 186);
   background-size: 600px 450px;
   width: 600px;
@@ -61,6 +61,7 @@ h3 {
   display: flex;
   flex-direction: column;
   color: #6a4747;
+  margin-top: 120px;
 }
 .sprintControlsBtns-container {
   display: flex;
