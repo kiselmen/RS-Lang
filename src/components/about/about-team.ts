@@ -13,11 +13,11 @@ class AboutTeam extends Component {
     this.title = new Component(this.element, "h3", ["about-team__title"], "О команде");
     this.contentWrapper = new Component(this.element, "div", ["about-team__wrapper"]);
 
-    this.firstMemberCard = new TeamMemberCard(this.contentWrapper.element, "Василий", "kiselmen",
+    this.firstMemberCard = new TeamMemberCard(this.contentWrapper.element, "Василий", "https://github.com/kiselmen", "kiselmen",
       ["Настройка рабочей среды", "Развертывание Back-End", "Каркас приложения", "Авторизация"]);
-    this.secondMemberCard = new TeamMemberCard(this.contentWrapper.element, "Максим", "maxomeleneckii",
+    this.secondMemberCard = new TeamMemberCard(this.contentWrapper.element, "Максим", "https://github.com/maxomeleneckii", "maxomeleneckii",
       ["Анализ проекта", "Каркас Dictionary", "Каркас Audio Call"]);
-    this.thirdMemberCard = new TeamMemberCard(this.contentWrapper.element, "Александр", "pitbrest",
+    this.thirdMemberCard = new TeamMemberCard(this.contentWrapper.element, "Александр", "https://github.com/pitbrest", "pitbrest",
       ["Футер", "Каркас Sprint", "Страница About"]);
 
     this.element.style.display = "none";
@@ -33,12 +33,12 @@ class TeamMemberCard extends Component {
   private memberPhoto;
   private rolesNames;
 
-  constructor(parentNode: HTMLElement, name: string, link: string, rolesNames: string[], img?: string) {
+  constructor(parentNode: HTMLElement, name: string, link: string, linkContent: string, rolesNames: string[], img?: string) {
     super(parentNode, "div", ["team-member__card"]);
 
     this.memberPhoto = new Component(this.element, "img", ["member-card__img"]);
     this.memberName = new Component(this.element, "div", ["member-card__name"], name);
-    this.ghLink = new Component(this.element, "a", ["member-gh__link"], link);
+    this.ghLink = new Component(this.element, "a", ["member-gh__link"], linkContent);
     this.roles = new Component(this.element, "ul", ["member-roles"]);
     this.rolesNames = rolesNames;
 
@@ -48,6 +48,8 @@ class TeamMemberCard extends Component {
       this.memberPhoto.element.setAttribute("src", "./public/about-images/man.jpg");
     }
 
+    this.ghLink.element.setAttribute("href", link);
+    this.ghLink.element.setAttribute("target", "_blank");
     this.createRoles();
   }
 

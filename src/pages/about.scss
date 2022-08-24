@@ -1,6 +1,4 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Bad+Script&family=Marck+Script&display=swap');
-
 
 .about h3 {
   font-size: 2rem;
@@ -105,7 +103,7 @@
   align-items: flex-start;
   justify-content: center;
   flex-wrap: wrap;
-  
+  gap: 30px;  
 }
 .team-member__card {
   display: flex;
