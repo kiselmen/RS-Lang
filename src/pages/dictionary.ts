@@ -35,7 +35,12 @@ export class Dictionary extends Component {
       });
     });
 
-    this.dictionaryContent = new DictionaryContent(this.element, this.words, (word) => this.onAddWordToDifficult(word));
+    this.dictionaryContent = new DictionaryContent(
+      this.element, 
+      this.words, 
+      (word) => this.onAddWordToDifficult(word),
+      (word) => this.onClickPlay(word)
+    );
   }
 
   onWordsLoaded() {
@@ -59,5 +64,13 @@ export class Dictionary extends Component {
         console.log(data);
       });
     });
+  }
+
+  onClickPlay(word: elementData) {
+    console.log(word);
+    const filterWordsElements = this.dictionaryContent.listElement.filter( item => {
+      return item.word.id !== word.id && item.isPlaying;      
+    });
+    filterWordsElements.forEach(item => item.onListenClick());
   }
 }

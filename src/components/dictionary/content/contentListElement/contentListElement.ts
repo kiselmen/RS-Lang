@@ -20,14 +20,18 @@ export class DictionaryContentElement extends Component {
   private elementAudio: Component;
   private elementAudioMeaning: Component;
   private elementAudioExample: Component;
-  onAddWordToDifficult: (word: elementData) => void;
+  onAddWordToDifficult: (word: elementData) => void = () => {
+    // 
+  };
+  onClickPLay: (word: elementData) => void = () => {
+    // 
+  };
 
-  constructor(parentNode: HTMLElement, word: elementData, onAddWordToDifficult: (word: elementData) => void) {
+  constructor(parentNode: HTMLElement, word: elementData) {
     super(parentNode, "li", ["list-content__element", "element"],);
     this.word = word;
     this.isPlaying = false;
     this.trackNumber = 1;
-    this.onAddWordToDifficult = (word) => onAddWordToDifficult(word);
 
     this.elementImg = new Component(this.element, "img", ["element-img"]);
     this.elementImg.element.setAttribute("alt", "picture-association");
@@ -85,13 +89,16 @@ export class DictionaryContentElement extends Component {
     const audio = this.elementAudio.element as HTMLAudioElement;
     const audioMeaning = this.elementAudioMeaning.element as HTMLAudioElement;
     const audioExample = this.elementAudioExample.element as HTMLAudioElement;
+    this.onClickPLay(this.word);
     if (this.isPlaying) {
       this.elementBtnImg.element.setAttribute("src", "../../../../../sprint-images/sound-on.svg");
       this.elementBtnImg.element.setAttribute("alt", "stop");
       audio.pause();
       audioMeaning.pause();
       audioExample.pause();
+      this.isPlaying = !this.isPlaying;
     } else {
+      this.isPlaying = !this.isPlaying;
       this.elementBtnImg.element.setAttribute("src", "../../../../../sprint-images/sound-off.svg");
       this.elementBtnImg.element.setAttribute("alt", "play");
       audio.play();
@@ -106,7 +113,6 @@ export class DictionaryContentElement extends Component {
         };
       };
     }
-    this.isPlaying = !this.isPlaying;
   }
 
   onAddClick() {
