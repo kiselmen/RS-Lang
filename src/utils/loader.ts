@@ -120,5 +120,4 @@ export {
   removeWordFromDifficult, 
   registerUser,
   signInUser,
-  // load, 
   preLoad } ;

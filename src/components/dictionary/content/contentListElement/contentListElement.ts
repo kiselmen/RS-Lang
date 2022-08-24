@@ -6,7 +6,6 @@ import { UIButton } from "../../../UI/button";
 export class DictionaryContentElement extends Component {
   word: elementData;
   isPlaying: boolean;
-  trackNumber: number;
   private elementImg: Component;
   private elementDiscription: Component;
   private elementWord: Component;
@@ -29,7 +28,6 @@ export class DictionaryContentElement extends Component {
     super(parentNode, "li", ["list-content__element", "element"],);
     this.word = word;
     this.isPlaying = false;
-    this.trackNumber = 1;
 
     this.elementImg = new Component(this.element, "img", ["element-img"]);
     this.elementImg.element.setAttribute("alt", "picture-association");
