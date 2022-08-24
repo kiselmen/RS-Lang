@@ -34,7 +34,7 @@ export class About extends Component {
           this.aboutProgectBtn.element.classList.toggle("active", true);
 
           this.aboutTeamPage.element.style.display = "none";
-          this.aboutRSLang.element.style.display = "block";
+          this.aboutRSLang.element.style.display = "flex";
         }
       })
     })
