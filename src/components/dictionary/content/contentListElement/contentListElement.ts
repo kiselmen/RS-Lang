@@ -20,13 +20,15 @@ export class DictionaryContentElement extends Component {
   private elementAudio: Component;
   private elementAudioMeaning: Component;
   private elementAudioExample: Component;
+  onAddWordToDifficult: (word: elementData) => void;
 
-  constructor(parentNode: HTMLElement, word: elementData) {
+  constructor(parentNode: HTMLElement, word: elementData, onAddWordToDifficult: (word: elementData) => void) {
     super(parentNode, "li", ["list-content__element", "element"],);
     this.word = word;
     this.isPlaying = false;
     this.trackNumber = 1;
-    
+    this.onAddWordToDifficult = (word) => onAddWordToDifficult(word);
+
     this.elementImg = new Component(this.element, "img", ["element-img"]);
     this.elementImg.element.setAttribute("alt", "picture-association");
     this.elementImg.element.setAttribute("src", BASE_URL + word.image);
@@ -50,21 +52,23 @@ export class DictionaryContentElement extends Component {
 
     this.elementBtns = new Component(this.elementDiscription.element, "div", ["element-btns"],);
 
-    this.elementBtnListen = new UIButton(this.elementBtns.element, ["btn", "btn-dictionary"], "");
+    this.elementBtnListen = new UIButton(this.elementBtns.element, ["btn"], "");
     this.elementBtnImg = new Component(this.elementBtnListen.element, "img", ["element-btn__img"],);
     this.elementBtnImg.element.setAttribute("src", "../../../../../sprint-images/sound-on.svg");
     this.elementBtnImg.element.setAttribute("alt", "play");
 
-    this.elementBtnAdd = null;
-    this.elementBtnRemove =null;
-    this.elementBtnStudied =null;
+    this.elementBtnAdd = new UIButton(this.elementBtns.element, ["btn"], "Hard");
+    this.elementBtnRemove = new UIButton(this.elementBtns.element, ["btn"], "Remove");
+    this.elementBtnStudied = new UIButton(this.elementBtns.element, ["btn"], "Studied");
+  
     if (localStorage.getItem("token")) {
-      this.elementBtnAdd = new UIButton(this.elementBtns.element, ["btn", "btn-dictionary"], "Hard");
-      this.elementBtnRemove = new UIButton(this.elementBtns.element, ["btn", "btn-dictionary"], "Remove");
-      this.elementBtnStudied = new UIButton(this.elementBtns.element, ["btn", "btn-dictionary"], "Studied");
       this.elementBtnAdd.onClickButton = async () => this.onAddClick();
       this.elementBtnRemove.onClickButton = async () => this.onRemoveClick();
       this.elementBtnStudied.onClickButton = async () => this.onStudiedClick();
+    } else {
+      this.elementBtnAdd.setDisabled(true);
+      this.elementBtnRemove.setDisabled(true);
+      this.elementBtnStudied.setDisabled(true);
     }
 
     this.elementAudio = new Component(this.elementDiscription.element, "audio", []);
@@ -78,22 +82,24 @@ export class DictionaryContentElement extends Component {
   }
 
   onListenClick() {
-    let audio = this.elementAudio.element as HTMLAudioElement;
+    const audio = this.elementAudio.element as HTMLAudioElement;
+    const audioMeaning = this.elementAudioMeaning.element as HTMLAudioElement;
+    const audioExample = this.elementAudioExample.element as HTMLAudioElement;
     if (this.isPlaying) {
       this.elementBtnImg.element.setAttribute("src", "../../../../../sprint-images/sound-on.svg");
       this.elementBtnImg.element.setAttribute("alt", "stop");
       audio.pause();
+      audioMeaning.pause();
+      audioExample.pause();
     } else {
       this.elementBtnImg.element.setAttribute("src", "../../../../../sprint-images/sound-off.svg");
       this.elementBtnImg.element.setAttribute("alt", "play");
       audio.play();
       audio.onended = () => {
-        audio = this.elementAudioMeaning.element as HTMLAudioElement;
-        audio.play();
-        audio.onended = () => {
-          audio = this.elementAudioExample.element as HTMLAudioElement;
-          audio.play();
-          audio.onended = () => {
+        audioMeaning.play();
+        audioMeaning.onended = () => {
+          audioExample.play();
+          audioExample.onended = () => {
             this.elementBtnImg.element.setAttribute("src", "../../../../../sprint-images/sound-on.svg");
             this.elementBtnImg.element.setAttribute("alt", "stop");
           };
@@ -104,7 +110,8 @@ export class DictionaryContentElement extends Component {
   }
 
   onAddClick() {
-    console.log();
+    this.onAddWordToDifficult(this.word);
+    
   }
 
   onRemoveClick() {

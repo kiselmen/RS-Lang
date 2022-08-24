@@ -7,11 +7,11 @@ const EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@((
 
 export class Login extends Component{
   loginForm : LoginForm;
-  onUpdateRouter: (e: Event) => void;
+  onUpdateRouter: () => void;
 
-  constructor(parentNode: HTMLElement, updateRouter: (e: Event) => void) {
+  constructor(parentNode: HTMLElement, updateRouter: () => void) {
     super(parentNode, "div", ["container"], "");
-    this.onUpdateRouter = (e) => updateRouter(e);
+    this.onUpdateRouter = () => updateRouter();
 
     this.loginForm = new LoginForm(this.element);
 
@@ -34,8 +34,10 @@ export class Login extends Component{
         passElement.placeholder = "Wrong password or EMail";
       } else {
         localStorage.setItem("token", response.data.token);
+        localStorage.setItem("refreshToken", response.data.refreshToken);
+        localStorage.setItem("userId", response.data.userId);
         window.location.hash = "#/profile";
-        this.onUpdateRouter(e);
+        this.onUpdateRouter();
       }
     }  
   };
@@ -54,17 +56,20 @@ export class Login extends Component{
         eMailElement.value = "";
         eMailElement.placeholder = "This email is in use by another user";
       } else {
-        const response = await this.onSignInUser(userData);
-        if (response.status !== 200) {
+        const responseSign = await this.onSignInUser(userData);
+        if (responseSign.status !== 200) {
           passElement.value = "";
           passElement.placeholder = "Wrong password or EMail";
         } else {
-          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("token", responseSign.data.token);
+          localStorage.setItem("refreshToken", responseSign.data.refreshToken);
+          localStorage.setItem("userId", responseSign.data.userId);
         }
       }
     }
   };
   
+
   onValidateEmail: (elem: HTMLInputElement) => boolean = (elem) => {
     const isEmailValidate = EMAIL_REGEXP.test(elem.value);
     if (!isEmailValidate) {

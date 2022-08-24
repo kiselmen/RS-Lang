@@ -31,18 +31,19 @@
     justify-content: space-between;
     column-gap: rem(10);
   }
-  // &-btn {
+  &-btn {
   //   display: flex;
   //   align-items: center;
   //   justify-content: center;
   //   padding: rem(0) rem(3);
-  //   &__img {
+    &__img {
+      margin: auto;
   //     display: inline-block;
   //     width: rem(17);
   //     height: rem(17);
   //     margin-left: rem(10);
-  //   }
-  // }
+    }
+  }
 }
 
 .word {

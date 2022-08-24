@@ -36,7 +36,7 @@ export class Router {
       {
         name: "/dictionary",
         component: () => {
-          this.dictionaryPage = new Dictionary(this.rootElement);
+          this.dictionaryPage = new Dictionary(this.rootElement, () => this.onSignOnUser("/login", "/profile"));
           this.rootElement.append(this.dictionaryPage.element);
         },
       },
@@ -89,6 +89,7 @@ export class Router {
   updateRouter(): void {
     this.rootElement.innerHTML = "";
     const currentRouteName = window.location.hash.slice(1);
+    
     const currentRoute = this.routes.find(
       (page) => page.name === currentRouteName,
     );

@@ -2,54 +2,62 @@ import { Component } from "../utils/component";
 import { DictionaryHeader } from "../components/dictionary/header/dictionaryHeader";
 import { DictionaryContent } from "../components/dictionary/content/dictionaryContent";
 import { DictionaryPagination } from "../components/dictionary/pagination/dictionaryPagination";
-import { load } from "../utils/loader";
-import { elementData} from "../interfaces";
+import { getWordsByChapterAndPage, getAlluserWords} from "../utils/loader";
+import { elementData } from "../interfaces";
+import { preLoad, addWordToDifficult } from "../utils/loader";
 
 export class Dictionary extends Component {
   private dictionaryHeader: DictionaryHeader;
   private dictionaryContent: DictionaryContent;
   private dictionaryPagination: DictionaryPagination;
   words: Array<elementData>;
+  userWords: Array<elementData>;
+  onUpdateRouter: () => void;
 
-  constructor(parentNode: HTMLElement) {
+  constructor(parentNode: HTMLElement, updateRouter: () => void) {
     super(parentNode, "div", ["dictionary"]);
+    this.onUpdateRouter = () => updateRouter();
     
     this.dictionaryHeader = new DictionaryHeader(this.element);
     this.dictionaryPagination = new DictionaryPagination(this.element);
 
     this.words = [];
-    this.getWordsByChapterAndPage(1, 1).then( data => {
-      this.words = data;
-      this.onWordsLoaded(this.words);
+    this.userWords = [];
+    this.checkToken().then(() => {
+      getAlluserWords().then( data => {
+        this.userWords = data;
+        console.log(this.userWords);
+        
+      });
+      getWordsByChapterAndPage(1, 1).then( data => {
+        this.words = data;
+        this.onWordsLoaded();
+      });
     });
 
-    this.dictionaryContent = new DictionaryContent(this.element, this.words);
+    this.dictionaryContent = new DictionaryContent(this.element, this.words, (word) => this.onAddWordToDifficult(word));
   }
 
-  onWordsLoaded(words: Array<elementData>) {
-    this.dictionaryContent.renderContent(words);
+  onWordsLoaded() {
+    this.dictionaryContent.renderContent(this.words);
   }
 
-  getWordsByChapterAndPage = async (chapter = 1, page = 1) => {
-    const response = await this.loadWords(chapter, page);
-    if (response.status !== 200) {
-      return this.words = [];
-    } else {
-      return this.words = response.data;
+  checkToken = async () => {
+    if (localStorage.getItem("token")) {
+      preLoad().then(() => {
+        if (!localStorage.getItem("token")) {
+          window.location.hash = "#/login";
+          this.onUpdateRouter();
+        }
+      });
     }
   };
 
-  async loadWords(chapter: number, page: number) {
-    const url = "words?group=" + chapter + "&page=" + page;
-    const method = {
-      method : "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("token")}`
-      },
-    };
-    return await load(url, method);     
+  onAddWordToDifficult(word: elementData) {
+    preLoad().then( () => {
+      addWordToDifficult(word).then( (data) => {
+        console.log(data);
+      });
+    });
   }
-
-
 }
