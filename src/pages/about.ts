@@ -1,4 +1,4 @@
-import "./about.scss";
+import "../styles/about.scss";
 import { Component } from "../utils/component";
 import {AboutTeam} from "../components/about/about-team";
 import AboutRsLang from "../components/about/about-rs-lang";
