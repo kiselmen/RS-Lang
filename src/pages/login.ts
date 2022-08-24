@@ -1,17 +1,18 @@
 import { Component } from "../utils/component";
 import { LoginForm } from "../components/forms/login";
-import { load } from "../utils/loader";
+// import { load } from "../utils/loader";
 import { elementData } from "../interfaces";
+import { registerUser, signInUser } from "../utils/loader";
 
 const EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
 
 export class Login extends Component{
   loginForm : LoginForm;
-  onUpdateRouter: (e: Event) => void = (e) => e;
+  onUpdateRouter: () => void;
 
-  constructor(parentNode: HTMLElement, updateRouter: (e: Event) => void) {
+  constructor(parentNode: HTMLElement, updateRouter: () => void) {
     super(parentNode, "div", ["container"], "");
-    this.onUpdateRouter = (e) => updateRouter(e);
+    this.onUpdateRouter = () => updateRouter();
 
     this.loginForm = new LoginForm(this.element);
 
@@ -28,14 +29,16 @@ export class Login extends Component{
 
     if (isValidate) {
       const userData = this.onDataConstruct(eMailElement, passElement);
-      const response = await this.onSignInUser(userData);
+      const response = await signInUser(userData);
       if (response.status !== 200) {
         passElement.value = "";
         passElement.placeholder = "Wrong password or EMail";
       } else {
         localStorage.setItem("token", response.data.token);
+        localStorage.setItem("refreshToken", response.data.refreshToken);
+        localStorage.setItem("userId", response.data.userId);
         window.location.hash = "#/profile";
-        this.onUpdateRouter(e);
+        this.onUpdateRouter();
       }
     }  
   };
@@ -49,22 +52,25 @@ export class Login extends Component{
     if (isValidate) {
       const userData = this.onDataConstruct(eMailElement, passElement);
       
-      const response = await this.onRegisterUser(userData);
+      const response = await registerUser(userData);
       if (response.status !== 200) {
         eMailElement.value = "";
         eMailElement.placeholder = "This email is in use by another user";
       } else {
-        const response = await this.onSignInUser(userData);
-        if (response.status !== 200) {
+        const responseSign = await signInUser(userData);
+        if (responseSign.status !== 200) {
           passElement.value = "";
           passElement.placeholder = "Wrong password or EMail";
         } else {
-          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("token", responseSign.data.token);
+          localStorage.setItem("refreshToken", responseSign.data.refreshToken);
+          localStorage.setItem("userId", responseSign.data.userId);
         }
       }
     }
   };
   
+
   onValidateEmail: (elem: HTMLInputElement) => boolean = (elem) => {
     const isEmailValidate = EMAIL_REGEXP.test(elem.value);
     if (!isEmailValidate) {
@@ -90,27 +96,27 @@ export class Login extends Component{
     return userData;
   };
 
-  async onRegisterUser(userData: elementData) {
-    const url = "/users";
-    const method = {
-      method : "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userData)
-    };
-    return await load(url, method);     
-  }
+  // async onRegisterUser(userData: elementData) {
+  //   const url = "users";
+  //   const method = {
+  //     method : "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(userData)
+  //   };
+  //   return await load(url, method);     
+  // }
 
-  async onSignInUser(userData: elementData) {
-    const url = "/signin";
-    const method = {
-      method : "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userData)
-    };
-    return await load(url, method);     
-  }
+  // async onSignInUser(userData: elementData) {
+  //   const url = "signin";
+  //   const method = {
+  //     method : "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(userData)
+  //   };
+  //   return await load(url, method);     
+  // }
 }
