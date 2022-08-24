@@ -1,26 +1,40 @@
 import { BASE_URL, elementData } from "../interfaces";
 
-const GET_SETTINGS = {
-  method : "GET",
-  headers: {
-    "Content-Type": "application/json",
-    "Authorization": `Bearer ${localStorage.getItem("token")}`
-  },
-};
+function createGetSettings() {
+  return {
+    method : "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem("token")}`
+    },
+  };
+} 
 
-const POST_SETTINGS = {
-  method : "POST",
-  headers: {
-    "Content-Type": "application/json",
-    "Authorization": `Bearer ${localStorage.getItem("token")}`
-  },
-  body : ""
-};
+function createPostSettings() {
+  return {
+    method : "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem("token")}`
+    },
+    body : ""
+  };
+}
+
+function createDeleteSettings() {
+  return {
+    method : "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem("token")}`
+    },
+    body : ""
+  };
+}
 
 async function preLoad() {
   const url = "users/" + localStorage.getItem("userId");
-  const response = await load(url, GET_SETTINGS);
-  
+  const response = await load(url, createGetSettings());
   if (response.status === 401) {
     localStorage.removeItem("token");
     localStorage.removeItem("refreshToken");
@@ -46,7 +60,7 @@ async function load(endpoint = "", method = { method : "GET" }) {
 
 const getWordsByChapterAndPage = async (chapter = 1, page = 1) => {
   const url = "words?group=" + chapter + "&page=" + page;
-  const response = await load(url, GET_SETTINGS);
+  const response = await load(url, createGetSettings());
   if (response.status !== 200) {
     return [];
   } else {
@@ -56,7 +70,7 @@ const getWordsByChapterAndPage = async (chapter = 1, page = 1) => {
 
 const getAlluserWords = async () => {
   const url = "users/" + localStorage.getItem("userId") + "/words";
-  const response = await load(url, GET_SETTINGS);
+  const response = await load(url, createGetSettings());
   if (response.status !== 200) {
     return [];
   } else {
@@ -66,8 +80,8 @@ const getAlluserWords = async () => {
 
 const addWordToDifficult = async (word: elementData) => {
   const url = "users/" + localStorage.getItem("userId") + "/words/" + word.id;
-  const method = POST_SETTINGS;
-  POST_SETTINGS.body = JSON.stringify({
+  const method = createPostSettings();
+  method.body = JSON.stringify({
     difficulty : "hard",
     optional : { total : 0, wrong : 0 }
   });
@@ -79,4 +93,32 @@ const addWordToDifficult = async (word: elementData) => {
   }
 };
 
-export { getWordsByChapterAndPage, getAlluserWords, addWordToDifficult, load, preLoad } ;
+const removeWordFromDifficult = async (word: elementData) => {
+  const url = "users/" + localStorage.getItem("userId") + "/words/" + word.id;
+  const method = createDeleteSettings();
+  await load(url, method);
+};
+
+const registerUser = async (userData: elementData) => {
+  const url = "users";
+  const method = createPostSettings();
+  method.body = JSON.stringify(userData);
+  return await load(url, method);     
+};
+
+const signInUser = async (userData: elementData) => {
+  const url = "signin";
+  const method = createPostSettings();
+  method.body = JSON.stringify(userData);
+  return await load(url, method);     
+};
+
+export { 
+  getWordsByChapterAndPage, 
+  getAlluserWords, 
+  addWordToDifficult, 
+  removeWordFromDifficult, 
+  registerUser,
+  signInUser,
+  // load, 
+  preLoad } ;

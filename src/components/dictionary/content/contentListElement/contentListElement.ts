@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { elementData, BASE_URL } from "../../../../interfaces";
 import { Component } from "../../../../utils/component";
 import { UIButton } from "../../../UI/button";
@@ -13,19 +14,16 @@ export class DictionaryContentElement extends Component {
   private elementExample: Component;
   private elementBtns: Component;
   private elementBtnListen: UIButton;
-  private elementBtnAdd: UIButton | null;
-  private elementBtnRemove: UIButton | null;
-  private elementBtnStudied: UIButton | null;
+  elementBtnAdd: UIButton;
+  elementBtnRemove: UIButton;
+  elementBtnStudied: UIButton;
   private elementBtnImg: Component;
   private elementAudio: Component;
   private elementAudioMeaning: Component;
   private elementAudioExample: Component;
-  onAddWordToDifficult: (word: elementData) => void = () => {
-    // 
-  };
-  onClickPLay: (word: elementData) => void = () => {
-    // 
-  };
+  onAddWordToDifficult: (word: elementData) => void = () => {};
+  onClickPLay: (word: elementData) => void = () => {};
+  onRemoveWordFromDifficult: (word: elementData) => void = () => {};
 
   constructor(parentNode: HTMLElement, word: elementData) {
     super(parentNode, "li", ["list-content__element", "element"],);
@@ -117,11 +115,10 @@ export class DictionaryContentElement extends Component {
 
   onAddClick() {
     this.onAddWordToDifficult(this.word);
-    
   }
 
   onRemoveClick() {
-    console.log();
+    this.onRemoveWordFromDifficult(this.word);
   }
 
   onStudiedClick() {

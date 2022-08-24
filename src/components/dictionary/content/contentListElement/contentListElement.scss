@@ -26,6 +26,9 @@
     row-gap: rem(10);
     padding: rem(0) rem(10);
   }
+  &__hard {
+    background-color: var(--hard-color);
+  }
   &-btns {
     display: flex;
     justify-content: space-between;
