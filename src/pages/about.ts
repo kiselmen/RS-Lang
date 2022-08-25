@@ -19,8 +19,6 @@ export class About extends Component {
     this.aboutTeamPage = new AboutTeam(this.element);
     this.aboutRSLang = new AboutRsLang(this.element);
 
-
-
     [this.aboutTeamBtn.element, this.aboutProgectBtn.element].forEach(btn => {
       btn.addEventListener("click", (e) => {
         if(e.target === this.aboutTeamBtn.element) {
@@ -36,8 +34,7 @@ export class About extends Component {
           this.aboutTeamPage.element.style.display = "none";
           this.aboutRSLang.element.style.display = "flex";
         }
-      })
-    })
-
+      });
+    });
   }
 }

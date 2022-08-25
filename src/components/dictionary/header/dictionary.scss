@@ -39,11 +39,18 @@
   }
   &-content {
     padding: rem(20) rem(0);
-    border-top: 1px solid rgba(128, 128, 128, 0.253);
+    // border-top: 1px solid rgba(128, 128, 128, 0.253);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: stretch;
+    justify-content: center;
+    flex-wrap: nowrap;
   }
   &-pagination {
     display: flex;
     justify-content: center;
+    align-items: center;
     column-gap: rem(30);
   }
   &-wrapper__games {

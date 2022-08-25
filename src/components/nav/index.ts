@@ -64,8 +64,6 @@ export class Nav extends Component {
   };
 
   onInitNavSignUser: () => void = () => {
-    console.log("!!!!!!!!!!");
-    
     if (localStorage.getItem("token")) {
       this.linkToProfile = new Component(this.navBody.element, "a", ["nav-link"], "Profile");
       this.linkToProfile.element.setAttribute("href", "#/profile");
