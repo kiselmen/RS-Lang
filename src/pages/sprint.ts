@@ -30,10 +30,11 @@ export class Sprint extends Component {
 
     //** Sprint game page **//
 
+    /* Кнопка звука */
     this.sprintGamePage.soundToggleBtn.element.addEventListener("click", () => {
       this.sprintGamePage.soundToggleBtn.element.classList.toggle("active");
     });
-
+    /* Кнопка full-screen */
     this.sprintGamePage.toFullScreenBtn.element.addEventListener("click", () => {
       const el = document.documentElement,
         rfs = el.requestFullscreen;
@@ -46,12 +47,13 @@ export class Sprint extends Component {
       }
     });
 
+    /* Отображение страниц при переключении между страницами */
     this.sprintGamePage.toSprintIntroPageBtn.element.addEventListener("click", () => {
       this.sprintIntroCard.element.style.display = "flex";
       this.sprintGamePage.element.style.display = "none";
     });
 
-    /* Остановка таймера при выходе из страницы игры */
+    /* Остановка таймера при закрытии страницы игры нажатием на крестик */
     this.sprintGamePage.toSprintIntroPageBtn.element.addEventListener("click", () => {
       this.timer?.timerStop();
     })
