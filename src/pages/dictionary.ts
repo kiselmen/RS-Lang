@@ -19,20 +19,11 @@ export class Dictionary extends Component {
     this.onUpdateRouter = () => updateRouter();
     
     this.dictionaryHeader = new DictionaryHeader(this.element);
-    this.dictionaryPagination = new DictionaryPagination(this.element);
+    this.dictionaryPagination = new DictionaryPagination(this.element, () => this.loadData());
 
     this.words = [];
     this.userWords = [];
-    this.checkToken().then(() => {
-      getAlluserWords().then( data => {
-        this.userWords = data;
-      }).then( () => {
-        getWordsByChapterAndPage(1, 1).then( data => {
-          this.words = data;
-          this.dictionaryContent.renderContent(this.words);
-        });
-      });
-    });
+    this.loadData();
 
     this.dictionaryContent = new DictionaryContent(
       this.element, 
@@ -43,6 +34,19 @@ export class Dictionary extends Component {
       (word) => this.onRemoveWordFromDifficult(word)
     );
   }
+
+  loadData = () => {
+    this.checkToken().then(() => {
+      getAlluserWords().then( data => {
+        this.userWords = data;
+      }).then( () => {
+        getWordsByChapterAndPage(0, this.dictionaryPagination.page).then( data => {
+          this.words = data;
+          this.dictionaryContent.renderContent(this.words);
+        });
+      });
+    });
+  };
 
   checkToken = async () => {
     if (localStorage.getItem("token")) {
