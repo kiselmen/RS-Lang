@@ -36,8 +36,8 @@ export class About extends Component {
           this.aboutTeamPage.element.style.display = "none";
           this.aboutRSLang.element.style.display = "flex";
         }
-      })
-    })
+      });
+    });
 
   }
 }
