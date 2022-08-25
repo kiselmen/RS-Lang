@@ -17,11 +17,11 @@
   align-items: center;
   max-width: 650px;
   min-height: 350px;
-  background: rgb(255 246 186);
+  background: rgb(3 124 173);
+  box-shadow: 0px 0px 10px 2px rgb(0 113 162);
   border-radius: 40px;
   padding: 30px;
   font-size: 30px;
-  box-shadow: 0px 0px 10px 10px rgb(241 238 215);
 }
 .sprintIntro-card__content {
   font-size: 1.4rem;
@@ -44,7 +44,6 @@
   justify-content: center;
   background: rgb(255, 24, 24);
   font-size: 25px;
-  border: 3px solid rgb(255, 255, 255);
   border-radius: 25px;
   cursor: pointer;
 }
@@ -52,7 +51,7 @@
 /***** Sprint Game *****/
 
 .sprint-game__wrap {
-  background-color: rgb(255 246 186);
+  background: rgb(3 124 173);
   background-size: 600px 450px;
   width: 600px;
   height: 450px;
@@ -103,7 +102,7 @@
 .sprint-timer, .sprint-points {
    width: 70px;
    height: 70px;
-   border: 2px solid #ff9f00;
+   border: 2px solid #3f60d3;
    border-radius: 50%;
    background-color: #ffff;
    display: flex;
@@ -146,7 +145,7 @@
   font-size: 40px;
   font-weight: 700;
   letter-spacing: 3px;
-  color: #6a4747;
+  color: #ffff;
 }
 .sprintWordInRu-container {
   margin-top: 0;
@@ -168,9 +167,9 @@
   width: 170px;
   height: 40px;
   font-size: 24px;
-  background: #fee249;
+  background: #d1f2ff;
   border-radius: 10px;
-  border: 2px solid #e4c102;
+  border: 2px solid #3f60d3;
   color: #6a4747;
   position: relative;
   padding: 0 10px;

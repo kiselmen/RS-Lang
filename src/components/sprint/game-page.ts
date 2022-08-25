@@ -21,6 +21,7 @@ class SprintGamePage extends Component {
   answersBtnsContainer;
   answerBtnFalse;
   answerBtnTrue;
+  audioPlayer;
 
   constructor(parentNode: HTMLElement) {
     super(parentNode, "div", ["sprint-game__wrap"]);
@@ -58,6 +59,10 @@ class SprintGamePage extends Component {
     this.answersBtnsContainer = new Component(this.element, "div", ["sprintAnswersBtns-container"]);
     this.answerBtnFalse = new Component(this.answersBtnsContainer.element, "button", ["sprintAnswerFalse-btn"], "Не верно");
     this.answerBtnTrue = new Component(this.answersBtnsContainer.element, "button", ["sprintAnswerTrue-btn"], "Верно");
+    this.audioPlayer = new Component(this.element, "audio", ["sprintAudioPlayer"]);
+
+    this.audioPlayer.element.style.cssText = "display: none; visibility: hidden";
+    (this.audioPlayer.element as HTMLAudioElement).volume = 0;
   }
 
   private startSprint() {
