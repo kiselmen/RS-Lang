@@ -36,17 +36,22 @@ export class Dictionary extends Component {
   }
 
   loadData = () => {
-    console.log("Load data...");
-    
     this.checkToken().then(() => {
-      getAlluserWords().then( data => {
-        this.userWords = data;
-      }).then( () => {
+      if (localStorage.getItem("token")) {
+        getAlluserWords().then( data => {
+          this.userWords = data;
+        }).then( () => {
+          getWordsByChapterAndPage(this.dictionaryHeader.chapters.chapter, this.dictionaryPagination.page).then( data => {
+            this.words = data;
+            this.dictionaryContent.renderContent(this.words);
+          });
+        });
+      } else {
         getWordsByChapterAndPage(this.dictionaryHeader.chapters.chapter, this.dictionaryPagination.page).then( data => {
           this.words = data;
           this.dictionaryContent.renderContent(this.words);
         });
-      });
+      }
     });
   };
 
