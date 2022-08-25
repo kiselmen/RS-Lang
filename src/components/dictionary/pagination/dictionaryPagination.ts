@@ -17,7 +17,7 @@ export class DictionaryPagination extends Component {
     }
 
     this.btnPrev = new UIButton(this.element, ["btn"], "Prev");
-    this.numberPage = new Component(this.element, "span", ["pagination-number"], `Page: ${this.page}`);
+    this.numberPage = new Component(this.element, "span", ["pagination-number"], `Page: ${this.page + 1}`);
     this.btnNext = new UIButton(this.element, ["btn"], "Next");
     this.btnPrev.onClickButton = () => this.onPrevPageClicl();
     this.btnNext.onClickButton = () => this.onNextPageClick();
@@ -50,7 +50,7 @@ export class DictionaryPagination extends Component {
       this.btnNext.setDisabled(false);
     }  
     localStorage.setItem("page", String(this.page));
-    this.numberPage.element.textContent = `Page: ${this.page}`;
+    this.numberPage.element.textContent = `Page: ${this.page + 1}`;
     this.onChangePage();
   };
 }

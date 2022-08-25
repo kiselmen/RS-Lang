@@ -8,16 +8,29 @@ export class Chapters extends Component {
   private dictionaryChaptersList: Component;
   dictionaryChaptersListEl: Component | undefined;
 
-  constructor(parentNode: HTMLElement) {
+  chapter: number;
+
+  constructor(parentNode: HTMLElement, onChangePage: () => void) {
     super(parentNode, "div", ["dictionary-wrapper__chapters"]);
 
+    this.chapter = 0;
+    if (localStorage.getItem("chapter")) {
+      this.chapter = Number(localStorage.getItem("chapter"));
+    } else {
+      localStorage.setItem("chapter", String(this.chapter));
+    }
+    onChangePage();
     this.dictionaryHeading = new Component(this.element, "h2", ["dictionary-heading"], "Choose a section:");
     this.dictionaryChapters = new Component(this.element, "div", ["dictionary-chapters", "chapters"]);
-    this.dictionaryChapterName = new Component(this.dictionaryChapters.element, "span", ["dictionary-chapter__name"], "Chapter 1");
+    this.dictionaryChapterName = new Component(this.dictionaryChapters.element, "span", ["dictionary-chapter__name"], "Chapter " + String(this.chapter + 1));
     this.dictionaryChaptersList = new Component(this.dictionaryChapters.element, "ul", ["chapters-list"]);
-    for(let i = 1; i < 8; i++) {
+    let chaptersCount = 6;
+    if (localStorage.getItem("token")){
+      chaptersCount = 7;
+    }
+    for(let i = 1; i <= chaptersCount; i++) {
       this.dictionaryChaptersListEl = new Component(this.dictionaryChaptersList.element, "li", ["chapters-item"], `Chapter ${i}`);
-      if (i === 1) this.dictionaryChaptersListEl.element.classList.add("active");
+      if (i === this.chapter + 1) this.dictionaryChaptersListEl.element.classList.add("active");
     }
 
     this.dictionaryChapters.element.addEventListener("click", () => {
@@ -37,6 +50,14 @@ export class Chapters extends Component {
       const event = e.target as HTMLElement;
       if (!event.closest(".dictionary-chapters")) {
         this.dictionaryChaptersList.element.classList.remove("open");
+      }
+      if (event.classList.contains("chapters-item")) {
+        const curChapter = Number(event.textContent?.slice(-1)) - 1;
+        if (this.chapter !== curChapter) {
+          localStorage.setItem("chapter", String(curChapter));
+          this.chapter = curChapter;
+          onChangePage();
+        }
       }
     });
   }
