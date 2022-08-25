@@ -1,17 +1,18 @@
+import "../styles/sprint.scss";
 import { Component } from "../utils/component";
 import SprintIntro from "../components/sprint/intro-page";
 import SprintGamePage from "../components/sprint/game-page";
 import {SprintResultesPage} from "../components/sprint/sprint-results-page";
-import "../styles/sprint.scss";
+import Timer from "../components/sprint/timer";
 
 export class Sprint extends Component {
   private sprintIntroCard;
   private sprintGamePage;
   private sprintResultsPage;
+  private timer: Timer | undefined;
 
   constructor(parentNode: HTMLElement) {
     super(parentNode, "div", ["sprint"]);
-
     this.sprintIntroCard = new SprintIntro(this.element);
     this.sprintGamePage = new SprintGamePage(this.element);
     this.sprintResultsPage = new SprintResultesPage(this.element);
@@ -22,6 +23,8 @@ export class Sprint extends Component {
       btn.element.addEventListener("click", () => {
         this.sprintIntroCard.element.style.display = "none";
         this.sprintGamePage.element.style.display = "flex";
+        this.timer = new Timer(this.sprintGamePage.timer.element);
+        this.timer.timerRun();
       });
     });
 
@@ -47,6 +50,14 @@ export class Sprint extends Component {
       this.sprintIntroCard.element.style.display = "flex";
       this.sprintGamePage.element.style.display = "none";
     });
-  }
 
+    /* Остановка таймера при выходе из страницы игры */
+    this.sprintGamePage.toSprintIntroPageBtn.element.addEventListener("click", () => {
+      this.timer?.timerStop();
+    })
+
+    // window.addEventListener("beforeunload", () => {
+    //   this.timer?.timerStop();
+    // })
+  }
 }
