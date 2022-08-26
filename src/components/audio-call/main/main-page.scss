@@ -1,0 +1,108 @@
+@import "../../../styles/functions.scss";
+@import "../../../styles/mixins.scss";
+@import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
+
+.master {
+  @include games-wrapper;
+  margin: 0 auto;
+  border-top-left-radius: rem(50);
+  max-width: rem(1024);
+  padding-bottom: rem(20);
+  min-height: unset;
+  display: none;
+  &-content {
+    display: flex;
+    flex-direction: column;
+    row-gap: rem(20);
+    align-items: center;
+  }
+  &-header {
+    display: flex;
+    flex-direction: column;
+    row-gap: rem(30);
+  }
+  &-progressbar {
+    position: relative;
+    width: rem(100);
+    height: rem(100);
+    background: white;
+    border-radius: 50%;
+    &__count {
+      font-family: 'Raleway', sans-serif;
+      font-size: rem(28);
+      position: absolute;
+      width: rem(69);
+      height: rem(28);
+      text-align: center;
+      top: calc(50% - 14px);
+      left: calc(50% - 34.5px);
+    }
+  }
+  &-voice {
+    width: rem(200);
+    height: rem(200);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &__btn {
+      display: block;
+      width: rem(80);
+      height: rem(80);
+      background: url(../../../../public/speaker.svg) center no-repeat, #efe391;
+      background-size: 60%;
+      box-shadow: unset;
+      border-radius: 50%;
+    }
+  }
+  &-action__btn {
+    display: block;
+    width: rem(150);
+    height: rem(40);
+    border-radius: rem(30);
+    background: #efe391;
+    box-shadow: unset;
+  }
+}
+
+.controls {
+  display: flex;
+  column-gap: rem(20);
+  position: absolute;
+  top: rem(10);
+  right: rem(10);
+  &-btn {
+    width: rem(30);
+    height: rem(30);
+    box-shadow: unset;
+  }
+  &-volume {
+    background: url(../../../../public/sprint-images/sound-on.svg) no-repeat;
+    background-size: 99%;
+  }
+  &-fullscreen {
+    background: url(../../../../public/sprint-images/full-screen.svg) no-repeat;
+  }
+  &-close {
+    background: url(../../../../public/sprint-images/close-page-X.svg) no-repeat;
+  }
+}
+
+.words{
+  display: flex;
+  justify-content: center;
+  column-gap: rem(10);
+  row-gap: rem(10);
+  flex-wrap: wrap;
+  width: 100%;
+  &-item {
+    width: 100%;
+    max-width: rem(125);
+  }
+  &-btn {
+    width: 100%;
+    text-transform: capitalize;
+    box-shadow: unset;
+    background: transparent;
+    border: rem(3) solid #efe391;
+  }
+}

@@ -1,8 +1,12 @@
+@import "./mixins.scss";
+@import "./functions.scss";
+
 .sprint h3 {
   font-size: 2rem;
   font-weight: bold;
 }
 .sprint {
+  width: 100%;
   height: calc(100vh - 83px);
   display: flex;
   flex-direction: column;
@@ -10,18 +14,7 @@
   justify-content: center;
 }
 .sprintIntro-card__wrap {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  row-gap: 20px;
-  align-items: center;
-  max-width: 650px;
-  min-height: 350px;
-  background: rgb(255 246 186);
-  border-radius: 40px;
-  padding: 30px;
-  font-size: 30px;
-  box-shadow: 0px 0px 10px 10px rgb(241 238 215);
+  @include intro-games-wrapper;
 }
 .sprintIntro-card__content {
   font-size: 1.4rem;
@@ -52,15 +45,7 @@
 /***** Sprint Game *****/
 
 .sprint-game__wrap {  
-  background-color: rgb(255 246 186);
-  background-size: 600px 450px;
-  width: 600px;
-  height: 450px;
-  border-radius: 40px;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  color: #6a4747;
+  @include games-wrapper;
   margin-top: 120px;
 }
 .sprintControlsBtns-container {
