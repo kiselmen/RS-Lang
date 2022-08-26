@@ -70,10 +70,12 @@ export class Dictionary extends Component {
     this.checkToken().then( () => {
       const isWordPresent = this.userWords.filter(item => item.wordId === word.id);
       if (isWordPresent.length) {
-        updateWordInUserWords(word, type);
-        this.onSetupButtons();
+        updateWordInUserWords(word, type).then( data => {
+          isWordPresent[0].difficulty = data.difficulty;
+          this.onSetupButtons();
+        });
       } else {
-        addWordToUserWords(word, type).then( (data) => {
+        addWordToUserWords(word, type).then( data => {
           this.userWords.push(data);
           this.onSetupButtons();
         });
@@ -114,11 +116,15 @@ export class Dictionary extends Component {
             itemInList.elementBtnAdd.setDisabled(true);
             itemInList.elementBtnRemove.setDisabled(false);
             itemInList.elementBtnStudied.setDisabled(false);
+            itemInList.element.classList.remove("element__hard");
+            itemInList.element.classList.remove("element__studied");
             itemInList.element.classList.add("element__hard");
           } else {
             itemInList.elementBtnAdd.setDisabled(true);
             itemInList.elementBtnRemove.setDisabled(false);
             itemInList.elementBtnStudied.setDisabled(true);
+            itemInList.element.classList.remove("element__hard");
+            itemInList.element.classList.remove("element__studied");
             itemInList.element.classList.add("element__studied");
           }
         } else {
