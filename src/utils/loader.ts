@@ -119,6 +119,20 @@ const updateWordInUserWords = async (word: elementData, type: string) => {
   }
 };
 
+const getAllAgregatedWords = async() => {
+  // eslint-disable-next-line quotes
+  const url = "users/" + localStorage.getItem("userId") + '/aggregatedWords?wordsPerPage=100&filter={"$and":[{"userWord.difficulty":"hard"}]}';
+  const response = await load(url, createGetSettings());
+  if (response.status !== 200) {
+    return [];
+  } else {
+    // console.log(response.data);
+    // console.log(response.data[0].paginatedResults);
+    
+    return response.data[0].paginatedResults;
+  }
+};
+
 const removeWordFromDifficult = async (word: elementData) => {
   const url = "users/" + localStorage.getItem("userId") + "/words/" + word.id;
   const method = createDeleteSettings();
@@ -144,7 +158,8 @@ export {
   getAlluserWords, 
   addWordToUserWords,
   updateWordInUserWords, 
-  removeWordFromDifficult, 
+  removeWordFromDifficult,
+  getAllAgregatedWords, 
   registerUser,
   signInUser,
   preLoad } ;

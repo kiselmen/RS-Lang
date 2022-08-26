@@ -4,7 +4,7 @@ import { DictionaryContent } from "../components/dictionary/content/dictionaryCo
 import { DictionaryPagination } from "../components/dictionary/pagination/dictionaryPagination";
 import { getWordsByChapterAndPage, getAlluserWords} from "../utils/loader";
 import { elementData } from "../interfaces";
-import { preLoad, addWordToUserWords, updateWordInUserWords, removeWordFromDifficult } from "../utils/loader";
+import { preLoad, addWordToUserWords, updateWordInUserWords, removeWordFromDifficult, getAllAgregatedWords } from "../utils/loader";
 
 export class Dictionary extends Component {
   private dictionaryHeader: DictionaryHeader;
@@ -41,10 +41,17 @@ export class Dictionary extends Component {
         getAlluserWords().then( data => {
           this.userWords = data;
         }).then( () => {
-          getWordsByChapterAndPage(this.dictionaryHeader.chapters.chapter, this.dictionaryPagination.page).then( data => {
-            this.words = data;
-            this.dictionaryContent.renderContent(this.words);
-          });
+          if (this.dictionaryHeader.chapters.chapter < 6) {
+            getWordsByChapterAndPage(this.dictionaryHeader.chapters.chapter, this.dictionaryPagination.page).then( data => {
+              this.words = data;
+              this.dictionaryContent.renderContent(this.words);
+            });
+          } else {
+            getAllAgregatedWords().then( data => {
+              this.words = data;
+              this.dictionaryContent.renderContent(this.words);
+            });
+          }
         });
       } else {
         this.userWords = [];
