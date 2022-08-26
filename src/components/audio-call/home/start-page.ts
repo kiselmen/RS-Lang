@@ -1,5 +1,5 @@
-import { Component } from "../../utils/component";
-import { UIButton } from "../UI/button";
+import { Component } from "../../../utils/component";
+import { UIButton } from "../../UI/button";
 import "./start-page.scss";
 
 export class AudioCallStartPage extends Component {
@@ -28,5 +28,13 @@ export class AudioCallStartPage extends Component {
     );
 
     this.linkMainPage.element.setAttribute("href", "#/");
+
+    this.homeLvlBtnsWrapper.element.addEventListener("click", (e) => {
+      const eventTarget = e.target as HTMLElement;
+      if (eventTarget.classList.contains("home-btn")) {
+        (<HTMLElement>document.querySelector(".master")).style.display = "flex";
+        (<HTMLElement>document.querySelector(".home")).style.display = "none";
+      }
+    });
   }
 }
