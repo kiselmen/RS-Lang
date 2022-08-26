@@ -27,9 +27,12 @@ export class LoginForm extends Component {
     this.passInput.element.setAttribute("placeholder", "password");
     this.passInput.element.setAttribute("required", "");
 
-    const messageContainer = new Component(this.element, "div", ["form-item", "item"], "");
-    this.showPass = new Component(messageContainer.element, "div", ["item-checkbox"], "");
+    const showPassContainer = new Component(this.element, "div", ["form-item", "item"]);
+    this.showPass = new Component(showPassContainer.element, "div", ["item-checkbox"], "");
+    new Component(showPassContainer.element, "label", ["item-label"], "Show password");
     this.showPass.element.addEventListener("click", () => this.toggleShow());
+
+    const messageContainer = new Component(this.element, "div", ["form-item", "item"], "");
     this.message = new Component(messageContainer.element, "div", ["item-message"], "");
 
     const buttonContainer = new Component(this.element, "div", ["form-item", "item"]);

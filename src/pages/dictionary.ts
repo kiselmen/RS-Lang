@@ -47,6 +47,7 @@ export class Dictionary extends Component {
           });
         });
       } else {
+        this.userWords = [];
         getWordsByChapterAndPage(this.dictionaryHeader.chapters.chapter, this.dictionaryPagination.page).then( data => {
           this.words = data;
           this.dictionaryContent.renderContent(this.words);
