@@ -1,4 +1,5 @@
 import {Component} from "../../utils/component";
+import { UIButton } from "../UI/button";
 
 class SprintGamePage extends Component {
   gamePageControlsBtnsContainer;
@@ -19,8 +20,8 @@ class SprintGamePage extends Component {
   wordInRuContainer;
   wordInRu;
   answersBtnsContainer;
-  answerBtnFalse;
-  answerBtnTrue;
+  answerFalseBtn;
+  answerTrueBtn;
   audioPlayer;
 
   constructor(parentNode: HTMLElement) {
@@ -57,12 +58,12 @@ class SprintGamePage extends Component {
     this.wordInRu = new Component(this.wordInRuContainer.element, "p", ["sprintWordInRu"], "эмоция");
 
     this.answersBtnsContainer = new Component(this.element, "div", ["sprintAnswersBtns-container"]);
-    this.answerBtnFalse = new Component(this.answersBtnsContainer.element, "button", ["sprintAnswerFalse-btn"], "Не верно");
-    this.answerBtnTrue = new Component(this.answersBtnsContainer.element, "button", ["sprintAnswerTrue-btn"], "Верно");
+    this.answerFalseBtn = new UIButton(this.answersBtnsContainer.element, ["sprintAnswerFalse-btn"], "Не верно");
+    this.answerTrueBtn = new UIButton(this.answersBtnsContainer.element, ["sprintAnswerTrue-btn"], "Верно");    
+    
     this.audioPlayer = new Component(this.element, "audio", ["sprintAudioPlayer"]);
-
     this.audioPlayer.element.style.cssText = "display: none; visibility: hidden";
-    (this.audioPlayer.element as HTMLAudioElement).volume = 0;
+    // (this.audioPlayer.element as HTMLAudioElement).volume = 0;
   }
 
   private startSprint() {

@@ -3,7 +3,7 @@ class Timer {
   parentNode: HTMLElement;
   timer: ReturnType<typeof setInterval> | undefined;
 
-  constructor (parentNode: HTMLElement, timeout = 60) {
+  constructor (parentNode: HTMLElement, timeout = 10) {
     this.parentNode = parentNode;
     this.timeout = timeout;
   }
@@ -11,12 +11,12 @@ class Timer {
   timerRun = () => {
 
     const startTimer = () => {
-      this.parentNode.innerHTML = this.timeout.toString();
+      (  this.parentNode as HTMLInputElement).innerText = this.timeout.toString();
       this.timeout -= 1;
 
       this.timer = setTimeout(startTimer, 1000);
       if(this.timeout < 0) {
-        clearTimeout(this.timer);
+        this.timerStop();           
       }
     };
     startTimer();

@@ -17,7 +17,7 @@
   align-items: center;
   max-width: 650px;
   min-height: 350px;
-  background: rgb(3 124 173);
+  background: rgb(107 197 233);
   box-shadow: 0px 0px 10px 2px rgb(0 113 162);
   border-radius: 40px;
   padding: 30px;
@@ -51,7 +51,7 @@
 /***** Sprint Game *****/
 
 .sprint-game__wrap {
-  background: rgb(3 124 173);
+  background: rgb(107 197 233);
   background-size: 600px 450px;
   width: 600px;
   height: 450px;
@@ -82,11 +82,11 @@
 .sprintSoundToggle-btn {
   width: 30px;
   height: 30px;
-  background: url(../../public/sprint-images/sound-off.svg) no-repeat top;
+  background: url(../../public/sprint-images/sound-on.svg) no-repeat top;  
   background-size: 30px 30px;
 }
 .sprintSoundToggle-btn.active {
-  background: url(../../public/sprint-images/sound-on.svg) no-repeat top;
+  background: url(../../public/sprint-images/sound-off.svg) no-repeat top;
 }
 .sprintToFullScreen-btn {
   width: 30px;
@@ -102,13 +102,15 @@
 .sprint-timer, .sprint-points {
    width: 70px;
    height: 70px;
-   border: 2px solid #3f60d3;
+   border: 2px solid #ccefff;
    border-radius: 50%;
    background-color: #ffff;
    display: flex;
    align-items: center;
    justify-content: center;
    font-size: 2.5em;
+   text-align: center;
+   font-family: inherit;
 }
 .sprintGameCardSignals-container {
   display: flex;
@@ -169,7 +171,7 @@
   font-size: 24px;
   background: #d1f2ff;
   border-radius: 10px;
-  border: 2px solid #3f60d3;
+  border: 2px solid #ccefff;
   color: #6a4747;
   position: relative;
   padding: 0 10px;
