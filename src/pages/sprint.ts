@@ -26,6 +26,7 @@ export class Sprint extends Component {
         this.sprintIntroCard.element.style.display = "none";
         this.sprintGamePage.element.style.display = "flex";
         this.timer = new Timer(this.sprintGamePage.timer.element);
+        this.timer.specialFunc = showResults;
         this.timer.timerRun();
 
         sprintState.currentGroup = +btn.element.innerText;
@@ -131,7 +132,14 @@ export class Sprint extends Component {
 
     });
 
-    //* Прослушивание таймера *//
-
+    const showResults = () => {
+      this.sprintIntroCard.element.style.display = "none";
+      this.sprintGamePage.element.style.display = "none";
+      this.sprintResultsPage.element.style.display = "block";
+      clearSprintState();   
+      this.timer?.timerStop();
+    };
   }
+
+  
 }

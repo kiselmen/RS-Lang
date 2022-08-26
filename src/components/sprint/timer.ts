@@ -2,7 +2,8 @@ class Timer {
   timeout: number;
   parentNode: HTMLElement;
   timer: ReturnType<typeof setInterval> | undefined;
-
+  specialFunc: () => void = () => console.log("something");
+  
   constructor (parentNode: HTMLElement, timeout = 10) {
     this.parentNode = parentNode;
     this.timeout = timeout;
@@ -16,7 +17,8 @@ class Timer {
 
       this.timer = setTimeout(startTimer, 1000);
       if(this.timeout < 0) {
-        this.timerStop();           
+        this.timerStop();  
+        this.specialFunc();         
       }
     };
     startTimer();
