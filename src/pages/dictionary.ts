@@ -18,7 +18,7 @@ export class Dictionary extends Component {
     super(parentNode, "div", ["dictionary"]);
     this.onUpdateRouter = () => updateRouter();
     
-    this.dictionaryHeader = new DictionaryHeader(this.element);
+    this.dictionaryHeader = new DictionaryHeader(this.element, () => this.loadData());
     this.dictionaryPagination = new DictionaryPagination(this.element, () => this.loadData());
 
     this.words = [];
@@ -37,14 +37,22 @@ export class Dictionary extends Component {
 
   loadData = () => {
     this.checkToken().then(() => {
-      getAlluserWords().then( data => {
-        this.userWords = data;
-      }).then( () => {
-        getWordsByChapterAndPage(0, this.dictionaryPagination.page).then( data => {
+      if (localStorage.getItem("token")) {
+        getAlluserWords().then( data => {
+          this.userWords = data;
+        }).then( () => {
+          getWordsByChapterAndPage(this.dictionaryHeader.chapters.chapter, this.dictionaryPagination.page).then( data => {
+            this.words = data;
+            this.dictionaryContent.renderContent(this.words);
+          });
+        });
+      } else {
+        this.userWords = [];
+        getWordsByChapterAndPage(this.dictionaryHeader.chapters.chapter, this.dictionaryPagination.page).then( data => {
           this.words = data;
           this.dictionaryContent.renderContent(this.words);
         });
-      });
+      }
     });
   };
 
@@ -59,7 +67,7 @@ export class Dictionary extends Component {
   };
 
   onAddWordToDifficult = (word: elementData) => {
-    preLoad().then( () => {
+    this.checkToken().then( () => {
       addWordToDifficult(word).then( (data) => {
         this.userWords.push(data);
         this.onSetupButtons();
@@ -68,7 +76,7 @@ export class Dictionary extends Component {
   };
 
   onRemoveWordFromDifficult =  (word: elementData) => {
-    preLoad().then( () => {
+    this.checkToken().then( () => {
       removeWordFromDifficult(word).then( () => {
         this.userWords = this.userWords.filter(item => {
           return item.wordId !== word.id;
@@ -89,19 +97,25 @@ export class Dictionary extends Component {
   onSetupButtons() {
     let countHard = 0;
     this.dictionaryContent.listElement.forEach ( itemInList => {
-      const isHard = this.userWords.filter( userItem => {
-        return itemInList.word.id === userItem.wordId && userItem.difficulty === "hard";
-      });
-      if (isHard.length) {
-        itemInList.elementBtnAdd?.setDisabled(true);
-        itemInList.elementBtnRemove.setDisabled(false);
-        itemInList.element.classList.add("element__hard");
+      if (localStorage.getItem("token")) {
+        const isHard = this.userWords.filter( userItem => {
+          return itemInList.word.id === userItem.wordId && userItem.difficulty === "hard";
+        });
+        if (isHard.length) {
+          itemInList.elementBtnAdd?.setDisabled(true);
+          itemInList.elementBtnRemove.setDisabled(false);
+          itemInList.element.classList.add("element__hard");
+        } else {
+          itemInList.elementBtnAdd?.setDisabled(false);
+          itemInList.elementBtnRemove.setDisabled(true);
+          itemInList.element.classList.remove("element__hard");
+        }
+        countHard = isHard.length === 0 ? countHard : countHard + 1;
       } else {
-        itemInList.elementBtnAdd?.setDisabled(false);
+        itemInList.elementBtnAdd?.setDisabled(true);
         itemInList.elementBtnRemove.setDisabled(true);
         itemInList.element.classList.remove("element__hard");
       }
-      countHard = isHard.length === 0 ? countHard : countHard + 1;
       
     });
     console.log(countHard);
