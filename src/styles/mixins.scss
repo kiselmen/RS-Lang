@@ -1,0 +1,14 @@
+@mixin games-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  row-gap: rem(20);
+  align-items: center;
+  max-width: rem(650);
+  min-height: rem(350);
+  background: rgb(255, 246, 186);
+  border-radius: rem(40);
+  padding: rem(30);
+  font-size: rem(30);
+  box-shadow: rem(0) rem(0) rem(10) rem(10) rgb(241 238 215);
+}
