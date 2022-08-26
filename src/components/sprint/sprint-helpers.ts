@@ -29,6 +29,12 @@ function getRandomIntInclusive(min = 0, max = 19) {
   myMax = Math.floor(myMax);
   return Math.floor(Math.random() * (myMax - myMin + 1)) + myMin;
 }
+
+function myRandom(currentNum: number): number {
+  const randomNum = getRandomIntInclusive();
+  return getRandomIntInclusive(1,3) === 1 ? currentNum : randomNum;
+}
+
 /* Сброс стейта при закрытии страницы игры */
 function clearSprintState() {
   sprintState.currentGroup = 0;
@@ -36,6 +42,13 @@ function clearSprintState() {
   sprintState.score = 0;
   sprintState.currentContent = [];
 }
+
+/* Отображение нужной страницы Sprint */
+const makeVisibleCurrentSprintPage = (hiddenEl1: HTMLElement, hiddenEl2: HTMLElement, visibleEl: HTMLElement, displayPropVisibleEl: string) => {
+  hiddenEl1.style.display = "none";
+  hiddenEl2.style.display = "none";
+  visibleEl.style.display = displayPropVisibleEl;
+};
 
 interface ISprintState {
   currentGroup: number;
@@ -49,7 +62,7 @@ interface IContent {
   [key:string]: string | number;
 }
 
-export {sprintState, getInfo, sayTheWord, IContent, getRandomIntInclusive, clearSprintState};
+export {sprintState, getInfo, sayTheWord, IContent, myRandom, clearSprintState, makeVisibleCurrentSprintPage};
 
 
 

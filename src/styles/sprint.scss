@@ -82,7 +82,7 @@
 .sprintSoundToggle-btn {
   width: 30px;
   height: 30px;
-  background: url(../../public/sprint-images/sound-on.svg) no-repeat top;  
+  background: url(../../public/sprint-images/sound-on.svg) no-repeat top;
   background-size: 30px 30px;
 }
 .sprintSoundToggle-btn.active {
@@ -214,13 +214,14 @@
   padding: 30px 20px;
   margin-top: 130px;
   border-radius: 30px;
+  position: relative;
 }
 .sprint-results__container {
   margin-top: 30px;
   border: 2px solid #dd8e8e;
   border-radius: 30px;
   display: flex;
-  align-items: stretch;
+  align-items: flex-start;
   justify-content: flex-start;
   flex-direction: column;
   padding: 20px;
@@ -232,15 +233,39 @@
 .sprint-result__wrap {
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: flex-start;
   gap: 15px;
   font-size: 16px;
+  width: 100%;
+}
+.toSprintGamePage-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 30px;
+  height: 30px;
+  background: url(../../public/sprint-images/close-page-X.svg) no-repeat top;
+  background-size: 30px 30px;
 }
 .sprintReultSound-btn {
   width: 30px;
   height: 30px;
   background: url(../../public/sprint-images/speaker-inSprint-result.svg) no-repeat top;
   background-size: 30px 30px;
+  flex: 0 1 auto;
+
+}
+.sprintResultWordInEng, .sprintResultWordInRu{
+  flex: 0 1 90px;
+  text-align: start;
+}
+.sprintResultWordInEng-transcription {
+  flex: 0 1 100px;
+  text-align: start;
+}
+.sprintResultWordCheckingResult-img {
+  flex: 0 0 30px;
+  text-align: start;
 }
 .sprintResultWordCheckingResult-img.true {
   width: 30px;
