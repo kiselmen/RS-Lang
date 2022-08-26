@@ -21,6 +21,17 @@ function createPostSettings() {
   };
 }
 
+function createPutSettings() {
+  return {
+    method : "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem("token")}`
+    },
+    body : ""
+  };
+}
+
 function createDeleteSettings() {
   return {
     method : "DELETE",
@@ -78,11 +89,26 @@ const getAlluserWords = async () => {
   }
 };
 
-const addWordToDifficult = async (word: elementData) => {
+const addWordToUserWords = async (word: elementData, type: string) => {
   const url = "users/" + localStorage.getItem("userId") + "/words/" + word.id;
   const method = createPostSettings();
   method.body = JSON.stringify({
-    difficulty : "hard",
+    difficulty : type,
+    optional : { total : 0, wrong : 0 }
+  });
+  const response = await load(url, method);
+  if (response.status !== 200) {
+    return [];
+  } else {
+    return response.data;
+  }
+};
+
+const updateWordInUserWords = async (word: elementData, type: string) => {
+  const url = "users/" + localStorage.getItem("userId") + "/words/" + word.id;
+  const method = createPutSettings();
+  method.body = JSON.stringify({
+    difficulty : type,
     optional : { total : 0, wrong : 0 }
   });
   const response = await load(url, method);
@@ -116,7 +142,8 @@ const signInUser = async (userData: elementData) => {
 export { 
   getWordsByChapterAndPage, 
   getAlluserWords, 
-  addWordToDifficult, 
+  addWordToUserWords,
+  updateWordInUserWords, 
   removeWordFromDifficult, 
   registerUser,
   signInUser,

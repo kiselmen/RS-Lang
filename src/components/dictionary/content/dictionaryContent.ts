@@ -5,20 +5,20 @@ import { DictionaryContentElement } from "./contentListElement/contentListElemen
 export class DictionaryContent extends Component {
   private wordsList: Component;
   listElement: Array<DictionaryContentElement>;
-  onAddWordToDifficult: (word: elementData) => void;
+  onAddWordToUserWords: (word: elementData, type: string) => void;
   onRemoveWordFromDifficult: (word: elementData) => void;
   onClickPLay: (word: elementData) => void;
   onSetupButtons: () => void;
 
   constructor(parentNode: HTMLElement, words: Array<elementData>, 
-    onAddWordToDifficult: (word: elementData) => void,
+    onAddWordToUserWords: (word: elementData, type: string) => void,
     onClickPLay: (word: elementData) => void,
     onSetupButtons: () => void,
     onRemoveWordFromDifficult: (word: elementData) => void
   ) {
     super(parentNode, "div", ["dictionary-content"],);
 
-    this.onAddWordToDifficult = (word) => onAddWordToDifficult(word);
+    this.onAddWordToUserWords = (word, type) => onAddWordToUserWords(word, type);
     this.onRemoveWordFromDifficult = (word) => onRemoveWordFromDifficult(word);
     this.onClickPLay = (word) => onClickPLay(word);
     this.onSetupButtons = () => onSetupButtons();
@@ -34,7 +34,7 @@ export class DictionaryContent extends Component {
     this.listElement = [];
     words.forEach( item  => {
       const elem = new DictionaryContentElement(this.wordsList.element, item);
-      elem.onAddWordToDifficult = (word) => this.onAddWordToDifficult(word);
+      elem.onAddWordToUserWords = (word: elementData, type: string) => this.onAddWordToUserWords(word, type);
       elem.onRemoveWordFromDifficult = (word) => this.onRemoveWordFromDifficult(word);
       elem.onClickPLay = (word) => this.onClickPLay(word);
       this.listElement.push(elem);

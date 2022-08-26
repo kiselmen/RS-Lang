@@ -4,7 +4,7 @@ import { DictionaryContent } from "../components/dictionary/content/dictionaryCo
 import { DictionaryPagination } from "../components/dictionary/pagination/dictionaryPagination";
 import { getWordsByChapterAndPage, getAlluserWords} from "../utils/loader";
 import { elementData } from "../interfaces";
-import { preLoad, addWordToDifficult, removeWordFromDifficult } from "../utils/loader";
+import { preLoad, addWordToUserWords, updateWordInUserWords, removeWordFromDifficult } from "../utils/loader";
 
 export class Dictionary extends Component {
   private dictionaryHeader: DictionaryHeader;
@@ -28,7 +28,7 @@ export class Dictionary extends Component {
     this.dictionaryContent = new DictionaryContent(
       this.element, 
       this.words, 
-      (word) => this.onAddWordToDifficult(word),
+      (word, type) => this.onAddWordToUserWords(word, type),
       (word) => this.onClickPlay(word),
       () => this.onSetupButtons(),
       (word) => this.onRemoveWordFromDifficult(word)
@@ -66,22 +66,28 @@ export class Dictionary extends Component {
     }
   };
 
-  onAddWordToDifficult = (word: elementData) => {
+  onAddWordToUserWords = (word: elementData, type: string) => {
     this.checkToken().then( () => {
-      addWordToDifficult(word).then( (data) => {
-        this.userWords.push(data);
+      const isWordPresent = this.userWords.filter(item => item.wordId === word.id);
+      if (isWordPresent.length) {
+        updateWordInUserWords(word, type);
         this.onSetupButtons();
-      });
+      } else {
+        addWordToUserWords(word, type).then( (data) => {
+          this.userWords.push(data);
+          this.onSetupButtons();
+        });
+      }
     });
   };
 
   onRemoveWordFromDifficult =  (word: elementData) => {
+    const isInHard = this.userWords.filter( item => item.wordId === word.id);
+    console.log(isInHard, this.userWords);
+    
     this.checkToken().then( () => {
       removeWordFromDifficult(word).then( () => {
-        this.userWords = this.userWords.filter(item => {
-          return item.wordId !== word.id;
-        });
-        
+        this.userWords = this.userWords.filter(item => item.wordId !== word.id);
         this.onSetupButtons();
       });
     });
@@ -95,29 +101,47 @@ export class Dictionary extends Component {
   }
 
   onSetupButtons() {
-    let countHard = 0;
+    let countStudy = 0;
+    console.log(this.userWords);
+    
     this.dictionaryContent.listElement.forEach ( itemInList => {
       if (localStorage.getItem("token")) {
-        const isHard = this.userWords.filter( userItem => {
-          return itemInList.word.id === userItem.wordId && userItem.difficulty === "hard";
+        const isPresent = this.userWords.filter( userItem => {
+          return itemInList.word.id === userItem.wordId;
         });
-        if (isHard.length) {
-          itemInList.elementBtnAdd?.setDisabled(true);
-          itemInList.elementBtnRemove.setDisabled(false);
-          itemInList.element.classList.add("element__hard");
+        if (isPresent.length) {
+          if (isPresent[0].difficulty === "hard") {
+            itemInList.elementBtnAdd.setDisabled(true);
+            itemInList.elementBtnRemove.setDisabled(false);
+            itemInList.elementBtnStudied.setDisabled(false);
+            itemInList.element.classList.add("element__hard");
+          } else {
+            itemInList.elementBtnAdd.setDisabled(true);
+            itemInList.elementBtnRemove.setDisabled(false);
+            itemInList.elementBtnStudied.setDisabled(true);
+            itemInList.element.classList.add("element__studied");
+          }
         } else {
           itemInList.elementBtnAdd?.setDisabled(false);
           itemInList.elementBtnRemove.setDisabled(true);
+          itemInList.elementBtnStudied.setDisabled(false);
           itemInList.element.classList.remove("element__hard");
+          itemInList.element.classList.remove("element__studied");
         }
-        countHard = isHard.length === 0 ? countHard : countHard + 1;
+        countStudy = countStudy + this.userWords.filter( userItem => itemInList.word.id === userItem.wordId && userItem.difficulty === "study").length;
       } else {
         itemInList.elementBtnAdd?.setDisabled(true);
         itemInList.elementBtnRemove.setDisabled(true);
+        itemInList.elementBtnStudied.setDisabled(true);
         itemInList.element.classList.remove("element__hard");
+        itemInList.element.classList.remove("element__studied");
       }
       
     });
-    console.log(countHard);
+    if (countStudy === 20) {
+      this.dictionaryPagination.numberPage.element.classList.add("pagination-number__learned");
+    } else {
+      this.dictionaryPagination.numberPage.element.classList.remove("pagination-number__learned");
+    }
   }
 }
