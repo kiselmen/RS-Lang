@@ -112,21 +112,11 @@ export class DictionaryContentElement extends Component {
   }
 
   onAddClick(type: string) {
-    // if (type === "study") {
-    //   console.log("add to stydy");
-    //   this.onRemoveWordFromDifficult(this.word);
-    // }  
-    // console.log(type);
-    
     this.onAddWordToUserWords(this.word, type);
   }
 
   onRemoveClick() {
     this.onRemoveWordFromDifficult(this.word);
   }
-
-  // onStudiedClick() {
-  //   console.log();
-  // }
 
 }

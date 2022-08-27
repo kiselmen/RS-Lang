@@ -4,7 +4,7 @@ import { DictionaryContent } from "../components/dictionary/content/dictionaryCo
 import { DictionaryPagination } from "../components/dictionary/pagination/dictionaryPagination";
 import { getWordsByChapterAndPage, getAlluserWords} from "../utils/loader";
 import { elementData } from "../interfaces";
-import { preLoad, addWordToUserWords, updateWordInUserWords, removeWordFromDifficult, getAllAgregatedWords } from "../utils/loader";
+import { preLoad, addWordToUserWords, updateWordInUserWords, removeWordFromDifficult, getAgregatedWordsByPage, getAllAgregatedWords } from "../utils/loader";
 
 export class Dictionary extends Component {
   private dictionaryHeader: DictionaryHeader;
@@ -37,19 +37,37 @@ export class Dictionary extends Component {
 
   loadData = () => {
     this.checkToken().then(() => {
+      this.words = [];
+      this.dictionaryContent.loading = true;
+      this.dictionaryContent.renderContent(this.words);
       if (localStorage.getItem("token")) {
         getAlluserWords().then( data => {
           this.userWords = data;
         }).then( () => {
           if (this.dictionaryHeader.chapters.chapter < 6) {
+            this.dictionaryPagination.enabledButtons();
             getWordsByChapterAndPage(this.dictionaryHeader.chapters.chapter, this.dictionaryPagination.page).then( data => {
               this.words = data;
+              this.dictionaryContent.loading = false;
               this.dictionaryContent.renderContent(this.words);
             });
           } else {
-            getAllAgregatedWords().then( data => {
-              this.words = data;
-              this.dictionaryContent.renderContent(this.words);
+            const page = 0;
+            const worPerPage = 100;
+            this.dictionaryPagination.disabletButtons();
+            getAgregatedWordsByPage(page, worPerPage).then( data => {
+              const allPages = Math.ceil(data.totalCount[0].count / worPerPage);
+              if (page < allPages) {
+                getAllAgregatedWords(allPages, worPerPage).then( data => {
+                  this.words = data;
+                  this.dictionaryContent.loading = false;
+                  this.dictionaryContent.renderContent(this.words);
+                });
+              } else {
+                this.words = data;
+                this.dictionaryContent.loading = false;
+                this.dictionaryContent.renderContent(this.words);
+              }
             });
           }
         });
@@ -74,20 +92,31 @@ export class Dictionary extends Component {
   };
 
   onAddWordToUserWords = (word: elementData, type: string) => {
-    this.checkToken().then( () => {
-      const isWordPresent = this.userWords.filter(item => item.wordId === word.id);
-      if (isWordPresent.length) {
-        updateWordInUserWords(word, type).then( data => {
-          isWordPresent[0].difficulty = data.difficulty;
-          this.onSetupButtons();
-        });
-      } else {
-        addWordToUserWords(word, type).then( data => {
-          this.userWords.push(data);
-          this.onSetupButtons();
-        });
-      }
-    });
+    if (this.dictionaryHeader.chapters.chapter !== 6) {
+      this.checkToken().then( () => {
+        const isWordPresent = this.userWords.filter(item => item.wordId === word.id);
+        if (isWordPresent.length) {
+          updateWordInUserWords(word, type).then( data => {
+            isWordPresent[0].difficulty = data.difficulty;
+            this.onSetupButtons();
+          });
+        } else {
+          addWordToUserWords(word, type).then( data => {
+            this.userWords.push(data);
+            this.onSetupButtons();
+          });
+        }
+      });
+    } else {
+      this.dictionaryContent.loading = true;
+      this.dictionaryContent.renderContent();
+      updateWordInUserWords(word, "study").then( data => {
+        this.userWords = this.userWords.filter(item => item.wordId !== data.wordId);
+        this.words = this.words.filter(item => item._id !== data.wordId);
+        this.dictionaryContent.loading = false;
+        this.dictionaryContent.renderContent(this.words);
+      });
+    }
   };
 
   onRemoveWordFromDifficult =  (word: elementData) => {
@@ -95,8 +124,19 @@ export class Dictionary extends Component {
     console.log(isInHard, this.userWords);
     
     this.checkToken().then( () => {
+
+      this.dictionaryContent.loading = true;
+      this.dictionaryContent.renderContent();
       removeWordFromDifficult(word).then( () => {
-        this.userWords = this.userWords.filter(item => item.wordId !== word.id);
+        if (this.dictionaryHeader.chapters.chapter !== 6) {
+          this.userWords = this.userWords.filter(item => item.wordId !== word.id);
+          this.words = this.words.filter(item => item.wordId !== word.id);
+        } else {
+          this.userWords = this.userWords.filter(item => item.wordId !== word._id);
+          this.words = this.words.filter(item => item._id !== word._id);
+        }
+        this.dictionaryContent.loading = false;
+        this.dictionaryContent.renderContent(this.words);
         this.onSetupButtons();
       });
     });
@@ -109,10 +149,8 @@ export class Dictionary extends Component {
     filterWordsElements.forEach(item => item.onListenClick());
   }
 
-  onSetupButtons() {
+  setupButtonsForCapter1_6 = () => {
     let countStudy = 0;
-    console.log(this.userWords);
-    
     this.dictionaryContent.listElement.forEach ( itemInList => {
       if (localStorage.getItem("token")) {
         const isPresent = this.userWords.filter( userItem => {
@@ -156,5 +194,17 @@ export class Dictionary extends Component {
     } else {
       this.dictionaryPagination.numberPage.element.classList.remove("pagination-number__learned");
     }
+  };
+
+  setupButtonsForCapter7 = () => {
+    this.dictionaryContent.listElement.forEach ( itemInList => {
+      itemInList.elementBtnAdd?.setDisabled(true);
+      itemInList.elementBtnRemove.setDisabled(false);
+      itemInList.elementBtnStudied.setDisabled(false);
+    });
+  };
+
+  onSetupButtons() {
+    this.dictionaryHeader.chapters.chapter !== 6 ? this.setupButtonsForCapter1_6() : this.setupButtonsForCapter7();
   }
 }
