@@ -106,7 +106,8 @@ const addWordToUserWords = async (word: elementData, type: string) => {
 };
 
 const updateWordInUserWords = async (word: elementData, type: string) => {
-  const url = "users/" + localStorage.getItem("userId") + "/words/" + word.id;
+  const wordId = word.id !== undefined ? word.id : word._id;
+  const url = "users/" + localStorage.getItem("userId") + "/words/" + wordId;
   const method = createPutSettings();
   method.body = JSON.stringify({
     difficulty : type,
@@ -143,7 +144,8 @@ const getAllAgregatedWords = async(allPages: number, wordPerPage: number) => {
 };
 
 const removeWordFromDifficult = async (word: elementData) => {
-  const url = "users/" + localStorage.getItem("userId") + "/words/" + word.id;
+  const wordId = word.id !== undefined ? word.id : word._id;
+  const url = "users/" + localStorage.getItem("userId") + "/words/" + wordId;
   const method = createDeleteSettings();
   await load(url, method);
 };

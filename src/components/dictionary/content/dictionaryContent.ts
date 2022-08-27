@@ -37,7 +37,7 @@ export class DictionaryContent extends Component {
     this.loadingElement.setVisible(false);
   }
 
-  renderContent(words: Array<elementData>){
+  renderContent(words: Array<elementData> = []){
     this.wordsList.element.innerHTML ="";
     this.listElement = [];
     if (this.loading) {
