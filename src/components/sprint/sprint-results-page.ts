@@ -19,7 +19,10 @@ class SprintResultesPage extends Component {
     // this.result = new SprintResult(this.results.element);
     // this.result = new SprintResult(this.results.element);
     // this.result = new SprintResult(this.results.element);
+  }
 
+  clearResults() {
+    this.results.element.innerHTML = "";
   }
 }
 
@@ -31,6 +34,7 @@ class SprintResult extends Component {
   wordInRu;
   wordPronunLink;
   wordCheckingResultImg;
+  specialFunc: () => void = () => console.log("to do something");
 
   constructor(parentNode: HTMLElement, wordInEng: string, wordInEngTranscription: string, wordInRu: string, wordVoiceLink: string, boolean: boolean) {
     super(parentNode, "div", ["sprint-result__wrap"]);
@@ -46,6 +50,8 @@ class SprintResult extends Component {
     } else {
       this.wordCheckingResultImg = new Component(this.element, "div", ["sprintResultWordCheckingResult-img", "false"]);
     }
+
+    this.soundOnOffBtn.element.onclick = () =>  this.specialFunc();
   }
 }
 

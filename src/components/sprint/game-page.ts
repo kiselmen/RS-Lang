@@ -59,16 +59,13 @@ class SprintGamePage extends Component {
 
     this.answersBtnsContainer = new Component(this.element, "div", ["sprintAnswersBtns-container"]);
     this.answerFalseBtn = new UIButton(this.answersBtnsContainer.element, ["sprintAnswerFalse-btn"], "Не верно");
-    this.answerTrueBtn = new UIButton(this.answersBtnsContainer.element, ["sprintAnswerTrue-btn"], "Верно");    
-    
+    this.answerTrueBtn = new UIButton(this.answersBtnsContainer.element, ["sprintAnswerTrue-btn"], "Верно");
+
     this.audioPlayer = new Component(this.element, "audio", ["sprintAudioPlayer"]);
     this.audioPlayer.element.style.cssText = "display: none; visibility: hidden";
     // (this.audioPlayer.element as HTMLAudioElement).volume = 0;
   }
 
-  private startSprint() {
-    return null;
-  }
 
 }
 

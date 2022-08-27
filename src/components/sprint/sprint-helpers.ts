@@ -12,12 +12,12 @@ const sprintState: ISprintState = {
 
 /* Контент для первой страницы */
 async function getInfo(currentGroup: number, currentPage: number,) {
-  if(localStorage.getItem("userId")) {
+  if(!localStorage.getItem("userId")) {
     return await getWordsByChapterAndPage(currentPage, currentGroup);
   }
 }
 /* Озвучка слова */
-async function sayTheWord(player: HTMLAudioElement, link: string) {
+function sayTheWord(player: HTMLAudioElement, link: string) {
   player.setAttribute("src", BASE_URL + link);
   player.play();
 }
@@ -39,6 +39,7 @@ function myRandom(currentNum: number): number {
 function clearSprintState() {
   sprintState.currentGroup = 0;
   sprintState.currentPage = 0;
+  sprintState.counter = 0;
   sprintState.score = 0;
   sprintState.currentContent = [];
 }

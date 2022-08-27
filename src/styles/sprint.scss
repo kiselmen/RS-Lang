@@ -8,6 +8,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  color: #494a69;
 }
 .sprintIntro-card__wrap {
   display: flex;
@@ -17,9 +18,10 @@
   align-items: center;
   max-width: 650px;
   min-height: 350px;
-  background: rgb(107 197 233);
-  box-shadow: 0px 0px 10px 2px rgb(0 113 162);
+  background: rgb(255, 246, 186);
+  box-shadow: 0px 0px 10px 2px rgb(141 139 74);
   border-radius: 40px;
+  color: #494a69;
   padding: 30px;
   font-size: 30px;
 }
@@ -51,7 +53,10 @@
 /***** Sprint Game *****/
 
 .sprint-game__wrap {
-  background: rgb(107 197 233);
+  background: rgb(255, 246, 186);
+  box-shadow: 0px 0px 10px 2px rgb(141 139 74);
+  border-radius: 40px;
+  color: #494a69;
   background-size: 600px 450px;
   width: 600px;
   height: 450px;
@@ -59,7 +64,6 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  color: #6a4747;
   margin-top: 120px;
 }
 .sprintControlsBtns-container {
@@ -102,7 +106,7 @@
 .sprint-timer, .sprint-points {
    width: 70px;
    height: 70px;
-   border: 2px solid #ccefff;
+   border: 2px solid #7c7c7c;
    border-radius: 50%;
    background-color: #ffff;
    display: flex;
@@ -111,6 +115,7 @@
    font-size: 2.5em;
    text-align: center;
    font-family: inherit;
+   color: #494a69;
 }
 .sprintGameCardSignals-container {
   display: flex;
@@ -147,7 +152,9 @@
   font-size: 40px;
   font-weight: 700;
   letter-spacing: 3px;
-  color: #ffff;
+}
+.sprintWordInRu-container {
+  color: #696bbc;
 }
 .sprintWordInRu-container {
   margin-top: 0;
@@ -169,10 +176,10 @@
   width: 170px;
   height: 40px;
   font-size: 24px;
-  background: #d1f2ff;
+  background: #ffff;
   border-radius: 10px;
-  border: 2px solid #ccefff;
-  color: #6a4747;
+  border: 2px solid #696bbc;
+  color: #494a69;
   position: relative;
   padding: 0 10px;
 }
@@ -205,7 +212,7 @@
   background: url(../../public/sprint-images/right-arrow.svg);
 }
 
-/***** Sprint Game Results *****/
+/***** Sprint Results Page*****/
 
 .sprint-resultsPage__container {
   min-width: 500px;
@@ -218,8 +225,6 @@
 }
 .sprint-results__container {
   margin-top: 30px;
-  border: 2px solid #dd8e8e;
-  border-radius: 30px;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
@@ -229,6 +234,7 @@
   max-height: 65vh;
   min-height: 400px;
   overflow-y: scroll;
+  border-top: 1px solid #494a69;
 }
 .sprint-result__wrap {
   display: flex;
