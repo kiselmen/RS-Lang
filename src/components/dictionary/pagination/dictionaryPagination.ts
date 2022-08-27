@@ -1,9 +1,10 @@
+import "./dictionaryPagination.scss";
 import { Component } from "../../../utils/component";
 import { UIButton } from "../../UI/button";
 
 export class DictionaryPagination extends Component {
   private btnPrev: UIButton;
-  private numberPage: Component;
+  numberPage: Component;
   private btnNext: UIButton;
   page: number;
   onChangePage: () => void;
@@ -12,12 +13,8 @@ export class DictionaryPagination extends Component {
     super(parentNode, "div", ["dictionary-pagination", "pagination"],);
     this.onChangePage = () => onChangePage();
     this.page = 0;
-    if (localStorage.getItem("page")) {
-      this.page = Number(localStorage.getItem("page"));
-    }
-
     this.btnPrev = new UIButton(this.element, ["btn"], "Prev");
-    this.numberPage = new Component(this.element, "span", ["pagination-number"], `Page: ${this.page}`);
+    this.numberPage = new Component(this.element, "span", ["pagination-number"], `Page: ${this.page + 1}`);
     this.btnNext = new UIButton(this.element, ["btn"], "Next");
     this.btnPrev.onClickButton = () => this.onPrevPageClicl();
     this.btnNext.onClickButton = () => this.onNextPageClick();
@@ -27,6 +24,7 @@ export class DictionaryPagination extends Component {
   onPrevPageClicl = () => {
     if (this.page !== 0) {
       this.page--;
+      localStorage.setItem("page", String(this.page));
       this.setupButtons();
     }
   };
@@ -34,11 +32,27 @@ export class DictionaryPagination extends Component {
   onNextPageClick = () => {
     if (this.page < 29) {
       this.page++;
+      localStorage.setItem("page", String(this.page));
       this.setupButtons();
     }
   };
 
   setupButtons = () => {
+    this.enabledButtons();
+    this.onChangePage();
+  };
+
+  disabletButtons = () => {
+    this.page = 0;
+    this.numberPage.element.textContent = `Page: ${this.page + 1}`;
+    this.btnPrev.setDisabled(true);
+    this.btnNext.setDisabled(true);
+  };
+
+  enabledButtons = () => {
+    if (localStorage.getItem("page")) {
+      this.page = Number(localStorage.getItem("page"));
+    }
     if (this.page === 0) {
       this.btnPrev.setDisabled(true);
     } else {
@@ -49,8 +63,6 @@ export class DictionaryPagination extends Component {
     } else {
       this.btnNext.setDisabled(false);
     }  
-    localStorage.setItem("page", String(this.page));
-    this.numberPage.element.textContent = `Page: ${this.page}`;
-    this.onChangePage();
+    this.numberPage.element.textContent = `Page: ${this.page + 1}`;
   };
 }

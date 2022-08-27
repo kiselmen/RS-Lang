@@ -20,7 +20,7 @@ export class DictionaryContentElement extends Component {
   private elementAudio: Component;
   private elementAudioMeaning: Component;
   private elementAudioExample: Component;
-  onAddWordToDifficult: (word: elementData) => void = () => {};
+  onAddWordToUserWords: (word: elementData, type: string) => void = () => {};
   onClickPLay: (word: elementData) => void = () => {};
   onRemoveWordFromDifficult: (word: elementData) => void = () => {};
 
@@ -62,9 +62,9 @@ export class DictionaryContentElement extends Component {
     this.elementBtnStudied = new UIButton(this.elementBtns.element, ["btn"], "Studied");
   
     if (localStorage.getItem("token")) {
-      this.elementBtnAdd.onClickButton = async () => this.onAddClick();
+      this.elementBtnAdd.onClickButton = async () => this.onAddClick("hard");
       this.elementBtnRemove.onClickButton = async () => this.onRemoveClick();
-      this.elementBtnStudied.onClickButton = async () => this.onStudiedClick();
+      this.elementBtnStudied.onClickButton = async () => this.onAddClick("study");
     } else {
       this.elementBtnAdd.setDisabled(true);
       this.elementBtnRemove.setDisabled(true);
@@ -111,16 +111,12 @@ export class DictionaryContentElement extends Component {
     }
   }
 
-  onAddClick() {
-    this.onAddWordToDifficult(this.word);
+  onAddClick(type: string) {
+    this.onAddWordToUserWords(this.word, type);
   }
 
   onRemoveClick() {
     this.onRemoveWordFromDifficult(this.word);
-  }
-
-  onStudiedClick() {
-    console.log();
   }
 
 }

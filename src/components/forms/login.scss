@@ -16,7 +16,18 @@
 }
 
 .item{
-  &-label{
+  &-label{  
     margin-right: 20px;
+  }
+  &-checkbox{
+    width: 20px;
+    height: 20px;
+    border: 1px solid var(--border-color);
+    &__active{
+      background-color: #baedff;
+    }
+  }
+  &-message{
+    color: var(--alert-color);
   }  
 }

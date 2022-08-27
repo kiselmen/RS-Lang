@@ -21,6 +21,17 @@ function createPostSettings() {
   };
 }
 
+function createPutSettings() {
+  return {
+    method : "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem("token")}`
+    },
+    body : ""
+  };
+}
+
 function createDeleteSettings() {
   return {
     method : "DELETE",
@@ -46,6 +57,7 @@ async function load(endpoint = "", method = { method : "GET" }) {
   try {
     const url = BASE_URL + endpoint;
     const response = await fetch(url, method);
+    
     const data = response.status === 200 ? await response.json() : response;
     const status = response.status;
     
@@ -78,11 +90,11 @@ const getAlluserWords = async () => {
   }
 };
 
-const addWordToDifficult = async (word: elementData) => {
+const addWordToUserWords = async (word: elementData, type: string) => {
   const url = "users/" + localStorage.getItem("userId") + "/words/" + word.id;
   const method = createPostSettings();
   method.body = JSON.stringify({
-    difficulty : "hard",
+    difficulty : type,
     optional : { total : 0, wrong : 0 }
   });
   const response = await load(url, method);
@@ -93,8 +105,47 @@ const addWordToDifficult = async (word: elementData) => {
   }
 };
 
+const updateWordInUserWords = async (word: elementData, type: string) => {
+  const wordId = word.id !== undefined ? word.id : word._id;
+  const url = "users/" + localStorage.getItem("userId") + "/words/" + wordId;
+  const method = createPutSettings();
+  method.body = JSON.stringify({
+    difficulty : type,
+    optional : { total : 0, wrong : 0 }
+  });
+  const response = await load(url, method);
+  if (response.status !== 200) {
+    return [];
+  } else {
+    return response.data;
+  }
+};
+
+const getAgregatedWordsByPage = async(page: number, wordPerPage: number) => {
+  // eslint-disable-next-line quotes
+  const url = "users/" + localStorage.getItem("userId") + '/aggregatedWords?page=' + String(page)+ '&wordsPerPage=' + wordPerPage + '&filter={"$and":[{"userWord.difficulty":"hard"}]}';
+  const response = await load(url, createGetSettings());
+  if (response.status !== 200) {
+    return [];
+  } else {
+    return response.data[0];
+  }
+};
+
+const getAllAgregatedWords = async(allPages: number, wordPerPage: number) => {
+  let allData = [] as elementData[];
+  for (let page = 0; page < allPages; page++){
+    const currResult = await getAgregatedWordsByPage(page, wordPerPage);
+    const curData = currResult.paginatedResults;
+    
+    allData = [...allData, ...curData];
+  }
+  return allData;
+};
+
 const removeWordFromDifficult = async (word: elementData) => {
-  const url = "users/" + localStorage.getItem("userId") + "/words/" + word.id;
+  const wordId = word.id !== undefined ? word.id : word._id;
+  const url = "users/" + localStorage.getItem("userId") + "/words/" + wordId;
   const method = createDeleteSettings();
   await load(url, method);
 };
@@ -116,8 +167,11 @@ const signInUser = async (userData: elementData) => {
 export { 
   getWordsByChapterAndPage, 
   getAlluserWords, 
-  addWordToDifficult, 
-  removeWordFromDifficult, 
+  addWordToUserWords,
+  updateWordInUserWords, 
+  removeWordFromDifficult,
+  getAgregatedWordsByPage,
+  getAllAgregatedWords, 
   registerUser,
   signInUser,
   preLoad } ;

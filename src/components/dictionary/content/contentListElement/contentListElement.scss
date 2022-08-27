@@ -29,6 +29,9 @@
   &__hard {
     background-color: var(--hard-color);
   }
+  &__studied {
+    background-color: var(--select-color);
+  }
   &-btns {
     display: flex;
     justify-content: space-between;

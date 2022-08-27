@@ -1,8 +1,12 @@
+@import "./mixins.scss";
+@import "./functions.scss";
+
 .sprint h3 {
   font-size: 2rem;
   font-weight: bold;
 }
 .sprint {
+  width: 100%;
   height: calc(100vh - 83px);
   display: flex;
   flex-direction: column;
@@ -51,6 +55,7 @@
 }
 
 /***** Sprint Game *****/
+
 
 .sprint-game__wrap {
   background: rgb(255, 246, 186);

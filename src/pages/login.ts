@@ -24,6 +24,7 @@ export class Login extends Component{
     e.preventDefault();
     const eMailElement = this.loginForm.eMailInput.element as HTMLInputElement;
     const passElement = this.loginForm.passInput.element as HTMLInputElement;
+    const message = this.loginForm.message.element as HTMLElement;
 
     const isValidate = this.onValidateEmail(eMailElement) && this.onValidatePass(passElement);
 
@@ -31,12 +32,12 @@ export class Login extends Component{
       const userData = this.onDataConstruct(eMailElement, passElement);
       const response = await signInUser(userData);
       if (response.status !== 200) {
-        passElement.value = "";
-        passElement.placeholder = "Wrong password or EMail";
+        message.textContent = "Wrong password or EMail";
       } else {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("refreshToken", response.data.refreshToken);
         localStorage.setItem("userId", response.data.userId);
+        message.textContent = "";
         window.location.hash = "#/profile";
         this.onUpdateRouter();
       }
@@ -47,6 +48,7 @@ export class Login extends Component{
     e.preventDefault();
     const eMailElement = this.loginForm.eMailInput.element as HTMLInputElement;
     const passElement = this.loginForm.passInput.element as HTMLInputElement;
+    const message = this.loginForm.message.element as HTMLElement;
 
     const isValidate = this.onValidateEmail(eMailElement) && this.onValidatePass(passElement);
     if (isValidate) {
@@ -54,13 +56,11 @@ export class Login extends Component{
       
       const response = await registerUser(userData);
       if (response.status !== 200) {
-        eMailElement.value = "";
-        eMailElement.placeholder = "This email is in use by another user";
+        message.textContent = "This email is in use by another user";
       } else {
         const responseSign = await signInUser(userData);
         if (responseSign.status !== 200) {
-          passElement.value = "";
-          passElement.placeholder = "Wrong password or EMail";
+          message.textContent = "Wrong password or EMail";
         } else {
           localStorage.setItem("token", responseSign.data.token);
           localStorage.setItem("refreshToken", responseSign.data.refreshToken);
@@ -74,8 +74,7 @@ export class Login extends Component{
   onValidateEmail: (elem: HTMLInputElement) => boolean = (elem) => {
     const isEmailValidate = EMAIL_REGEXP.test(elem.value);
     if (!isEmailValidate) {
-      elem.value = "";
-      elem.placeholder = "Invalid EMail";
+      this.loginForm.message.element.textContent = "Invalid EMail";
     }
     return isEmailValidate;
   };
@@ -83,8 +82,7 @@ export class Login extends Component{
   onValidatePass: (elem: HTMLInputElement) => boolean = (elem) => {
     const isPassValidate = elem.value.length > 7;
     if (!isPassValidate) {
-      elem.value = "";
-      elem.placeholder = "Password length must be more then 7";
+      this.loginForm.message.element.textContent = "Password length must be more then 7";
     }
     return isPassValidate;
   };
@@ -95,28 +93,4 @@ export class Login extends Component{
     userData.password = pass.value;
     return userData;
   };
-
-  // async onRegisterUser(userData: elementData) {
-  //   const url = "users";
-  //   const method = {
-  //     method : "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(userData)
-  //   };
-  //   return await load(url, method);     
-  // }
-
-  // async onSignInUser(userData: elementData) {
-  //   const url = "signin";
-  //   const method = {
-  //     method : "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(userData)
-  //   };
-  //   return await load(url, method);     
-  // }
 }

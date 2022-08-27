@@ -36,7 +36,7 @@ export class Router {
       {
         name: "/dictionary",
         component: () => {
-          this.dictionaryPage = new Dictionary(this.rootElement, () => this.onSignOnUser("/login", "/profile"));
+          this.dictionaryPage = new Dictionary(this.rootElement, () => this.onSignOnUser("/profile", "/login"));
           this.rootElement.append(this.dictionaryPage.element);
         },
       },
