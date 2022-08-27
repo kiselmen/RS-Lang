@@ -76,12 +76,12 @@ function updateSprintState(pageUpdate: boolean, stepCounterUpdate: boolean | num
   if(typeof scoreUpdate === "number") {
     sprintState.score = scoreUpdate;
   }
-  if(correctAnswerCountUpdate && sprintState.correctAnswerCount <= 2) {
+  if(correctAnswerCountUpdate && sprintState.correctAnswerCount < 3) {
     sprintState.correctAnswerCount += 1;
-  } else {
-    if(sprintState.correctAnswerCount !== 0) {
-      sprintState.correctAnswerCount -= 1;
-    }
+  } else if(correctAnswerCountUpdate && sprintState.correctAnswerCount === 3) {
+    sprintState.correctAnswerCount += 0;
+  } else if(!correctAnswerCountUpdate) {
+    sprintState.correctAnswerCount = 0;
   }
   if(currentContent) {
     sprintState.currentContent = currentContent;
