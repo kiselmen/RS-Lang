@@ -4,6 +4,7 @@ import { DictionaryContentElement } from "./contentListElement/contentListElemen
 
 export class DictionaryContent extends Component {
   private wordsList: Component;
+  private emptyWordsList: Component;
   listElement: Array<DictionaryContentElement>;
   onAddWordToUserWords: (word: elementData, type: string) => void;
   onRemoveWordFromDifficult: (word: elementData) => void;
@@ -24,6 +25,7 @@ export class DictionaryContent extends Component {
     this.onSetupButtons = () => onSetupButtons();
 
     this.wordsList = new Component(this.element, "ul", ["dictionary-content__list", "list-content"]);
+    this.emptyWordsList = new Component(this.element, "ul", ["dictionary-content__list", "list-content"]);
 
     this.listElement = [];
     () => this.renderContent(words);
@@ -40,6 +42,11 @@ export class DictionaryContent extends Component {
       this.listElement.push(elem);
     });
     this.onSetupButtons();
+    if (words.length === 0) {
+      this.emptyWordsList.element.textContent = "There is no any hard words";
+    } else {
+      this.emptyWordsList.element.textContent = "";
+    }  
   }
 }
 

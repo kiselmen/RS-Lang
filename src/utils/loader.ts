@@ -57,6 +57,7 @@ async function load(endpoint = "", method = { method : "GET" }) {
   try {
     const url = BASE_URL + endpoint;
     const response = await fetch(url, method);
+    
     const data = response.status === 200 ? await response.json() : response;
     const status = response.status;
     
@@ -119,18 +120,26 @@ const updateWordInUserWords = async (word: elementData, type: string) => {
   }
 };
 
-const getAllAgregatedWords = async() => {
+const getAgregatedWordsByPage = async(page: number, wordPerPage: number) => {
   // eslint-disable-next-line quotes
-  const url = "users/" + localStorage.getItem("userId") + '/aggregatedWords?wordsPerPage=100&filter={"$and":[{"userWord.difficulty":"hard"}]}';
+  const url = "users/" + localStorage.getItem("userId") + '/aggregatedWords?page=' + String(page)+ '&wordsPerPage=' + wordPerPage + '&filter={"$and":[{"userWord.difficulty":"hard"}]}';
   const response = await load(url, createGetSettings());
   if (response.status !== 200) {
     return [];
   } else {
-    // console.log(response.data);
-    // console.log(response.data[0].paginatedResults);
-    
-    return response.data[0].paginatedResults;
+    return response.data[0];
   }
+};
+
+const getAllAgregatedWords = async(allPages: number, wordPerPage: number) => {
+  let allData = [] as elementData[];
+  for (let page = 0; page < allPages; page++){
+    const currResult = await getAgregatedWordsByPage(page, wordPerPage);
+    const curData = currResult.paginatedResults;
+    
+    allData = [...allData, ...curData];
+  }
+  return allData;
 };
 
 const removeWordFromDifficult = async (word: elementData) => {
@@ -159,6 +168,7 @@ export {
   addWordToUserWords,
   updateWordInUserWords, 
   removeWordFromDifficult,
+  getAgregatedWordsByPage,
   getAllAgregatedWords, 
   registerUser,
   signInUser,

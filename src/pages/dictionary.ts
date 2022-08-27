@@ -4,7 +4,7 @@ import { DictionaryContent } from "../components/dictionary/content/dictionaryCo
 import { DictionaryPagination } from "../components/dictionary/pagination/dictionaryPagination";
 import { getWordsByChapterAndPage, getAlluserWords} from "../utils/loader";
 import { elementData } from "../interfaces";
-import { preLoad, addWordToUserWords, updateWordInUserWords, removeWordFromDifficult, getAllAgregatedWords } from "../utils/loader";
+import { preLoad, addWordToUserWords, updateWordInUserWords, removeWordFromDifficult, getAgregatedWordsByPage, getAllAgregatedWords } from "../utils/loader";
 
 export class Dictionary extends Component {
   private dictionaryHeader: DictionaryHeader;
@@ -47,9 +47,19 @@ export class Dictionary extends Component {
               this.dictionaryContent.renderContent(this.words);
             });
           } else {
-            getAllAgregatedWords().then( data => {
-              this.words = data;
-              this.dictionaryContent.renderContent(this.words);
+            const page = 0;
+            const worPerPage = 100;
+            getAgregatedWordsByPage(page, worPerPage).then( data => {
+              const allPages = Math.ceil(data.totalCount[0].count / worPerPage);
+              if (page < allPages) {
+                getAllAgregatedWords(allPages, worPerPage).then( data => {
+                  this.words = data;
+                  this.dictionaryContent.renderContent(this.words);
+                });
+              } else {
+                this.words = data;
+                this.dictionaryContent.renderContent(this.words);
+              }
             });
           }
         });
