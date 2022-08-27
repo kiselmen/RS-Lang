@@ -1,4 +1,5 @@
 import {Component} from "../../utils/component";
+import {UIButton} from "../UI/button";
 
 class SprintIntro extends Component {
 
@@ -19,12 +20,12 @@ class SprintIntro extends Component {
     this.cardTextContent = new Component(this.element, "p", ["sprintIntro-card__content"], "Тренирует навык быстрого перевода с английского языка на русский. Вам нужно выбрать соответствует ли перевод предложенному слову.");
 
     this.cardBtnsContainer = new Component(this.element, "div", ["sprintIntro-card__Btns"]);
-    this.cardBtn1 = new Component(this.cardBtnsContainer.element, "button", ["sprintIntro-card__Btn", "btn-1"], "1");
-    this.cardBtn2 = new Component(this.cardBtnsContainer.element, "button", ["sprintIntro-card__Btn", "btn-2"], "2");
-    this.cardBtn3 = new Component(this.cardBtnsContainer.element, "button", ["sprintIntro-card__Btn", "btn-3"], "3");
-    this.cardBtn4 = new Component(this.cardBtnsContainer.element, "button", ["sprintIntro-card__Btn", "btn-4"], "4");
-    this.cardBtn5 = new Component(this.cardBtnsContainer.element, "button", ["sprintIntro-card__Btn", "btn-5"], "5");
-    this.cardBtn6 = new Component(this.cardBtnsContainer.element, "button", ["sprintIntro-card__Btn", "btn-6"], "6");
+    this.cardBtn1 = new UIButton(this.cardBtnsContainer.element, ["sprintIntro-card__Btn"], "1");
+    this.cardBtn2 = new UIButton(this.cardBtnsContainer.element, ["sprintIntro-card__Btn"], "2");
+    this.cardBtn3 = new UIButton(this.cardBtnsContainer.element, ["sprintIntro-card__Btn"], "3");
+    this.cardBtn4 = new UIButton(this.cardBtnsContainer.element, ["sprintIntro-card__Btn"], "4");
+    this.cardBtn5 = new UIButton(this.cardBtnsContainer.element, ["sprintIntro-card__Btn"], "5");
+    this.cardBtn6 = new UIButton(this.cardBtnsContainer.element, ["sprintIntro-card__Btn"], "6");
 
     this.cardBtn1.element.style.background = "#FA8072";
     this.cardBtn2.element.style.background = "#00FFFF";
