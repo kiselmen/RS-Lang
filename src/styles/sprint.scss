@@ -132,8 +132,8 @@
 .signal-lamp {
   fill: #ff9f00;
 }
-.signal-lamp.activate {
-  fill: rgb(255 0 0);
+.sprintGameCardSignal.activate .signal-lamp {
+  fill: #ff4b31;
 }
 .sprintPronounceWord-btn {
   margin-top: 30px;
@@ -259,7 +259,7 @@
   background: url(../../public/sprint-images/speaker-inSprint-result.svg) no-repeat top;
   background-size: 30px 30px;
   flex: 0 1 auto;
-
+  cursor: pointer;
 }
 .sprintResultWordInEng, .sprintResultWordInRu{
   flex: 0 1 90px;
@@ -270,18 +270,20 @@
   text-align: start;
 }
 .sprintResultWordCheckingResult-img {
-  flex: 0 0 30px;
+  flex: 0 0 50px;
   text-align: start;
 }
 .sprintResultWordCheckingResult-img.true {
   width: 30px;
   height: 30px;
-  background: url(../../public/sprint-images/true-check.svg) no-repeat top;
+  background: url(../../public/sprint-images/true-check.svg) no-repeat;
   background-size: 30px 30px;
+  background-position-x: right;
 }
 .sprintResultWordCheckingResult-img.false {
   width: 30px;
   height: 30px;
-  background: url(../../public/sprint-images/false-check.svg) no-repeat top;
+  background: url(../../public/sprint-images/false-check.svg) no-repeat;
   background-size: 30px 30px;
+  background-position-x: right;
 }

@@ -5,8 +5,9 @@ import { BASE_URL } from "../../interfaces";
 const sprintState: ISprintState = {
   currentGroup: 0,
   currentPage: 0,
-  counter: 0,
+  stepCounter: 0,
   score: 0,
+  correctAnswerCount: 0,
   currentContent: [],
 };
 
@@ -39,10 +40,54 @@ function myRandom(currentNum: number): number {
 function clearSprintState() {
   sprintState.currentGroup = 0;
   sprintState.currentPage = 0;
-  sprintState.counter = 0;
+  sprintState.stepCounter = 0;
   sprintState.score = 0;
+  sprintState.correctAnswerCount = 0;
   sprintState.currentContent = [];
 }
+
+/* Обновление стейта */
+function updateSprintState(pageUpdate: boolean, stepCounterUpdate: boolean | number, scoreUpdate: boolean | number, correctAnswerCountUpdate: boolean, currentContent?: []) {
+  if(pageUpdate) {
+    sprintState.currentPage += 1;
+  }
+  if(typeof stepCounterUpdate === "boolean" && stepCounterUpdate) {
+    sprintState.stepCounter += 1;
+  }
+  if(typeof stepCounterUpdate === "number") {
+    sprintState.stepCounter = stepCounterUpdate;
+  }
+  if(typeof scoreUpdate === "boolean" && scoreUpdate) {
+    switch(sprintState.correctAnswerCount) {
+    case 0:
+      sprintState.score += 5;
+      break;
+    case 1:
+      sprintState.score += 10;
+      break;
+    case 2:
+      sprintState.score += 15;
+      break;
+    case 3:
+      sprintState.score += 20;
+      break;
+    }
+  }
+  if(typeof scoreUpdate === "number") {
+    sprintState.score = scoreUpdate;
+  }
+  if(correctAnswerCountUpdate && sprintState.correctAnswerCount <= 2) {
+    sprintState.correctAnswerCount += 1;
+  } else {
+    if(sprintState.correctAnswerCount !== 0) {
+      sprintState.correctAnswerCount -= 1;
+    }
+  }
+  if(currentContent) {
+    sprintState.currentContent = currentContent;
+  }
+}
+
 
 /* Отображение нужной страницы Sprint */
 const makeVisibleCurrentSprintPage = (hiddenEl1: HTMLElement, hiddenEl2: HTMLElement, visibleEl: HTMLElement, displayPropVisibleEl: string) => {
@@ -54,16 +99,17 @@ const makeVisibleCurrentSprintPage = (hiddenEl1: HTMLElement, hiddenEl2: HTMLEle
 interface ISprintState {
   currentGroup: number;
   currentPage: number,
-  counter: number,
-  currentContent: IContent[],
+  stepCounter: number,
   score: number,
+  correctAnswerCount: number,
+  currentContent: IContent[],
 }
 
 interface IContent {
   [key:string]: string | number;
 }
 
-export {sprintState, getInfo, sayTheWord, IContent, myRandom, clearSprintState, makeVisibleCurrentSprintPage};
+export {sprintState, getInfo, sayTheWord, IContent, myRandom, clearSprintState, makeVisibleCurrentSprintPage, updateSprintState};
 
 
 

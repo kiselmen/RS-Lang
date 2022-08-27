@@ -4,7 +4,7 @@ import SprintIntro from "../components/sprint/intro-page";
 import SprintGamePage from "../components/sprint/game-page";
 import {SprintResultesPage, SprintResult} from "../components/sprint/sprint-results-page";
 import Timer from "../components/sprint/timer";
-import {sprintState, getInfo, sayTheWord, myRandom, clearSprintState, makeVisibleCurrentSprintPage} from "../components/sprint/sprint-helpers";
+import {sprintState, getInfo, sayTheWord, myRandom, clearSprintState, makeVisibleCurrentSprintPage, updateSprintState} from "../components/sprint/sprint-helpers";
 // import { BASE_URL } from "../interfaces";
 
 export class Sprint extends Component {
@@ -35,8 +35,8 @@ export class Sprint extends Component {
 
         sprintState.currentContent = await getInfo(sprintState.currentGroup, sprintState.currentPage );
 
-        this.sprintGamePage.wordInEng.element.innerText =  sprintState.currentContent[sprintState.counter].word.toString();
-        this.sprintGamePage.wordInRu.element.innerText =  sprintState.currentContent[myRandom(sprintState.counter)].wordTranslate.toString();
+        this.sprintGamePage.wordInEng.element.innerText =  sprintState.currentContent[sprintState.stepCounter].word.toString();
+        this.sprintGamePage.wordInRu.element.innerText =  sprintState.currentContent[myRandom(sprintState.stepCounter)].wordTranslate.toString();
       });
     });
 
@@ -69,7 +69,7 @@ export class Sprint extends Component {
 
     /* Кнопка озвучки слова */
     this.sprintGamePage.pronounceWordBtn.element.addEventListener("click", () => {
-      sayTheWord(this.sprintGamePage.audioPlayer.element as HTMLAudioElement, sprintState.currentContent[sprintState.counter].audio.toString());
+      sayTheWord(this.sprintGamePage.audioPlayer.element as HTMLAudioElement, sprintState.currentContent[sprintState.stepCounter].audio.toString());
     });
 
     /* Закрытие страницы игры нажатием на Х */
@@ -90,56 +90,55 @@ export class Sprint extends Component {
         const currentBtn = e.target as HTMLButtonElement;
 
         // console.log(currentBtn.innerText);
-        // console.log(this.sprintGamePage.wordInRu.element.innerText);
-        // console.log(sprintState.currentContent[sprintState.counter].wordTranslate.toString());
-        // console.log(sprintState.counter);
-        // console.log(sprintState.currentContent);
+        console.log(this.sprintGamePage.wordInRu.element.innerText);
+        console.log(sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString());
+        console.log(sprintState.stepCounter);
+        console.log(sprintState.currentContent);
 
-        if(sprintState.counter === 19 && sprintState.currentPage < 30) {
-          sprintState.counter = 0;
-          sprintState.currentPage += 1;
-          sprintState.currentContent = await getInfo(sprintState.currentGroup, sprintState.currentPage );
-        } else if(sprintState.counter === 19 && sprintState.currentPage === 30) {
+        if(sprintState.stepCounter === 19 && sprintState.currentPage < 30) {
+          updateSprintState(true, 0, false, false,
+            await getInfo(sprintState.currentGroup, sprintState.currentPage ));
+          // sprintState.stepCounter = 0;
+          // sprintState.currentPage += 1;
+          // sprintState.currentContent = await getInfo(sprintState.currentGroup, sprintState.currentPage );
+        } else if(sprintState.stepCounter === 19 && sprintState.currentPage === 30) {
           makeVisibleCurrentSprintPage(this.sprintGamePage.element, this.sprintIntroCard.element, this.sprintResultsPage.element, "block");
           this.timer?.timerStop();
           clearSprintState();
+          updateSignalLampState();
+        }
+        console.log(sprintState.correctAnswerCount);
+
+        if(currentBtn.innerText === "ВЕРНО" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
+          updateSprintState(false, true, true, true);
+          updateScore();
+          updateGameCardContent();
+          updateSignalLampState();
+          makeAnswerVoise(true);
+          userResponseProcessing(sprintState.currentContent[sprintState.stepCounter].word.toString(), sprintState.currentContent[sprintState.stepCounter].transcription.toString(), sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString(), sprintState.currentContent[sprintState.stepCounter].audio.toString(), true);
+
+        } else if (currentBtn.innerText === "ВЕРНО" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
+          updateSprintState(false, true, false, false);
+          updateGameCardContent();
+          updateSignalLampState();
+          makeAnswerVoise(false);
+          userResponseProcessing(sprintState.currentContent[sprintState.stepCounter].word.toString(), sprintState.currentContent[sprintState.stepCounter].transcription.toString(), sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString(), sprintState.currentContent[sprintState.stepCounter].audio.toString(), false);
         }
 
-        if(currentBtn.innerText === "ВЕРНО" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.currentContent[sprintState.counter].wordTranslate.toString()) {
-          sprintState.score += 10;
-          sprintState.counter += 1;
-          this.sprintGamePage.points.element.innerText = sprintState.score.toString();
+        if(currentBtn.innerText === "НЕ ВЕРНО" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
+          updateSprintState(false, true, true, true);
+          updateScore();
+          updateGameCardContent();
+          updateSignalLampState();
+          makeAnswerVoise(true);
+          userResponseProcessing(sprintState.currentContent[sprintState.stepCounter].word.toString(), sprintState.currentContent[sprintState.stepCounter].transcription.toString(), sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString(), sprintState.currentContent[sprintState.stepCounter].audio.toString(), true);
 
-          this.sprintGamePage.wordInEng.element.innerText =  sprintState.currentContent[sprintState.counter].word.toString();
-          this.sprintGamePage.wordInRu.element.innerText =  sprintState.currentContent[myRandom(sprintState.counter)].wordTranslate.toString();
-
-          userResponseProcessing(sprintState.currentContent[sprintState.counter].word.toString(), sprintState.currentContent[sprintState.counter].transcription.toString(), sprintState.currentContent[sprintState.counter].wordTranslate.toString(), sprintState.currentContent[sprintState.counter].audio.toString(), true);
-
-
-        } else if (currentBtn.innerText === "ВЕРНО" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.currentContent[sprintState.counter].wordTranslate.toString()) {
-          sprintState.counter += 1;
-          this.sprintGamePage.wordInEng.element.innerText =  sprintState.currentContent[sprintState.counter].word.toString();
-          this.sprintGamePage.wordInRu.element.innerText =  sprintState.currentContent[myRandom(sprintState.counter)].wordTranslate.toString();
-
-          userResponseProcessing(sprintState.currentContent[sprintState.counter].word.toString(), sprintState.currentContent[sprintState.counter].transcription.toString(), sprintState.currentContent[sprintState.counter].wordTranslate.toString(), sprintState.currentContent[sprintState.counter].audio.toString(), false);
-        }
-
-        if(currentBtn.innerText === "НЕ ВЕРНО" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.currentContent[sprintState.counter].wordTranslate.toString()) {
-          sprintState.score += 10;
-          sprintState.counter += 1;
-          this.sprintGamePage.points.element.innerText = sprintState.score.toString();
-
-          this.sprintGamePage.wordInEng.element.innerText =  sprintState.currentContent[sprintState.counter].word.toString();
-          this.sprintGamePage.wordInRu.element.innerText =  sprintState.currentContent[myRandom(sprintState.counter)].wordTranslate.toString();
-
-          userResponseProcessing(sprintState.currentContent[sprintState.counter].word.toString(), sprintState.currentContent[sprintState.counter].transcription.toString(), sprintState.currentContent[sprintState.counter].wordTranslate.toString(), sprintState.currentContent[sprintState.counter].audio.toString(), true);
-
-        } else if (currentBtn.innerText === "НЕ ВЕРНО" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.currentContent[sprintState.counter].wordTranslate.toString()) {
-          sprintState.counter += 1;
-          this.sprintGamePage.wordInEng.element.innerText =  sprintState.currentContent[sprintState.counter].word.toString();
-          this.sprintGamePage.wordInRu.element.innerText =  sprintState.currentContent[myRandom(sprintState.counter)].wordTranslate.toString();
-
-          userResponseProcessing(sprintState.currentContent[sprintState.counter].word.toString(), sprintState.currentContent[sprintState.counter].transcription.toString(), sprintState.currentContent[sprintState.counter].wordTranslate.toString(), sprintState.currentContent[sprintState.counter].audio.toString(), false);
+        } else if (currentBtn.innerText === "НЕ ВЕРНО" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
+          updateSprintState(false, true, false, false);
+          updateGameCardContent();
+          updateSignalLampState();
+          makeAnswerVoise(false);
+          userResponseProcessing(sprintState.currentContent[sprintState.stepCounter].word.toString(), sprintState.currentContent[sprintState.stepCounter].transcription.toString(), sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString(), sprintState.currentContent[sprintState.stepCounter].audio.toString(), false);
         }
       });
 
@@ -156,7 +155,7 @@ export class Sprint extends Component {
 
     //* Вспомогательные *//
 
-    /* Вспомогательная ф-я для таймера */
+    /* Для таймера */
     const showResults = () => {
       makeVisibleCurrentSprintPage(this.sprintGamePage.element, this.sprintIntroCard.element, this.sprintResultsPage.element, "block");
       this.timer?.timerStop();
@@ -164,7 +163,7 @@ export class Sprint extends Component {
       updateScore();
     };
 
-    /* Вспомогательная ф-я обработки ответа пользователя и вывода резултата Sprint */
+    /* Для обработки ответа пользователя и вывода резултата Sprint */
     const userResponseProcessing = (wordInEng: string, wordInEngTranscription: string, wordInRu: string, wordVoiceLink: string, boolean: boolean) => {
       this.sprintResultsPage.result = new SprintResult(this.sprintResultsPage.results.element, wordInEng, wordInEngTranscription, wordInRu, wordVoiceLink, boolean);
 
@@ -172,6 +171,38 @@ export class Sprint extends Component {
         wordVoiceLink);
     };
 
+    /* Для обнорвления контента карточки игры (следующее слово) */
+    const updateGameCardContent = () => {
+      this.sprintGamePage.wordInEng.element.innerText =  sprintState.currentContent[sprintState.stepCounter].word.toString();
+      this.sprintGamePage.wordInRu.element.innerText =  sprintState.currentContent[myRandom(sprintState.stepCounter)].wordTranslate.toString();
+    };
+
+    /* Для обнорвления счета */
     const updateScore = () => this.sprintGamePage.points.element.innerText = sprintState.score.toString();
+
+    /* Для обновления сигнальных ламп */
+
+    const updateSignalLampState = () => {
+      const signalLamps = [this.sprintGamePage.gameSignalOne.element, this.sprintGamePage.gameSignalTwo.element, this.sprintGamePage.gameSignalThree.element];
+
+      signalLamps.forEach(lamp => lamp.classList.toggle("activate", false));
+
+      for(let i = 0; i < sprintState.correctAnswerCount; i += 1) {
+        signalLamps[i].classList.toggle("activate", true);
+      }
+    };
+
+    /* Для озвучки  правильных и неправильных ответов */
+
+    const makeAnswerVoise = (soundLinkToBool: boolean) => {
+      const player = this.sprintGamePage.audioPlayer.element as HTMLAudioElement;
+
+      if(soundLinkToBool) {
+        player.setAttribute("src", "./public/sprint-music/true.mp3");
+      } else {
+        player.setAttribute("src", "./public/sprint-music/false.mp3");
+      }
+      player.play();
+    };
   }
 }

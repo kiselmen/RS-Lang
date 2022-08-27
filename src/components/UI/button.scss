@@ -8,7 +8,7 @@
     text-transform: uppercase;
     font-weight: bold;
     border: none;
-    box-shadow: 0 4px 1px rgba(255, 255, 255, 0.5);
+    box-shadow: 0 4px 1px rgba(255, 255, 255, 0.747);
     cursor: pointer;
     transition: transform 0.1s ease-in-out;
     &:active {
@@ -24,7 +24,7 @@
       height: 25px;
       padding: 2px 8px;
       font-size: 12px;
-      box-shadow: 0 3px 1px rgba(255, 255, 255, 0.5);
+      box-shadow: 0 3px 1px rgba(255, 255, 255, 0.671);
       &:active {
         transform: translateY(3px);
         box-shadow: none;
@@ -35,4 +35,3 @@
       }
     }
   }
-  

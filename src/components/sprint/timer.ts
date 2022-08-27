@@ -4,7 +4,7 @@ class Timer {
   timer: ReturnType<typeof setInterval> | undefined;
   specialFunc: () => void = () => console.log("to do something");
 
-  constructor (parentNode: HTMLElement, timeout = 5) {
+  constructor (parentNode: HTMLElement, timeout = 60) {
     this.parentNode = parentNode;
     this.timeout = timeout;
   }
