@@ -74,6 +74,7 @@
     width: rem(30);
     height: rem(30);
     box-shadow: unset;
+    border: unset;
   }
   &-volume {
     background: url(../../../../public/sprint-images/sound-on.svg) no-repeat;
@@ -96,13 +97,16 @@
   width: 100%;
   &-item {
     width: 100%;
-    max-width: rem(125);
+    max-width: rem(160);
+    min-height: rem(60);
   }
   &-btn {
     width: 100%;
+    height: 100%;
     text-transform: capitalize;
     box-shadow: unset;
     background: transparent;
     border: rem(3) solid #efe391;
+    padding: rem(12) rem(5);
   }
 }
