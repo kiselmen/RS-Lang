@@ -9,6 +9,7 @@ const sprintState: ISprintState = {
   score: 0,
   correctAnswerCount: 0,
   currentContent: [],
+  parentNodeInfo: {"about": 0},
 };
 
 /* Контент для первой страницы */
@@ -44,6 +45,7 @@ function clearSprintState() {
   sprintState.score = 0;
   sprintState.correctAnswerCount = 0;
   sprintState.currentContent = [];
+  sprintState.parentNodeInfo = {};
 }
 
 /* Обновление стейта */
@@ -103,6 +105,7 @@ interface ISprintState {
   score: number,
   correctAnswerCount: number,
   currentContent: IContent[],
+  parentNodeInfo: {[key: string]: number | null}
 }
 
 interface IContent {
