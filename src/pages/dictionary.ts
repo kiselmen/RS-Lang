@@ -37,6 +37,9 @@ export class Dictionary extends Component {
 
   loadData = () => {
     this.checkToken().then(() => {
+      this.words = [];
+      this.dictionaryContent.loading = true;
+      this.dictionaryContent.renderContent(this.words);
       if (localStorage.getItem("token")) {
         getAlluserWords().then( data => {
           this.userWords = data;
@@ -44,20 +47,25 @@ export class Dictionary extends Component {
           if (this.dictionaryHeader.chapters.chapter < 6) {
             getWordsByChapterAndPage(this.dictionaryHeader.chapters.chapter, this.dictionaryPagination.page).then( data => {
               this.words = data;
+              this.dictionaryPagination.enabledButtons();
+              this.dictionaryContent.loading = false;
               this.dictionaryContent.renderContent(this.words);
             });
           } else {
             const page = 0;
             const worPerPage = 100;
+            this.dictionaryPagination.disabletButtons();
             getAgregatedWordsByPage(page, worPerPage).then( data => {
               const allPages = Math.ceil(data.totalCount[0].count / worPerPage);
               if (page < allPages) {
                 getAllAgregatedWords(allPages, worPerPage).then( data => {
                   this.words = data;
+                  this.dictionaryContent.loading = false;
                   this.dictionaryContent.renderContent(this.words);
                 });
               } else {
                 this.words = data;
+                this.dictionaryContent.loading = false;
                 this.dictionaryContent.renderContent(this.words);
               }
             });
