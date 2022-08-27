@@ -1,9 +1,10 @@
+import "./dictionaryPagination.scss";
 import { Component } from "../../../utils/component";
 import { UIButton } from "../../UI/button";
 
 export class DictionaryPagination extends Component {
   private btnPrev: UIButton;
-  private numberPage: Component;
+  numberPage: Component;
   private btnNext: UIButton;
   page: number;
   onChangePage: () => void;
