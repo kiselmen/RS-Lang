@@ -49,7 +49,7 @@ export class Profile extends Component {
     this.userProfileMail = new Component(this.userProfileInfoContent.element, "div", ["userProfile-mail"], "E-mail");
     this.userProfileIcon = new Component(this.userProfileInfoContainer.element, "div", ["userProfile-icon"]);
 
-    this.learnedWordsCounter = new Component(this.todayLearnedWordsStatWrapper.element, "div", ["learnedWords-counter"]);
+    this.learnedWordsCounter = new Component(this.todayLearnedWordsStatWrapper.element, "div", ["learnedWords-counter"], "0");
     this.learnedWordsTextContentContainer = new Component(this.todayLearnedWordsStatWrapper.element, "div", ["learnedWordsTxtContent-container"]);
     new Component(  this.learnedWordsTextContentContainer.element, "div", ["learnedWordsTxtContent-textContent"], "words");
     new Component(  this.learnedWordsTextContentContainer.element, "div", ["learnedWordsTxtContent-textContent"], "were learned");
@@ -86,10 +86,10 @@ class StatisticsContentPart extends Component {
     new Component(this.block1Wrapper.element, "p", [partOfClassName + "Block1-textContent", partOfClassName + "Block-textContent"], "words");
 
     this.block2Counter = new Component(this.block2Wrapper.element, "div", [partOfClassName + "Block2-counter", partOfClassName + "Block-counter"], "0%");
-    new Component(this.block1Wrapper.element, "p", [partOfClassName + "Block2-textContent", partOfClassName + "Block-textContent"], "accuracy");
+    new Component(this.block2Wrapper.element, "p", [partOfClassName + "Block2-textContent", partOfClassName + "Block-textContent"], "accuracy");
 
     this.block3Counter = new Component(this.block3Wrapper.element, "div", [partOfClassName + "Block3-counter", partOfClassName + "Block-counter"], "0");
-    new Component(this.block1Wrapper.element, "p", [partOfClassName + "Block3-textContent", partOfClassName + "Block-textContent"], "in a row");
+    new Component(this.block3Wrapper.element, "p", [partOfClassName + "Block3-textContent", partOfClassName + "Block-textContent"], "in a row");
   }
 
   setCounter = (counterNumber: number, value: string): string => {
