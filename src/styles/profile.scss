@@ -1,0 +1,56 @@
+.profile {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  max-width: 1440px;
+  width: 100%;
+  min-height: calc(100vh - 82px);
+  align-self: flex-start;
+  padding: 20px 40px;
+  font-family: Arial;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  font-size: 15px;
+}
+.statisticsHeader-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.statisticsProfileInfo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -moz-column-gap: 15px;
+       column-gap: 15px;
+  padding-bottom: 30px;
+}
+.statistics-title {
+  font-size: 2rem;
+  font-weight: bold;
+  letter-spacing: 2.2px;
+  align-self: start;
+}
+.userProfile-icon {
+  width: 40px;
+  height: 40px;
+  background: url("../../public/profile.svg") no-repeat center;
+}
+.statisticsContent-wrapper {
+  align-self: center;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+.statistics-subTitle {
+  font-size: 2rem;
+  font-weight: bold;
+  letter-spacing: 3px;
+  align-self: start;
+  color: #494a69;
+  padding: 30px 0;
+}

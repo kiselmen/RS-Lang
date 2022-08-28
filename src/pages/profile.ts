@@ -1,7 +1,14 @@
+import "../styles/profile.scss";
 import { Component } from "../utils/component";
 
 export class Profile extends Component {
+  profileHeaderContainer;
   title;
+  userProfileInfoContainer;
+  userProfileInfoContent;
+  userProfileLogin;
+  userProfileMail;
+  userProfileIcon;
   contentWrapper;
   todaySubTitle;
   todayContentWrapper;
@@ -20,9 +27,11 @@ export class Profile extends Component {
   constructor(parentNode: HTMLElement) {
     super(parentNode, "div", ["profile"]);
 
-    this.title = new Component(this.element, "h3", ["statistics-title"], "Statistics");
-    this.contentWrapper = new Component(this.element, "div", ["statisticsContent-wrapper"]);
+    this.profileHeaderContainer = new Component(this.element, "div", ["statisticsHeader-container"]);
+    this.title = new Component(this.profileHeaderContainer.element, "h3", ["statistics-title"], "Statistics");
+    this.userProfileInfoContainer = new Component(this.profileHeaderContainer.element, "div", ["statisticsProfileInfo-container"]);
 
+    this.contentWrapper = new Component(this.element, "div", ["statisticsContent-wrapper"]);
     this.todaySubTitle = new Component(this.contentWrapper.element, "h3", ["statistics-subTitle", "today-subTitle"], "Today");
     this.todayContentWrapper = new Component(this.contentWrapper.element, "div", ["todayStatistics-wrapper"]);
     this.todayLearnedWordsStatWrapper = new Component(this.todayContentWrapper.element, "div", ["todayLearnedWords-wrapper"]);
@@ -35,6 +44,10 @@ export class Profile extends Component {
     this.allTimeProgress = new Component(this.allTimeContentWrapper.element, "div", ["allTimeProgress-wrapper"]);
 
     /* Внутиренние блоки */
+    this.userProfileInfoContent = new Component(this.userProfileInfoContainer.element, "div", ["statisticsProfileInfo-content"]);
+    this.userProfileLogin = new Component(this.userProfileInfoContent.element, "div", ["userProfile-login"], "Login");
+    this.userProfileMail = new Component(this.userProfileInfoContent.element, "div", ["userProfile-mail"], "E-mail");
+    this.userProfileIcon = new Component(this.userProfileInfoContainer.element, "div", ["userProfile-icon"]);
 
     this.learnedWordsCounter = new Component(this.todayLearnedWordsStatWrapper.element, "div", ["learnedWords-counter"]);
     this.learnedWordsTextContentContainer = new Component(this.todayLearnedWordsStatWrapper.element, "div", ["learnedWordsTxtContent-container"]);
@@ -47,6 +60,8 @@ export class Profile extends Component {
   }
 }
 
+
+
 class StatisticsContentPart extends Component {
   contentWrapper;
   block1Wrapper;
@@ -57,11 +72,11 @@ class StatisticsContentPart extends Component {
   block3Counter;
 
   constructor(parentNode: HTMLElement, title: string) {
-    super(parentNode, "div", ["profile"]);
+    super(parentNode, "div", ["statistics-item"]);
 
     const partOfClassName = title.toLowerCase().split(" ").join("");
 
-    new Component(this.element, "p", [partOfClassName + "-title"], partOfClassName);
+    new Component(this.element, "p", [partOfClassName + "-title"], title);
     this.contentWrapper = new Component(this.element, "div", [partOfClassName + "Content-wrapper"]);
     this.block1Wrapper = new Component(this.contentWrapper.element, "div", [partOfClassName + "Block1-wrapper", partOfClassName + "Block-wrapper"]);
     this.block2Wrapper = new Component(this.contentWrapper.element, "div", [partOfClassName + "Block2-wrapper", partOfClassName + "Block-wrapper"]);
