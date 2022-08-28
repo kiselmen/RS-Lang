@@ -60,6 +60,7 @@
   grid-template-rows: repeat(auto-fill, auto);
   grid-template-columns: repeat(2, minmax(auto-fill, 1fr));
   gap: 50px;
+  padding-bottom: 50px;
 }
 .todayLearnedWords-wrapper p {
   display: block;
@@ -111,7 +112,9 @@
   justify-content: space-between;
   -moz-column-gap: 30px;
        column-gap: 30px;
+  padding: 5px 0;
 }
+
 @media (max-width: 576px) {
   .statistics-item {
   width: 100%;
