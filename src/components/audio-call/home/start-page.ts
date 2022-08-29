@@ -23,18 +23,11 @@ export class AudioCallStartPage extends Component {
     this.homeLvlBtnsWrapper = new Component(this.homeLvl.element, "div", ["home-lvl__btns"]);
     for(let i = 0; i < 6; i+=1) {
       this.homeLvlBtns = new UIButton(this.homeLvlBtnsWrapper.element, ["btn", "home-btn"], `${i+1}`);
+      this.homeLvlBtns.element.setAttribute("id", `${i}`);
     }
     this.linkMainPage = new Component(this.homeContent.element, "a", ["btn", "home-link__back"], "Back to main page"
     );
 
     this.linkMainPage.element.setAttribute("href", "#/");
-
-    this.homeLvlBtnsWrapper.element.addEventListener("click", (e) => {
-      const eventTarget = e.target as HTMLElement;
-      if (eventTarget.classList.contains("home-btn")) {
-        (<HTMLElement>document.querySelector(".master")).style.display = "flex";
-        (<HTMLElement>document.querySelector(".home")).style.display = "none";
-      }
-    });
   }
 }

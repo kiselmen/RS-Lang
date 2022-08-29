@@ -7,12 +7,19 @@
 }
 .sprint {
   width: 100%;
-  height: calc(100vh - 83px);
+  height: calc(100vh - 165px);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   color: #494a69;
+
+  font-family: Arial;
+  font-style: normal;
+  font-weight: 400;
+  color: #494a69; 
+  user-select: none;
+
 }
 .sprintIntro-card__wrap {
   display: flex;
@@ -20,11 +27,11 @@
   justify-content: center;
   row-gap: 20px;
   align-items: center;
-  max-width: 650px;
+
+  max-width: 540px;
   min-height: 350px;
-  background: rgb(255, 246, 186);
-  box-shadow: 0px 0px 10px 2px rgb(141 139 74);
-  border-radius: 40px;
+
+
   color: #494a69;
   padding: 30px;
   font-size: 30px;
@@ -48,19 +55,41 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgb(255, 24, 24);
+  background: #a2dafe;
   font-size: 25px;
   border-radius: 25px;
   cursor: pointer;
+  border: none;
+  transition: all 200ms ease-in-out;
+  color: #494a69;
+}
+.sprintIntro-card__Btn:hover::before {
+  content: "";
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  background: rgba(24, 213, 255, 0.1);
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  border: 3px solid #51a8e1;
+  position: absolute;
+  transition: all 200ms ease-in-out;
+}
+.sprintIntro-card__Btn:active {  
+  background: #51a8e1;  
+  transition: all 200ms ease-in-out;
 }
 
 /***** Sprint Game *****/
 
 
 .sprint-game__wrap {
-  background: rgb(255, 246, 186);
-  box-shadow: 0px 0px 10px 2px rgb(141 139 74);
-  border-radius: 40px;
+  // background: rgb(255, 246, 186);
+  // box-shadow: 0px 0px 10px 2px rgb(141 139 74);
+  // border-radius: 40px;
+
   color: #494a69;
   background-size: 600px 450px;
   width: 600px;
@@ -68,8 +97,10 @@
   border-radius: 40px;
   position: relative;
   display: flex;
-  flex-direction: column;
-  margin-top: 120px;
+
+  flex-direction: column;  
+
+
 }
 .sprintControlsBtns-container {
   display: flex;
@@ -111,9 +142,10 @@
 .sprint-timer, .sprint-points {
    width: 70px;
    height: 70px;
-   border: 2px solid #7c7c7c;
-   border-radius: 50%;
-   background-color: #ffff;
+
+   background: #e4f4ff;
+   border-radius: 50%;   
+
    display: flex;
    align-items: center;
    justify-content: center;
@@ -135,10 +167,12 @@
   height: 50px;
 }
 .signal-lamp {
-  fill: #ff9f00;
+  fill: #e4f4ff;
 }
 .sprintGameCardSignal.activate .signal-lamp {
-  fill: #ff4b31;
+
+  fill: #d47373;
+
 }
 .sprintPronounceWord-btn {
   margin-top: 30px;
@@ -159,7 +193,9 @@
   letter-spacing: 3px;
 }
 .sprintWordInRu-container {
-  color: #696bbc;
+
+  color: #d47373;
+
 }
 .sprintWordInRu-container {
   margin-top: 0;
@@ -183,7 +219,9 @@
   font-size: 24px;
   background: #ffff;
   border-radius: 10px;
-  border: 2px solid #696bbc;
+
+  border: 2px solid #9cd2ff;
+
   color: #494a69;
   position: relative;
   padding: 0 10px;
@@ -224,7 +262,9 @@
   background: rgb(255 246 186);
   text-align: center;
   padding: 30px 20px;
-  margin-top: 130px;
+
+  margin: 130px 0 20px 0;
+
   border-radius: 30px;
   position: relative;
 }

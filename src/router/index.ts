@@ -1,12 +1,11 @@
 import { IRoute } from "../interfaces";
-import { Component } from "../utils/component";
+import { Component} from "../utils/component";
 import { About } from "../pages/about";
 import { Dictionary } from "../pages/dictionary";
 import { AudioCall } from "../pages/audiocall";
 import { Sprint } from "../pages/sprint";
 import { Login } from "../pages/login";
 import { Profile } from "../pages/profile";
-// import { Header } from "../components/header";
 
 export class Router {
   private routes: Array<IRoute>;
@@ -42,15 +41,15 @@ export class Router {
       },
       {
         name: "/audiocall",
-        component: () => {
-          this.audiocallPage = new AudioCall(this.rootElement);
+        component: (param) => {
+          this.audiocallPage = new AudioCall(this.rootElement, param);
           this.rootElement.append(this.audiocallPage.element);
         },
       },
       {
         name: "/sprint",
-        component: () => {
-          this.sprintPage = new Sprint(this.rootElement);
+        component: (param) => {
+          this.sprintPage = new Sprint(this.rootElement, param);
           this.rootElement.append(this.sprintPage.element);
         },
       },
@@ -88,15 +87,21 @@ export class Router {
 
   updateRouter(): void {
     this.rootElement.innerHTML = "";
-    const currentRouteName = window.location.hash.slice(1);
+    const currentRouteFromHash = window.location.hash.slice(1);
+     
+    const currentRouteArray = currentRouteFromHash.split("?");
+    const currentRouteName = currentRouteArray[0];
+    let currentRouteParam = "";
+    if (currentRouteArray.length > 1) {
+      currentRouteParam = String(currentRouteArray[1]);
+    } 
     
     const currentRoute = this.routes.find(
       (page) => page.name === currentRouteName,
     );
     
-    window.location.hash = (currentRoute || this.defaultRoute).name;
-
-    (currentRoute || this.defaultRoute).component();
+    !currentRouteParam ? window.location.hash = (currentRoute || this.defaultRoute).name : window.location.hash = (currentRoute || this.defaultRoute).name + "?" + currentRouteParam;
+    (currentRoute || this.defaultRoute).component(currentRouteParam);
   }
 
   initRouter(): void {
