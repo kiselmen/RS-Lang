@@ -52,6 +52,10 @@
       background-size: 60%;
       box-shadow: unset;
       border-radius: 50%;
+      &.showPicture {
+        background: url(../../../../public/speaker.svg) center no-repeat, #efe2915d;
+        background-size: 60%;
+      }
     }
   }
   &-action__btn {
@@ -61,6 +65,7 @@
     border-radius: rem(30);
     background: #efe391;
     box-shadow: unset;
+    padding: rem(0);
   }
 }
 
@@ -74,6 +79,7 @@
     width: rem(30);
     height: rem(30);
     box-shadow: unset;
+    border: unset;
   }
   &-volume {
     background: url(../../../../public/sprint-images/sound-on.svg) no-repeat;
@@ -96,13 +102,28 @@
   width: 100%;
   &-item {
     width: 100%;
-    max-width: rem(125);
+    max-width: rem(180);
+    min-height: rem(60);
   }
   &-btn {
     width: 100%;
+    height: 100%;
     text-transform: capitalize;
     box-shadow: unset;
     background: transparent;
     border: rem(3) solid #efe391;
+    padding: rem(5);
   }
+}
+
+.action-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.next {
+  display: none;
 }

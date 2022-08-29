@@ -18,12 +18,12 @@
   font-family: Arial;
   font-style: normal;
   font-weight: 400;
+
   color: #494a69;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
-
 }
 .sprintIntro-card__wrap {
   display: flex;
@@ -81,13 +81,13 @@
   position: absolute;
   transition: all 200ms ease-in-out;
 }
+
 .sprintIntro-card__Btn:active {
   background: #51a8e1;
   transition: all 200ms ease-in-out;
 }
 
 /***** Sprint Game *****/
-
 
 .sprint-game__wrap {
   color: #494a69;

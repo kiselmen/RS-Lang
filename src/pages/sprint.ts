@@ -13,8 +13,10 @@ export class Sprint extends Component {
   private sprintResultsPage;
   private timer: Timer | undefined;
 
-  constructor(parentNode: HTMLElement) {
+  constructor(parentNode: HTMLElement, parameters: string) {
     super(parentNode, "div", ["sprint"]);
+    console.log(parameters);
+    
     this.sprintIntroCard = new SprintIntro(this.element);
     this.sprintGamePage = new SprintGamePage(this.element);
     this.sprintResultsPage = new SprintResultesPage(this.element);
