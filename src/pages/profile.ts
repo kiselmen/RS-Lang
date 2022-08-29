@@ -1,14 +1,11 @@
 import "../styles/profile.scss";
 import { Component } from "../utils/component";
+import { UIButton } from "../components/UI/button";
 
 export class Profile extends Component {
   profileHeaderContainer;
   title;
-  userProfileInfoContainer;
-  userProfileInfoContent;
-  userProfileLogin;
-  userProfileMail;
-  userProfileIcon;
+  userLogOut;
   contentWrapper;
   todaySubTitle;
   todayContentWrapper;
@@ -29,7 +26,7 @@ export class Profile extends Component {
 
     this.profileHeaderContainer = new Component(this.element, "div", ["statisticsHeader-container"]);
     this.title = new Component(this.profileHeaderContainer.element, "h3", ["statistics-title"], "Statistics");
-    this.userProfileInfoContainer = new Component(this.profileHeaderContainer.element, "div", ["statisticsProfileInfo-container"]);
+    this.userLogOut = new UIButton(this.profileHeaderContainer.element,["statisticsProfileLogout"], "Log Out");
 
     this.contentWrapper = new Component(this.element, "div", ["statisticsContent-wrapper"]);
     this.todaySubTitle = new Component(this.contentWrapper.element, "h3", ["statistics-subTitle", "today-subTitle"], "Today");
@@ -44,11 +41,6 @@ export class Profile extends Component {
     this.allTimeProgress = new Component(this.allTimeContentWrapper.element, "div", ["allTimeProgress-wrapper"]);
 
     /* Внутиренние блоки */
-    this.userProfileInfoContent = new Component(this.userProfileInfoContainer.element, "div", ["statisticsProfileInfo-content"]);
-    this.userProfileLogin = new Component(this.userProfileInfoContent.element, "div", ["userProfile-login"], "Login");
-    this.userProfileMail = new Component(this.userProfileInfoContent.element, "div", ["userProfile-mail"], "E-mail");
-    this.userProfileIcon = new Component(this.userProfileInfoContainer.element, "div", ["userProfile-icon"]);
-
     this.learnedWordsCounter = new Component(this.todayLearnedWordsStatWrapper.element, "div", ["learnedWords-counter"], "0");
     this.learnedWordsTextContentContainer = new Component(this.todayLearnedWordsStatWrapper.element, "div", ["learnedWordsTxtContent-container"]);
     new Component(  this.learnedWordsTextContentContainer.element, "div", ["learnedWordsTxtContent-textContent"], "words");

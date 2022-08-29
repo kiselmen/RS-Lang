@@ -13,8 +13,11 @@
   font-weight: 400;
   line-height: 24px;
   font-size: 1.2rem;
-  color: #494a69;  
-  user-select: none;  
+  color: #494a69;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 .statisticsHeader-container {
   display: flex;
@@ -75,10 +78,10 @@
   background: #e3e3e305;
   padding: 20px;
   border-radius: 15px;
-  border: 2px solid #dfdfdf;  
+  border: 2px solid #dfdfdf;
   grid-column-start: 1;
   grid-column-end: 3;
-  width: 100%; 
+  width: 100%;
 }
 .todayLearnedWords-wrapper {
   display: block;
@@ -90,8 +93,8 @@
   background: #e3e3e305;
   padding: 20px;
   border-radius: 15px;
-  border: 2px solid #dfdfdf;  
-  width: 100%;  
+  border: 2px solid #dfdfdf;
+  width: 100%;
 }
 .learnedWords-counter {
   font-size: 5rem;
@@ -128,6 +131,23 @@
        column-gap: 30px;
   padding: 5px 0;
 }
+.statisticsProfileLogout {
+  font-family: Arial;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 2px;
+  background: #ffffff;
+  cursor: pointer;
+  font-weight: 700;
+  box-shadow: 3px 3px 10px rgb(168 168 168), inset 5px 5px 10px rgb(255 253 253);
+  border-radius: 15px;
+  border: 2px solid #dfdfdf;
+  transition: all 200ms ease-in-out;
+}
+.statisticsProfileLogout:hover {
+  box-shadow: inset 0 0 35px #43b4ff;
+  transition: all 200ms ease-in-out;
+}
 .audiocall-title::before {
   content: "";
   position: absolute;
@@ -151,8 +171,8 @@
 .allTimeContent-wrapper {
   display: flex;
   align-items: center;
-  justify-content: center;  
-  flex-wrap: wrap;  
+  justify-content: center;
+  flex-wrap: wrap;
   width: 100%;
   gap: 30px;
 }
@@ -166,7 +186,7 @@
   background: #e3e3e305;
   padding: 20px;
   border-radius: 15px;
-  border: 2px solid #dfdfdf;    
+  border: 2px solid #dfdfdf;
   flex: 1 1 45%;
 }
 
@@ -181,14 +201,14 @@
     gap: 10px;
     flex-wrap: wrap;
     width: 100%;
-  }  
+  }
   .todayStatistics-wrapper:first-child {
-    width: 100%;  
+    width: 100%;
   }
-  .audiocall-title, .sprint-title {  
-    align-self: center;  
+  .audiocall-title, .sprint-title {
+    align-self: center;
   }
-  .todayLearnedWords-wrapper:first-child {    
-    justify-content: center;    
+  .todayLearnedWords-wrapper:first-child {
+    justify-content: center;
   }
 }
