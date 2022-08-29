@@ -18,12 +18,12 @@ export class Dictionary extends Component {
     super(parentNode, "div", ["dictionary"]);
     this.onUpdateRouter = () => updateRouter();
     
-    this.dictionaryHeader = new DictionaryHeader(this.element, () => this.loadData());
-    this.dictionaryPagination = new DictionaryPagination(this.element, () => this.loadData());
+    this.dictionaryHeader = new DictionaryHeader(this.element, () => this.onChapterChange());
+    this.dictionaryPagination = new DictionaryPagination(this.element, () => this.onPageChange());
 
     this.words = [];
     this.userWords = [];
-    this.loadData();
+    // this.loadData();
 
     this.dictionaryContent = new DictionaryContent(
       this.element, 
@@ -35,7 +35,17 @@ export class Dictionary extends Component {
     );
   }
 
+  onChapterChange = () => {
+    this.onPageChange();
+  };
+
+  onPageChange = () => {
+    this.loadData();
+  }; 
+
   loadData = () => {
+    console.log("AAAAAAAAAAA");
+    
     this.checkToken().then(() => {
       this.words = [];
       this.dictionaryContent.loading = true;
@@ -57,14 +67,14 @@ export class Dictionary extends Component {
             this.dictionaryPagination.disabletButtons();
             getAgregatedWordsByPage(page, worPerPage).then( data => {
               const allPages = Math.ceil(data.totalCount[0].count / worPerPage);
-              if (page < allPages) {
+              if (page < allPages - 1) {
                 getAllAgregatedWords(allPages, worPerPage).then( data => {
                   this.words = data;
                   this.dictionaryContent.loading = false;
                   this.dictionaryContent.renderContent(this.words);
                 });
               } else {
-                this.words = data;
+                this.words = data.paginatedResults;
                 this.dictionaryContent.loading = false;
                 this.dictionaryContent.renderContent(this.words);
               }
@@ -75,6 +85,7 @@ export class Dictionary extends Component {
         this.userWords = [];
         getWordsByChapterAndPage(this.dictionaryHeader.chapters.chapter, this.dictionaryPagination.page).then( data => {
           this.words = data;
+          this.dictionaryContent.loading = false;
           this.dictionaryContent.renderContent(this.words);
         });
       }
