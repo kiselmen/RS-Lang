@@ -49,7 +49,6 @@ export class Sprint extends Component {
       } else {
         (this.sprintGamePage.audioPlayer.element as HTMLAudioElement).volume = 0;
       }
-
     });
 
     /* Кнопка full-screen */
@@ -95,7 +94,7 @@ export class Sprint extends Component {
           updateSignalLampState();
         }
 
-        if(currentBtn.innerText === "ВЕРНО" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
+        if(currentBtn.innerText === "CORRECT" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
           updateSprintState(false, true, true, true);
           updateScore(true);
           updateGameCardContent();
@@ -103,7 +102,7 @@ export class Sprint extends Component {
           makeAnswerVoise(true);
           userResponseProcessing(sprintState.currentContent[sprintState.stepCounter].word.toString(), sprintState.currentContent[sprintState.stepCounter].transcription.toString(), sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString(), sprintState.currentContent[sprintState.stepCounter].audio.toString(), true);
 
-        } else if (currentBtn.innerText === "ВЕРНО" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
+        } else if (currentBtn.innerText === "CORRECT" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
           updateSprintState(false, true, false, false);
           updateGameCardContent();
           updateSignalLampState();
@@ -111,7 +110,7 @@ export class Sprint extends Component {
           userResponseProcessing(sprintState.currentContent[sprintState.stepCounter].word.toString(), sprintState.currentContent[sprintState.stepCounter].transcription.toString(), sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString(), sprintState.currentContent[sprintState.stepCounter].audio.toString(), false);
         }
 
-        if(currentBtn.innerText === "НЕ ВЕРНО" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
+        if(currentBtn.innerText === "INCORRECT" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
           updateSprintState(false, true, true, true);
           updateScore(true);
           updateGameCardContent();
@@ -119,7 +118,7 @@ export class Sprint extends Component {
           makeAnswerVoise(true);
           userResponseProcessing(sprintState.currentContent[sprintState.stepCounter].word.toString(), sprintState.currentContent[sprintState.stepCounter].transcription.toString(), sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString(), sprintState.currentContent[sprintState.stepCounter].audio.toString(), true);
 
-        } else if (currentBtn.innerText === "НЕ ВЕРНО" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
+        } else if (currentBtn.innerText === "INCORRECT" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
           updateSprintState(false, true, false, false);
           updateGameCardContent();
           updateSignalLampState();
