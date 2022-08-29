@@ -13,11 +13,13 @@
   align-items: center;
   justify-content: center;
   color: #494a69;
+
   font-family: Arial;
   font-style: normal;
   font-weight: 400;
   color: #494a69; 
   user-select: none;
+
 }
 .sprintIntro-card__wrap {
   display: flex;
@@ -25,8 +27,11 @@
   justify-content: center;
   row-gap: 20px;
   align-items: center;
+
   max-width: 540px;
   min-height: 350px;
+
+
   color: #494a69;
   padding: 30px;
   font-size: 30px;
@@ -79,10 +84,12 @@
 
 /***** Sprint Game *****/
 
+
 .sprint-game__wrap {
   // background: rgb(255, 246, 186);
   // box-shadow: 0px 0px 10px 2px rgb(141 139 74);
   // border-radius: 40px;
+
   color: #494a69;
   background-size: 600px 450px;
   width: 600px;
@@ -90,7 +97,10 @@
   border-radius: 40px;
   position: relative;
   display: flex;
+
   flex-direction: column;  
+
+
 }
 .sprintControlsBtns-container {
   display: flex;
@@ -132,8 +142,10 @@
 .sprint-timer, .sprint-points {
    width: 70px;
    height: 70px;
+
    background: #e4f4ff;
    border-radius: 50%;   
+
    display: flex;
    align-items: center;
    justify-content: center;
@@ -158,7 +170,9 @@
   fill: #e4f4ff;
 }
 .sprintGameCardSignal.activate .signal-lamp {
+
   fill: #d47373;
+
 }
 .sprintPronounceWord-btn {
   margin-top: 30px;
@@ -179,7 +193,9 @@
   letter-spacing: 3px;
 }
 .sprintWordInRu-container {
+
   color: #d47373;
+
 }
 .sprintWordInRu-container {
   margin-top: 0;
@@ -203,7 +219,9 @@
   font-size: 24px;
   background: #ffff;
   border-radius: 10px;
+
   border: 2px solid #9cd2ff;
+
   color: #494a69;
   position: relative;
   padding: 0 10px;
@@ -244,7 +262,9 @@
   background: rgb(255 246 186);
   text-align: center;
   padding: 30px 20px;
+
   margin: 130px 0 20px 0;
+
   border-radius: 30px;
   position: relative;
 }

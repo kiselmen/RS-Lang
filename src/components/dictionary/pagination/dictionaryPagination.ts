@@ -18,7 +18,7 @@ export class DictionaryPagination extends Component {
     this.btnNext = new UIButton(this.element, ["btn"], "Next");
     this.btnPrev.onClickButton = () => this.onPrevPageClicl();
     this.btnNext.onClickButton = () => this.onNextPageClick();
-    this.setupButtons();
+    this.enabledButtons();
   }
 
   onPrevPageClicl = () => {

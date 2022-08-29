@@ -19,6 +19,8 @@ export class Sprint extends Component {
     this.sprintGamePage = new SprintGamePage(this.element);
     this.sprintResultsPage = new SprintResultesPage(this.element);
 
+
+
     //** Sprint intro page **//
 
     [this.sprintIntroCard.cardBtn1, this.sprintIntroCard.cardBtn2, this.sprintIntroCard.cardBtn3, this.sprintIntroCard.cardBtn4, this.sprintIntroCard.cardBtn5, this.sprintIntroCard.cardBtn6].forEach((btn) => {
@@ -75,18 +77,23 @@ export class Sprint extends Component {
       makeVisibleCurrentSprintPage(this.sprintGamePage.element, this.sprintResultsPage.element, this.sprintIntroCard.element, "flex");
       clearSprintState();
       this.timer?.timerStop();
+
       updateScore(false);
       this.sprintGamePage.clearLamp();
     });
+
+
 
     /* Прослушивание кнопок выбора ответа */
     [this.sprintGamePage.answerFalseBtn.element, this.sprintGamePage.answerTrueBtn.element].forEach(btn => {
       btn.addEventListener("click", async (e) => {
         const currentBtn = e.target as HTMLButtonElement;
 
+
         if(sprintState.stepCounter === 19 && sprintState.currentPage < 30) {
           updateSprintState(true, 0, false, false,
             await getInfo(sprintState.currentGroup, sprintState.currentPage ));
+
 
         } else if(sprintState.stepCounter === 19 && sprintState.currentPage === 30) {
           makeVisibleCurrentSprintPage(this.sprintGamePage.element, this.sprintIntroCard.element, this.sprintResultsPage.element, "block");
@@ -95,9 +102,11 @@ export class Sprint extends Component {
           updateSignalLampState();
         }
 
+
         if(currentBtn.innerText === "ВЕРНО" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
           updateSprintState(false, true, true, true);
           updateScore(true);
+
           updateGameCardContent();
           updateSignalLampState();
           makeAnswerVoise(true);
@@ -113,7 +122,9 @@ export class Sprint extends Component {
 
         if(currentBtn.innerText === "НЕ ВЕРНО" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
           updateSprintState(false, true, true, true);
+
           updateScore(true);
+
           updateGameCardContent();
           updateSignalLampState();
           makeAnswerVoise(true);
@@ -127,6 +138,7 @@ export class Sprint extends Component {
           userResponseProcessing(sprintState.currentContent[sprintState.stepCounter].word.toString(), sprintState.currentContent[sprintState.stepCounter].transcription.toString(), sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString(), sprintState.currentContent[sprintState.stepCounter].audio.toString(), false);
         }
       });
+
     });
 
     //** Sprint Results page **//
@@ -164,6 +176,7 @@ export class Sprint extends Component {
     };
 
     /* Для обнорвления счета */
+
     const updateScore = (bool: boolean) => {
       if(bool) {
         this.sprintGamePage.points.element.innerText = sprintState.score.toString();
@@ -172,6 +185,7 @@ export class Sprint extends Component {
     };
 
     /* Для обновления сигнальных ламп */
+
     const updateSignalLampState = () => {
       const signalLamps = [this.sprintGamePage.gameSignalOne.element, this.sprintGamePage.gameSignalTwo.element, this.sprintGamePage.gameSignalThree.element];
 
@@ -179,19 +193,10 @@ export class Sprint extends Component {
 
       for(let i = 1; i <= sprintState.correctAnswerCount; i += 1) {
         signalLamps[i-1].classList.toggle("activate", true);
+
+
       }
     };
 
     /* Для озвучки  правильных и неправильных ответов */
-    const makeAnswerVoise = (soundLinkToBool: boolean) => {
-      const player = this.sprintGamePage.audioPlayer.element as HTMLAudioElement;
 
-      if(soundLinkToBool) {
-        player.setAttribute("src", "./public/sprint-music/true.mp3");
-      } else {
-        player.setAttribute("src", "./public/sprint-music/false.mp3");
-      }
-      player.play();
-    };
-  }
-}

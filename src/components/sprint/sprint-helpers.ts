@@ -9,7 +9,9 @@ const sprintState: ISprintState = {
   score: 0,
   correctAnswerCount: 0,
   currentContent: [],
+
   parentNodeInfo: {"about": 0},
+
 };
 
 /* Контент для первой страницы */
@@ -45,7 +47,9 @@ function clearSprintState() {
   sprintState.score = 0;
   sprintState.correctAnswerCount = 0;
   sprintState.currentContent = [];
+
   sprintState.parentNodeInfo = {};
+
 }
 
 /* Обновление стейта */
@@ -78,12 +82,14 @@ function updateSprintState(pageUpdate: boolean, stepCounterUpdate: boolean | num
   if(typeof scoreUpdate === "number") {
     sprintState.score = scoreUpdate;
   }
+
   if(correctAnswerCountUpdate && sprintState.correctAnswerCount < 3) {
     sprintState.correctAnswerCount += 1;
   } else if(correctAnswerCountUpdate && sprintState.correctAnswerCount === 3) {
     sprintState.correctAnswerCount += 0;
   } else if(!correctAnswerCountUpdate) {
     sprintState.correctAnswerCount = 0;
+
   }
   if(currentContent) {
     sprintState.currentContent = currentContent;
@@ -106,6 +112,7 @@ interface ISprintState {
   correctAnswerCount: number,
   currentContent: IContent[],
   parentNodeInfo: {[key: string]: number | null}
+
 }
 
 interface IContent {

@@ -61,6 +61,7 @@ class SprintGamePage extends Component {
     this.answerFalseBtn = new UIButton(this.answersBtnsContainer.element, ["sprintAnswerFalse-btn"], "Не верно");
     this.answerTrueBtn = new UIButton(this.answersBtnsContainer.element, ["sprintAnswerTrue-btn"], "Верно");
 
+
     this.audioPlayer = new Component(this.element, "audio", ["sprintAudioPlayer"]);
     this.audioPlayer.element.style.cssText = "display: none; visibility: hidden";
     // (this.audioPlayer.element as HTMLAudioElement).volume = 0;
@@ -70,7 +71,9 @@ class SprintGamePage extends Component {
     [this.gameSignalOne.element, this.gameSignalTwo.element, this.gameSignalThree.element].forEach(lampElement => {
       lampElement.classList.toggle("activate", false);
     });
+
   }
+
 
 }
 

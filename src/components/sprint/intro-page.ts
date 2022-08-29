@@ -25,7 +25,9 @@ class SprintIntro extends Component {
     this.cardBtn3 = new UIButton(this.cardBtnsContainer.element, ["sprintIntro-card__Btn"], "3");
     this.cardBtn4 = new UIButton(this.cardBtnsContainer.element, ["sprintIntro-card__Btn"], "4");
     this.cardBtn5 = new UIButton(this.cardBtnsContainer.element, ["sprintIntro-card__Btn"], "5");
+
     this.cardBtn6 = new UIButton(this.cardBtnsContainer.element, ["sprintIntro-card__Btn"], "6");    
+
   }
 
   private startSprint() {

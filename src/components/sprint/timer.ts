@@ -10,6 +10,7 @@ class Timer {
   }
 
   timerRun = () => {
+
     const startTimer = () => {
       (  this.parentNode as HTMLInputElement).innerText = this.timeout.toString();
       this.timeout -= 1;
