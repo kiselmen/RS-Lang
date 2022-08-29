@@ -66,6 +66,11 @@ class SprintGamePage extends Component {
     // (this.audioPlayer.element as HTMLAudioElement).volume = 0;
   }
 
+  clearLamp() {
+    [this.gameSignalOne.element, this.gameSignalTwo.element, this.gameSignalThree.element].forEach(lampElement => {
+      lampElement.classList.toggle("activate", false);
+    });
+  }
 
 }
 

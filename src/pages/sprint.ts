@@ -76,6 +76,7 @@ export class Sprint extends Component {
       clearSprintState();
       this.timer?.timerStop();
       updateScore(false);
+      this.sprintGamePage.clearLamp();
     });
 
     /* Прослушивание кнопок выбора ответа */
@@ -135,6 +136,7 @@ export class Sprint extends Component {
       makeVisibleCurrentSprintPage(this.sprintResultsPage.element, this.sprintGamePage.element, this.sprintIntroCard.element, "flex");
       clearSprintState();
       this.sprintResultsPage.clearResults();
+      this.sprintGamePage.clearLamp();
     };
 
     //* Вспомогательные *//
