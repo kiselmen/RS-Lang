@@ -1,6 +1,6 @@
 export interface IRoute {
   name: string;
-  component: () => void;
+  component: (param: string) => void;
 }
   
 export type elementData = {

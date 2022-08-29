@@ -8,9 +8,11 @@ export class AudioCall extends Component {
   private mainPage: AudioCallMainPage;
   private statPage: AudioCallStatisticPage;
 
-  constructor(parentNode: HTMLElement) {
+  constructor(parentNode: HTMLElement, parameters: string) {
     super(parentNode, "div", ["audiocall"]);
 
+    console.log(parameters);
+    
     this.homePage = new AudioCallStartPage(this.element);
     this.mainPage = new AudioCallMainPage(this.element);
     this.statPage = new AudioCallStatisticPage(this.element);
