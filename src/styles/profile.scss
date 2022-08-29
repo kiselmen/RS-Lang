@@ -15,6 +15,7 @@
   font-size: 1.2rem;
   color: #494a69;
   background: #f0f0f0;
+  user-select: none;  
 }
 .statisticsHeader-container {
   display: flex;
@@ -57,29 +58,41 @@
 }
 .todayStatistics-wrapper {
   display: grid;
-  grid-template-rows: repeat(auto-fill, auto);
-  grid-template-columns: repeat(2, minmax(auto-fill, 1fr));
-  gap: 50px;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(300px, 1fr));
+  gap: 30px;
   padding-bottom: 50px;
 }
 .todayLearnedWords-wrapper p {
   display: block;
 }
 .todayLearnedWords-wrapper:first-child {
-  grid-column-start: 1;
-  grid-column-end: 3;
-}
-.todayLearnedWords-wrapper {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   -moz-column-gap: 20px;
-       column-gap: 20px;
-  box-shadow: 0px 0px 10px 10px rgb(255 253 253);
+  column-gap: 20px;
+  box-shadow: 3px 3px 10px rgb(168 168 168), inset 5px 5px 10px rgb(255 253 253);
   background: #eaeaea;
   padding: 20px;
   border-radius: 15px;
-  width: 100%;
+  border: 2px solid #dfdfdf;  
+  grid-column-start: 1;
+  grid-column-end: 3;
+  width: 100%; 
+}
+.todayLearnedWords-wrapper {
+  display: block;
+  align-items: center;
+  justify-content: space-between;
+  -moz-column-gap: 20px;
+  column-gap: 20px;
+  box-shadow: 3px 3px 10px rgb(168 168 168), inset 5px 5px 10px rgb(255 253 253);
+  background: #eaeaea;
+  padding: 20px;
+  border-radius: 15px;
+  border: 2px solid #dfdfdf;  
+  width: 100%;  
 }
 .learnedWords-counter {
   font-size: 5rem;
@@ -104,7 +117,9 @@
   font-weight: bold;
   letter-spacing: 3px;
   align-self: start;
-  padding: 0 20px 0px 60px;
+  padding: 0 20px 0px 70px;
+  position: relative;
+  padding-bottom: 15px;
 }
 .audiocallBlock-wrapper, .sprintBlock-wrapper {
   display: flex;
@@ -114,12 +129,49 @@
        column-gap: 30px;
   padding: 5px 0;
 }
+.audiocall-title::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 0;
+  width: 50px;
+  height: 50px;
+  background: url(../../public/profile-images/heardphone.svg) no-repeat center;
+  background-size: cover;
+}
+.sprint-title::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 0;
+  width: 50px;
+  height: 50px;
+  background: url(../../public/profile-images/sprint.svg) no-repeat center;
+  background-size: cover;
+}
+.allTimeContent-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;  
+  flex-wrap: wrap;  
+  width: 100%;
+  gap: 30px;
+}
+.allTimeLearnedWords-wrapper, .allTimeProgress-wrapper {
+  display: block;
+  align-items: center;
+  justify-content: center;
+  -moz-column-gap: 20px;
+  column-gap: 20px;
+  box-shadow: 3px 3px 10px rgb(168 168 168), inset 5px 5px 10px rgb(255 253 253);
+  background: #eaeaea;
+  padding: 20px;
+  border-radius: 15px;
+  border: 2px solid #dfdfdf;    
+  flex: 1 1 45%;
+}
 
 @media (max-width: 576px) {
-  .statistics-item {
-  width: 100%;
-  min-width: 300px;
-}
   .profile {
     padding: 20px 5px;
   }
@@ -129,12 +181,15 @@
     align-items: center;
     gap: 10px;
     flex-wrap: wrap;
+    width: 100%;
+  }  
+  .todayStatistics-wrapper:first-child {
+    width: 100%;  
   }
-  .todayLearnedWords-wrapper {
-    min-width: 300px;
+  .audiocall-title, .sprint-title {  
+    align-self: center;  
+  }
+  .todayLearnedWords-wrapper:first-child {    
+    justify-content: center;    
   }
 }
-// .audiocallBlock-counter, .sprintBlock-counter {
-
-
-// }
