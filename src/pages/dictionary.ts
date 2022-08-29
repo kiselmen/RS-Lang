@@ -44,8 +44,6 @@ export class Dictionary extends Component {
   }; 
 
   loadData = () => {
-    console.log("AAAAAAAAAAA");
-    
     this.checkToken().then(() => {
       this.words = [];
       this.dictionaryContent.loading = true;
