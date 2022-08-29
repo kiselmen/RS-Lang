@@ -14,7 +14,7 @@ export class AudioCallMainPage extends Component {
   private audioCallHeader: Component;
   private audioCallContent: Component;
   private audioCallControls: Component;
-  private controlsVolume: UIButton;
+  // private controlsVolume: UIButton;
   private controlsScreen: UIButton;
   private controlsClose: UIButton;
   private voiceWrapper: Component;
@@ -42,7 +42,7 @@ export class AudioCallMainPage extends Component {
     this.audioCallHeader = new Component(this.element, "div", ["master-header"]);
     this.audioCallContent = new Component(this.element, "div", ["master-content"]);
     this.audioCallControls = new Component(this.audioCallHeader.element, "div", ["master-controls", "controls"]);
-    this.controlsVolume = new UIButton(this.audioCallControls.element, ["controls-btn", "btn", "controls-volume"], "");
+    // this.controlsVolume = new UIButton(this.audioCallControls.element, ["controls-btn", "btn", "controls-volume"], "");
     this.controlsScreen = new UIButton(this.audioCallControls.element, ["controls-btn", "btn", "controls-fullscreen"], "");
     this.controlsClose = new UIButton(this.audioCallControls.element, ["controls-btn", "btn", "controls-close"], "");
     this.audioCallProgressbar = new Component(this.audioCallHeader.element, "div", ["master-progressbar"]);
@@ -65,12 +65,20 @@ export class AudioCallMainPage extends Component {
     this.bar = progressBarMixin(this.audioCallProgressbar.element);
 
     this.controlsClose.element.addEventListener("click", () => {
-      this.progressVal = 0;
-      correctWords = [];
-      wrongWords = [];
-      this.bar.animate(0);
+      if(document.fullscreenElement) {
+        document.exitFullscreen();
+      }
+      this.resetVal();
       (<HTMLElement>document.querySelector(".master")).style.display = "none";
       (<HTMLElement>document.querySelector(".home")).style.display = "flex";
+    });
+
+    this.controlsScreen.element.addEventListener("click", () => {
+      if(document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        parentNode.requestFullscreen();
+      }
     });
     
     (<HTMLElement>document.querySelector(".home-lvl__btns")).addEventListener("click", (e) => {
@@ -79,11 +87,13 @@ export class AudioCallMainPage extends Component {
       this.valChapter = +id;
       
       if (eventTarget.classList.contains("home-btn")) {
+        this.resetVal();
         (<HTMLElement>document.querySelector(".master")).style.display = "flex";
         (<HTMLElement>document.querySelector(".home")).style.display = "none";
         this.textDontKnow.element.style.display = "flex";
         this.textNext.element.style.display = "none";
         this.getWords(this.valChapter, this.valPage);
+        localStorage. removeItem("progressbarVal");
       }
     });
     
@@ -112,6 +122,7 @@ export class AudioCallMainPage extends Component {
     this.textDontKnow.element.style.display = "flex";
     this.textNext.element.style.display = "none";
     getWordsByChapterAndPage(numChapter, numPage).then( data => {
+      this.shuffleArr(data);
       this.arrWords = data.map( (dataItm: IWordsElement, idx: number) => {
         if(idx < 5) {
           const wordBtn = (<HTMLElement>document.querySelectorAll(".words-btn")[idx]);
@@ -121,17 +132,27 @@ export class AudioCallMainPage extends Component {
         }
       }).filter( (dataItm: IWordsElement) => dataItm !== undefined);
       
-      this.randomNum = this.getRandomNum(this.arrWords);
+      this.randomNum = this.getRandomElem(this.arrWords);
 
       this.audio.element.setAttribute("src", BASE_URL + this.randomNum.audio);
       this.audio.element.setAttribute("autoplay", "");
+      if (correctWords.length + wrongWords.length === 10) {
+        this.audio.element.removeAttribute("autoplay");
+      }
     });
   };
 
-  getRandomNum = (arr: IWordsElement[]) => {
+  getRandomElem = (arr: IWordsElement[]) => {
     const randomNum = Math.floor(Math.random() * arr.length);
     const randomElem = arr[randomNum];
     return randomElem;
+  };
+
+  shuffleArr = (array: IWordsElement[]) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
   };
 
   guessWord = (e: Event) => {
@@ -147,7 +168,7 @@ export class AudioCallMainPage extends Component {
       } else {
         eventTarget.style.background = "#ff4c4c";
         this.audioResult.element.setAttribute("src", "../../../../public/audio/wrong.mp3");
-        wrongWords.push(this.arrWords.filter( el => el.word === id)[0]);
+        wrongWords.push(this.randomNum);
       }
       (<HTMLAudioElement>this.audioResult.element).play();
       this.getCorrectWord();
@@ -165,5 +186,12 @@ export class AudioCallMainPage extends Component {
       this.textDontKnow.element.style.display = "none";
       this.textNext.element.style.display = "flex";
     });
+  };
+
+  resetVal = () => {
+    this.progressVal = 0;
+    correctWords = [];
+    wrongWords = [];
+    this.bar.animate(0);
   };
 }

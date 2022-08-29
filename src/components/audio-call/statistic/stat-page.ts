@@ -1,5 +1,5 @@
 import Circle from "progressbar.js/circle";
-import { IWordsElement } from "../../../interfaces";
+import { BASE_URL, IWordsElement } from "../../../interfaces";
 import { Component } from "../../../utils/component";
 import { UIButton } from "../../UI/button";
 import { correctWords, wrongWords } from "../main/main-page";
@@ -22,7 +22,6 @@ export class AudioCallStatisticPage extends Component {
   private btnDictionary: UIButton;
   private linkDictionary: Component;
   private linkAgain: Component;
-  animateVal = localStorage.getItem("progressbarVal") as string;
   totalItemHyphen!: Component;
   totalCorrectItem!: Component;
   totalWrongItem!: Component;
@@ -32,6 +31,7 @@ export class AudioCallStatisticPage extends Component {
   totalItemBtn!: UIButton;
   bar: Circle;
   totalItem!: Component;
+  totalItemAudio!: Component;
 
   constructor(parentNode: HTMLElement) {
     super(parentNode, "div", ["audiocall-stat", "statistic"]);
@@ -57,11 +57,15 @@ export class AudioCallStatisticPage extends Component {
     this.progressbarCount = new Component(this.statProgressbar.element, "span", ["master-progressbar__count"],);
     this.bar = progressBarMixin(this.statProgressbar.element);
 
-    if (correctWords.length + wrongWords.length === 10) {
-      this.bar.animate(+this.animateVal);
-      this.createList(this.totalCorrect.element, correctWords);
-      this.createList(this.totalWrong.element, wrongWords);
-    }
+    (<HTMLElement>document.querySelector(".next")).addEventListener("click", this.updateStat);
+
+    this.statTotalCont.element.addEventListener("click", (e) => {
+      const eventTarget = e.target as HTMLElement;
+      const btn = eventTarget.closest(".total-item__btn");
+      if (!btn) return;
+      if ((!this.statTotalCont.element.contains(btn))) return;
+      (<HTMLAudioElement>btn.querySelector("audio")).play();
+    });
   }
   
   createList = (listContainer: HTMLElement, arrayWords: IWordsElement[]) => {
@@ -71,9 +75,23 @@ export class AudioCallStatisticPage extends Component {
       this.totalItemImg = new Component(this.totalItemBtn.element, "img", ["total-item__img"]);
       this.totalItemImg.element.setAttribute("src", "../../../../public/volume.svg");
       this.totalItemImg.element.setAttribute("alt", "volume");
+      this.totalItemAudio = new Component(this.totalItemBtn.element, "audio", ["total-item__audio"]);
+      this.totalItemAudio.element.setAttribute("src", BASE_URL + el.audio);
       this.totalItemEnWord = new Component(this.totalItem.element, "span", ["total-item__word", "total-item__en"], el.word);
       this.totalItemHyphen = new Component(this.totalItem.element, "span", [], "-");
       this.totalItemRuWord = new Component(this.totalItem.element, "span", ["total-item__word"], el.wordTranslate);
     });
   };
+  
+  updateStat = () => {
+    if (correctWords.length + wrongWords.length === 10) {
+      const animateVal = localStorage.getItem("progressbarVal") as string;
+      (<HTMLElement>document.querySelector(".audiocall-main")).style.display = "none";
+      this.element.style.display = "flex";
+      this.bar.animate(+animateVal);
+      this.createList(this.totalCorrect.element, correctWords);
+      this.createList(this.totalWrong.element, wrongWords);
+    }
+  };
+
 }
