@@ -15,18 +15,45 @@
     z-index: 2;
     border: 1px solid #a2dbfedc;
     display: none;
+    & #chapter-1 {
+      background: #a2dbfedc;
+    }
+    & #chapter-2 {
+      background: #FFC53D;
+    }
+    & #chapter-3 {
+      background: #4CCBB7;
+    }
+    & #chapter-4 {
+      background: #FF7171;
+    }
+    & #chapter-5 {
+      background: #5D7CFD;
+    }
+    & #chapter-6 {
+      background: #8A78FA;
+    }
+    & #chapter-7 {
+      background: #5a5674;
+    }
+    & #chapter-1,
+    & #chapter-2,
+    & #chapter-3,
+    & #chapter-4,
+    & #chapter-5,
+    & #chapter-6,
+    & #chapter-7,
     & li {
       padding: rem(3.2);
       border-bottom: rem(1) solid white;
       cursor: pointer;
       &:hover {
-        background: var(--text-color);
+        background: rgba(255, 255, 255, 0.329);
       }
       &:last-child {
         border: none;
       }
       &.active {
-        background: var(--text-color);
         position: relative;
         &::after {
           content: "";
