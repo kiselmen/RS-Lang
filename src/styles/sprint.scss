@@ -8,7 +8,7 @@
 }
 .sprint {
   width: 100%;
-  height: calc(100vh - 165px);
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -49,6 +49,8 @@
   display: flex;
   text-align: center;
   justify-content: center;
+  flex-wrap: wrap;
+  row-gap: 10px;
   -moz-column-gap: 15px;
        column-gap: 15px;
 }
@@ -92,12 +94,15 @@
 .sprint-game__wrap {
   color: #494a69;
   background-size: 600px 450px;
-  width: 600px;
-  height: 450px;
+  max-width: 600px;
+  width: 100%;
   border-radius: 40px;
   position: relative;
   display: flex;
   flex-direction: column;
+  padding-bottom: rem(45);
+  align-items: center;
+  margin-top: rem(100);
 }
 .sprintControlsBtns-container {
   display: flex;
@@ -136,6 +141,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
 }
 .sprint-timer, .sprint-points {
    width: 70px;
@@ -154,8 +160,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  -moz-column-gap: 30px;
-       column-gap: 30px;
+  max-width: rem(150);
+  -moz-column-gap: rem(30);
+       column-gap: rem(30);
   margin-top: -50px;
 }
 .sprintGameCardSignal {
@@ -201,9 +208,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 100px;
+  margin-top: 40px;
   -moz-column-gap: 60px;
        column-gap: 60px;
+  flex-wrap: wrap;
+  row-gap: rem(10);
 }
 .sprintAnswerFalse-btn, .sprintAnswerTrue-btn {
   width: 170px;
@@ -248,10 +257,12 @@
 /***** Sprint Results Page*****/
 
 .sprint-resultsPage__container {
-  min-width: 500px;
+  max-width: 500px;
+  width: 100%;
   text-align: center;
   padding: 30px 20px;
   position: relative;
+  margin-top: rem(40);
 }
 .sprint-results__container {
   margin-top: 30px;
@@ -265,6 +276,9 @@
   min-height: 400px;
   overflow-y: scroll;
   border-top: 1px solid #494a69;
+  @media (max-width: 480px) {
+    padding: rem(20) rem(0);
+  }
 }
 .sprint-result__wrap {
   display: flex;
@@ -273,10 +287,15 @@
   gap: 15px;
   font-size: 16px;
   width: 100%;
+  @media (max-width:480px) {
+    padding-bottom: rem(10);
+    flex-wrap: wrap;
+    border-bottom: rem(1) solid rgba(122, 122, 122, 0.233);
+  }
 }
 .toSprintGamePage-btn {
   position: absolute;
-  top: -15px;
+  top: 5px;
   right: 15px;
   width: 30px;
   height: 30px;
@@ -290,14 +309,26 @@
   background-size: 30px 30px;
   flex: 0 1 auto;
   cursor: pointer;
+  @media (max-width: 767px) {
+    flex: 0 0 auto;
+  }
+}
+.sprintResultWordInEng {
+  font-weight: 700;
 }
 .sprintResultWordInEng, .sprintResultWordInRu{
   flex: 0 1 90px;
   text-align: start;
+  @media (max-width:480px) {
+    flex: unset;
+  }
 }
 .sprintResultWordInEng-transcription {
   flex: 0 1 100px;
   text-align: start;
+  @media (max-width:480px) {
+    flex: unset;
+  }
 }
 .sprintResultWordCheckingResult-img {
   flex: 0 0 50px;
@@ -309,6 +340,9 @@
   background: url(../../public/sprint-images/true-check.svg) no-repeat;
   background-size: 30px 30px;
   background-position-x: right;
+  @media (max-width:480px) {
+    display: none;
+  }
 }
 .sprintResultWordCheckingResult-img.false {
   width: 30px;
@@ -316,4 +350,7 @@
   background: url(../../public/sprint-images/false-check.svg) no-repeat;
   background-size: 30px 30px;
   background-position-x: right;
+  @media (max-width:480px) {
+    display: none;
+  }
 }
