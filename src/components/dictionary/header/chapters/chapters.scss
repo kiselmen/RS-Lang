@@ -1,21 +1,22 @@
 .chapters {
   width: rem(220);
-  border: rem(2) solid var(--shadow-color);
+  border: rem(4) solid #a2dbfedc;
   padding: rem(3.2) rem(16) rem(3.2) rem(3.2);
   position: relative;
+  border-radius: rem(30);
   cursor: pointer;
   &-list {
     position: absolute;
     width: 100%;
     left: 0;
     top: calc(100% + rem(2));
-    background: var(--active-color) 100%;
+    background: #a2dbfedc 100%;
     z-index: 2;
-    border: 1px solid var(--active-color);
+    border: 1px solid #a2dbfedc;
     display: none;
     & li {
       padding: rem(3.2);
-      border-bottom: rem(1) solid var(--chapter-itm-border-color);
+      border-bottom: rem(1) solid white;
       cursor: pointer;
       &:hover {
         background: var(--text-color);

@@ -2,12 +2,20 @@
   display: flex;
   justify-content: space-between;
   padding: rem(3.2);
+  & a {
+    text-decoration: none;
+    color: inherit;
+    border-radius: rem(30);
+    &:visited {
+      text-decoration: none;
+      color: var(--border-color)
+    }
+  }
 }
 
 .game {
-  border: 1px solid transparent;
   padding: rem(5);
-  border: rem(2) solid var(--shadow-color);
+  border: rem(4) solid #a2dbfedc;
   &:hover {
     transform: scale(105%);
   }
