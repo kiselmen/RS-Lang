@@ -17,7 +17,7 @@ const sprintState: ISprintState = {
 /* Контент для первой страницы */
 async function getInfo(currentGroup: number, currentPage: number,) {
   if(!localStorage.getItem("userId")) {
-    return await getWordsByChapterAndPage(currentPage, currentGroup);
+    return await getWordsByChapterAndPage(currentGroup, currentPage);
   }
 }
 /* Озвучка слова */
@@ -89,7 +89,6 @@ function updateSprintState(pageUpdate: boolean, stepCounterUpdate: boolean | num
     sprintState.correctAnswerCount += 0;
   } else if(!correctAnswerCountUpdate) {
     sprintState.correctAnswerCount = 0;
-
   }
   if(currentContent) {
     sprintState.currentContent = currentContent;
@@ -98,11 +97,19 @@ function updateSprintState(pageUpdate: boolean, stepCounterUpdate: boolean | num
 
 
 /* Отображение нужной страницы Sprint */
-const makeVisibleCurrentSprintPage = (hiddenEl1: HTMLElement, hiddenEl2: HTMLElement, visibleEl: HTMLElement, displayPropVisibleEl: string) => {
-  hiddenEl1.style.display = "none";
-  hiddenEl2.style.display = "none";
-  visibleEl.style.display = displayPropVisibleEl;
+const makeVisibleCurrentSprintPage = async(hiddenEl1: HTMLElement, hiddenEl2: HTMLElement, visibleEl: HTMLElement, displayPropVisibleEl: string) => {
+  await changeVisible(hiddenEl1, false);
+  await changeVisible(hiddenEl2, false);
+  changeVisible(visibleEl, true, displayPropVisibleEl);
 };
+
+async function changeVisible(el: HTMLElement, bool: boolean, displayProp = "none") {
+  if(bool) {
+    el.style.display = displayProp;
+  } else {
+    el.style.display = displayProp;
+  }
+}
 
 interface ISprintState {
   currentGroup: number;
@@ -119,7 +126,8 @@ interface IContent {
   [key:string]: string | number;
 }
 
-export {sprintState, getInfo, sayTheWord, IContent, myRandom, clearSprintState, makeVisibleCurrentSprintPage, updateSprintState};
+export {sprintState, getInfo, sayTheWord, IContent, myRandom, clearSprintState, makeVisibleCurrentSprintPage,
+  updateSprintState, changeVisible};
 
 
 

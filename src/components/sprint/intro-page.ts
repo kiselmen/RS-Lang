@@ -15,6 +15,7 @@ class SprintIntro extends Component {
 
   constructor(parentNode: HTMLElement) {
     super(parentNode, "div", ["sprintIntro-card__wrap"]);
+    this.element.style.display = "none";
     
     this.cardTitle = new Component(this.element, "h3", ["sprintIntro-card__title"], "Sprint");
     this.cardTextContent = new Component(this.element, "p", ["sprintIntro-card__content"]);
