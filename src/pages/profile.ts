@@ -20,13 +20,16 @@ export class Profile extends Component {
   learnedWordsTextContentContainer;
   todayAudioCallStatContent;
   todaySprintStatContent;
+  onUpdateRouter: () => void;
 
-  constructor(parentNode: HTMLElement) {
+  constructor(parentNode: HTMLElement, updateRouter: () => void) {
     super(parentNode, "div", ["profile"]);
+    this.onUpdateRouter = () => updateRouter();
 
     this.profileHeaderContainer = new Component(this.element, "div", ["statisticsHeader-container"]);
     this.title = new Component(this.profileHeaderContainer.element, "h3", ["statistics-title"], "Statistics");
     this.userLogOut = new UIButton(this.profileHeaderContainer.element,["statisticsProfileLogout"], "Log Out");
+    this.userLogOut.onClickButton = async () => this.onLogout();
 
     this.contentWrapper = new Component(this.element, "div", ["statisticsContent-wrapper"]);
     this.todaySubTitle = new Component(this.contentWrapper.element, "h3", ["statistics-subTitle", "today-subTitle"], "Today");
@@ -49,6 +52,20 @@ export class Profile extends Component {
     this.todayAudioCallStatContent = new StatisticsContentPart(this.todayAudioCallStatWrapper.element, "Audio call");
     this.todaySprintStatContent = new StatisticsContentPart(this.todaySprintStatWrapper.element, "Sprint");
 
+  }
+
+  onLogout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("page");
+    localStorage.removeItem("chapter");
+    localStorage.removeItem("audiocall");
+    localStorage.removeItem("sprint");
+    localStorage.removeItem("words");
+
+    window.location.hash = "#/";
+    this.onUpdateRouter();
   }
 }
 

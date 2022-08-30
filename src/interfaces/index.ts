@@ -7,6 +7,11 @@ export type elementData = {
   [key: string] : string 
 }
 
+export type statisticsData = {
+  learnedWords: string,
+  optional : elementData
+}
+
 export const BASE_URL = "http://localhost:8081/";
 
 type IdValue = {
