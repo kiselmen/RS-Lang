@@ -15,11 +15,13 @@ export class Sprint extends Component {
   parameters: string | undefined;
 
   constructor(parentNode: HTMLElement, parameters: string) {
-    super(parentNode, "div", ["sprint"]);    
+    super(parentNode, "div", ["sprint"]);
+
     if(parameters) {
       this.parameters = parameters;
       console.log(parameters);
     }
+
     this.sprintIntroCard = new SprintIntro(this.element);
     this.sprintGamePage = new SprintGamePage(this.element);
     this.sprintResultsPage = new SprintResultesPage(this.element);
@@ -29,7 +31,7 @@ export class Sprint extends Component {
     [this.sprintIntroCard.cardBtn1, this.sprintIntroCard.cardBtn2, this.sprintIntroCard.cardBtn3, this.sprintIntroCard.cardBtn4, this.sprintIntroCard.cardBtn5, this.sprintIntroCard.cardBtn6].forEach((btn) => {
       btn.element.addEventListener("click", async() => {
         sprintState.currentGroup = +btn.element.innerText - 1;
-        this.prepareGame();        
+        this.prepareGame();
       });
     });
 
@@ -48,7 +50,6 @@ export class Sprint extends Component {
       }
     });
 
-    
     /* Кнопка full-screen */
     this.sprintGamePage.toFullScreenBtn.element.addEventListener("click", () => {
       const el = document.documentElement,
@@ -80,48 +81,56 @@ export class Sprint extends Component {
     [this.sprintGamePage.answerFalseBtn.element, this.sprintGamePage.answerTrueBtn.element].forEach(btn => {
       btn.addEventListener("click", async (e) => {
         const currentBtn = e.target as HTMLButtonElement;
+        console.log(sprintState);
 
-        if(sprintState.stepCounter === 19 && sprintState.currentPage < 30) {
-          updateSprintState(true, 0, false, false,
-            await getInfo(sprintState.currentGroup, sprintState.currentPage ));
+        if(!parameters) {
+          if(sprintState.stepCounter === 19 && sprintState.currentPage < 29) {
+            updateSprintState(true, "none", false, false,
+              await getInfo(sprintState.currentGroup, sprintState.currentPage ));
+            sprintState.stepCounter = 0;
+          } else if(sprintState.stepCounter === 19 && sprintState.currentPage === 29) {
+            makeVisibleCurrentSprintPage(this.sprintGamePage.element, this.sprintIntroCard.element, this.sprintResultsPage.element, "block");
+            this.timer?.timerStop();
+            clearSprintState();
+            this.updateSignalLampState();
+          }
 
-        } else if(sprintState.stepCounter === 19 && sprintState.currentPage === 30) {
-          makeVisibleCurrentSprintPage(this.sprintGamePage.element, this.sprintIntroCard.element, this.sprintResultsPage.element, "block");
-          this.timer?.timerStop();
-          clearSprintState();
-          this.updateSignalLampState();
+          if(currentBtn.innerText === "CORRECT" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
+            this.responseProcessing(true);
+          } else if (currentBtn.innerText === "CORRECT" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
+            this.responseProcessing(false);
+          }
+
+          if(currentBtn.innerText === "INCORRECT" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
+            this.responseProcessing(true);
+          } else if (currentBtn.innerText === "INCORRECT" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
+            this.responseProcessing(false);
+          }
         }
 
-        if(currentBtn.innerText === "CORRECT" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
-          updateSprintState(false, true, true, true);
-          this.updateScore(true);
-          this.updateGameCardContent();
-          this.updateSignalLampState();
-          this.makeAnswerVoise(true);
-          this.userResponseProcessing(sprintState.currentContent[sprintState.stepCounter].word.toString(), sprintState.currentContent[sprintState.stepCounter].transcription.toString(), sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString(), sprintState.currentContent[sprintState.stepCounter].audio.toString(), true);
+        if(parameters) {
+          if(sprintState.stepCounter === 19 && sprintState.currentPage < 29) {
+            updateSprintState(true, "none", false, false,
+              await getInfo(sprintState.currentGroup, sprintState.currentPage ));
+            sprintState.stepCounter = 0;
+          } else if(sprintState.stepCounter === 19 && sprintState.currentPage === 29) {
+            makeVisibleCurrentSprintPage(this.sprintGamePage.element, this.sprintIntroCard.element, this.sprintResultsPage.element, "block");
+            this.timer?.timerStop();
+            clearSprintState();
+            this.updateSignalLampState();
+          }
 
-        } else if (currentBtn.innerText === "CORRECT" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
-          updateSprintState(false, true, false, false);
-          this.updateGameCardContent();
-          this.updateSignalLampState();
-          this.makeAnswerVoise(false);
-          this.userResponseProcessing(sprintState.currentContent[sprintState.stepCounter].word.toString(), sprintState.currentContent[sprintState.stepCounter].transcription.toString(), sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString(), sprintState.currentContent[sprintState.stepCounter].audio.toString(), false);
-        }
+          if(currentBtn.innerText === "CORRECT" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
+            this.responseProcessing(true);
+          } else if (currentBtn.innerText === "CORRECT" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
+            this.responseProcessing(false);
+          }
 
-        if(currentBtn.innerText === "INCORRECT" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
-          updateSprintState(false, true, true, true);
-          this.updateScore(true);
-          this.updateGameCardContent();
-          this.updateSignalLampState();
-          this.makeAnswerVoise(true);
-          this.userResponseProcessing(sprintState.currentContent[sprintState.stepCounter].word.toString(), sprintState.currentContent[sprintState.stepCounter].transcription.toString(), sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString(), sprintState.currentContent[sprintState.stepCounter].audio.toString(), true);
-
-        } else if (currentBtn.innerText === "INCORRECT" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
-          updateSprintState(false, true, false, false);
-          this.updateGameCardContent();
-          this.updateSignalLampState();
-          this.makeAnswerVoise(false);
-          this.userResponseProcessing(sprintState.currentContent[sprintState.stepCounter].word.toString(), sprintState.currentContent[sprintState.stepCounter].transcription.toString(), sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString(), sprintState.currentContent[sprintState.stepCounter].audio.toString(), false);
+          if(currentBtn.innerText === "INCORRECT" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
+            this.responseProcessing(true);
+          } else if (currentBtn.innerText === "INCORRECT" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
+            this.responseProcessing(false);
+          }
         }
       });
     });
@@ -134,7 +143,7 @@ export class Sprint extends Component {
       clearSprintState();
       this.sprintResultsPage.clearResults();
       this.sprintGamePage.clearLamp();
-    }; 
+    };
 
     document.querySelectorAll(".nav-link").forEach(el => {
       el.addEventListener("click", () => {
@@ -149,6 +158,7 @@ export class Sprint extends Component {
 
   //* Вспомогательные *//
 
+  /* Запуск Sprint из Dictionary */
   startFromDictionary = async () => {
     if(this.parameters) {
       sprintState.currentGroup = +localStorage.chapter;
@@ -156,7 +166,25 @@ export class Sprint extends Component {
       await this.prepareGame();
     } else {
       makeVisibleCurrentSprintPage(this.sprintResultsPage.element, this.sprintGamePage.element, this.sprintIntroCard.element, "flex");
-    }    
+    }
+  };
+
+  /* Обработка ответов пользователя */
+  responseProcessing = (bool: boolean) => {
+    if(bool) {
+      this.userResponseProcessing(sprintState.currentContent[sprintState.stepCounter].word.toString(), sprintState.currentContent[sprintState.stepCounter].transcription.toString(), sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString(), sprintState.currentContent[sprintState.stepCounter].audio.toString(), true);
+      updateSprintState("none", true, true, true);
+      this.updateScore(true);
+      this.updateGameCardContent();
+      this.updateSignalLampState();
+      this.makeAnswerVoise(true);
+    } else {
+      this.userResponseProcessing(sprintState.currentContent[sprintState.stepCounter].word.toString(), sprintState.currentContent[sprintState.stepCounter].transcription.toString(), sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString(), sprintState.currentContent[sprintState.stepCounter].audio.toString(), false);
+      updateSprintState("none", true, false, false);
+      this.updateGameCardContent();
+      this.updateSignalLampState();
+      this.makeAnswerVoise(false);
+    }
   };
 
   /* Для обработки ответа пользователя и вывода резултата Sprint */
@@ -164,7 +192,7 @@ export class Sprint extends Component {
     this.sprintResultsPage.result = new SprintResult(this.sprintResultsPage.results.element, wordInEng, wordInEngTranscription, wordInRu, wordVoiceLink, boolean);
     this.sprintResultsPage.result.specialFunc =  () => sayTheWord(this.sprintGamePage.audioPlayer.element as HTMLAudioElement,
       wordVoiceLink);
-  };  
+  };
 
   /* Для таймера */
   showResults = () => {
@@ -195,7 +223,7 @@ export class Sprint extends Component {
     for(let i = 1; i <= sprintState.correctAnswerCount; i += 1) {
       signalLamps[i-1].classList.toggle("activate", true);
     }
-  }; 
+  };
 
   /* Для озвучки  правильных и неправильных ответов */
   makeAnswerVoise = (soundLinkToBool: boolean) => {
@@ -208,14 +236,14 @@ export class Sprint extends Component {
     }
     player.play();
   };
-  
+
   /* Подготовка к игре */
   prepareGame = async () => {
-    sprintState.currentContent = await getInfo(sprintState.currentGroup, sprintState.currentPage );    
+    sprintState.currentContent = await getInfo(sprintState.currentGroup, sprintState.currentPage );
     makeVisibleCurrentSprintPage(this.sprintIntroCard.element, this.sprintResultsPage.element, this.sprintGamePage.element, "flex");
     await this.updateGameCardContent();
     this.timer = new Timer(this.sprintGamePage.timer.element);
     this.timer.specialFunc = this.showResults;
-    this.timer.timerRun();  
+    this.timer.timerRun();
   };
 }

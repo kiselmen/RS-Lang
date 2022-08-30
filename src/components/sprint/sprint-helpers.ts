@@ -9,9 +9,7 @@ const sprintState: ISprintState = {
   score: 0,
   correctAnswerCount: 0,
   currentContent: [],
-
   parentNodeInfo: {"about": 0},
-
 };
 
 /* Контент для первой страницы */
@@ -47,22 +45,27 @@ function clearSprintState() {
   sprintState.score = 0;
   sprintState.correctAnswerCount = 0;
   sprintState.currentContent = [];
-
   sprintState.parentNodeInfo = {};
-
 }
 
 /* Обновление стейта */
-function updateSprintState(pageUpdate: boolean, stepCounterUpdate: boolean | number, scoreUpdate: boolean | number, correctAnswerCountUpdate: boolean, currentContent?: []) {
-  if(pageUpdate) {
+function updateSprintState(pageUpdate: boolean | string, stepCounterUpdate: boolean | string, scoreUpdate: boolean | number, correctAnswerCountUpdate: boolean, currentContent?: []) {
+  if(pageUpdate && typeof pageUpdate !== "string") {
     sprintState.currentPage += 1;
+  } else if(!pageUpdate){
+    sprintState.currentPage -= 1;
+  } else if(typeof pageUpdate === "string"){
+    sprintState.currentPage += 0;
   }
-  if(typeof stepCounterUpdate === "boolean" && stepCounterUpdate) {
+
+  if(stepCounterUpdate && typeof stepCounterUpdate !== "string") {
     sprintState.stepCounter += 1;
+  } else if(!stepCounterUpdate){
+    sprintState.stepCounter -= 1;
+  } else if(typeof stepCounterUpdate === "string"){
+    sprintState.stepCounter += 0;
   }
-  if(typeof stepCounterUpdate === "number") {
-    sprintState.stepCounter = stepCounterUpdate;
-  }
+
   if(typeof scoreUpdate === "boolean" && scoreUpdate) {
     switch(sprintState.correctAnswerCount) {
     case 0:

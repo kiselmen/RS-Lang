@@ -14,11 +14,9 @@
   align-items: center;
   justify-content: center;
   color: #494a69;
-
   font-family: Arial;
   font-style: normal;
   font-weight: 400;
-
   color: #494a69;
   -webkit-user-select: none;
      -moz-user-select: none;
@@ -31,11 +29,8 @@
   justify-content: center;
   row-gap: 20px;
   align-items: center;
-
   max-width: 540px;
   min-height: 350px;
-
-
   color: #494a69;
   padding: 30px;
   font-size: 30px;
@@ -264,7 +259,7 @@
   max-height: 65vh;
   min-height: 400px;
   overflow-y: scroll;
-  border-top: 1px solid #494a69;
+  border-top: 1px solid #494a696c;
 }
 .sprint-result__wrap {
   display: flex;
@@ -292,11 +287,11 @@
   cursor: pointer;
 }
 .sprintResultWordInEng, .sprintResultWordInRu{
-  flex: 0 1 90px;
+  flex: 0 1 130px;
   text-align: start;
 }
 .sprintResultWordInEng-transcription {
-  flex: 0 1 100px;
+  flex: 0 1 140px;
   text-align: start;
 }
 .sprintResultWordCheckingResult-img {
