@@ -13,6 +13,7 @@ export class Router {
   private defaultRoute: IRoute;
 
   onInitNavSignUser: () => void;
+  onRenderFooter: () => void;
 
   // Pages
   aboutPage: Component;
@@ -21,10 +22,12 @@ export class Router {
   sprintPage: Component | undefined;
   loginPage: Component | undefined;
   profilePage: Component | undefined;
+  currRoute: string;
 
-  constructor(private rootElement: HTMLElement, onInitNav: () => void ) {
+  constructor(private rootElement: HTMLElement, onInitNav: () => void, onRenderFooter: () => void ) {
     this.aboutPage = new About(this.rootElement);
     this.onInitNavSignUser = () => onInitNav();
+    this.onRenderFooter = () => onRenderFooter();
     this.routes = [
       {
         name: "/",
@@ -70,7 +73,7 @@ export class Router {
     ];
 
     this.allRoutes = [...this.routes];
-
+    this.currRoute = "/";
     if (localStorage.getItem("token")) {
       this.routes = this.routes.filter( item => item.name !== "/login");
     } else {
@@ -102,6 +105,8 @@ export class Router {
     
     !currentRouteParam ? window.location.hash = (currentRoute || this.defaultRoute).name : window.location.hash = (currentRoute || this.defaultRoute).name + "?" + currentRouteParam;
     (currentRoute || this.defaultRoute).component(currentRouteParam);
+    this.currRoute = (currentRoute || this.defaultRoute).name;
+    this.onRenderFooter();
   }
 
   initRouter(): void {
