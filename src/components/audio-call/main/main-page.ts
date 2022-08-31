@@ -55,12 +55,16 @@ export class AudioCallMainPage extends Component {
     for(let i = 0; i < 5; i+=1) {
       this.listItem = new Component(this.listWords.element, "li", ["words-item"],);
       this.listBtn = new UIButton(this.listItem.element, ["words-btn", "btn"], "");
+      this.listBtn.element.setAttribute("value", `${i + 1}`);
     }
     this.actionBtn = new UIButton(this.audioCallContent.element, ["master-action__btn", "btn"], "");
     this.textDontKnow = new Component(this.actionBtn.element, "span", ["action-item"], "I don't know");
     this.textNext = new Component(this.actionBtn.element, "span", ["action-item", "next"], "Next");
     
     this.audioCallProgressbar.element.setAttribute("id", "container");
+    this.voiceBtn.element.setAttribute("value", "Shift");
+    this.textDontKnow.element.setAttribute("id", "Space-Dont");
+    this.textNext.element.setAttribute("id", "Space-Next");
 
     this.bar = progressBarMixin(this.audioCallProgressbar.element);
 
@@ -99,6 +103,28 @@ export class AudioCallMainPage extends Component {
     
     this.voiceBtn.element.addEventListener("click", () => {
       (<HTMLAudioElement>this.audio.element).play();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      const valueKeyDont = this.textDontKnow.element.id.replace(/-Dont/gi, "");
+      // const valueKeyNext = this.textNext.element.id.replace(/-Next/gi, "");
+      
+      if (event.key === (<HTMLButtonElement>this.voiceBtn.element).value) {
+        (<HTMLAudioElement>this.audio.element).play();
+      }
+      document.querySelectorAll(".words-btn").forEach( el => {
+        if (event.key === (<HTMLButtonElement>el).value && !(<HTMLButtonElement>el).disabled) {
+          this.splitEvents((<HTMLButtonElement>el).id, <HTMLElement>el);
+        }
+      });
+      if (event.code === valueKeyDont && this.textNext.element.style.display === "none") {
+        this.getCorrectWord();
+        wrongWords.push(this.randomNum);
+      }
+      // if (event.code === valueKeyNext && this.textDontKnow.element.style.display === "none") {
+      //   this.getWords(this.valChapter, this.valPage +=1);
+      // }
+      // event.preventDefault();
     });
 
     this.textDontKnow.element.addEventListener("click", () => {
@@ -159,19 +185,20 @@ export class AudioCallMainPage extends Component {
     const eventTarget = e.target as HTMLElement;
     if (eventTarget.classList.contains("words-btn")) {
       const { id } = eventTarget;
-      if(this.randomNum.word === id) {
-        eventTarget.style.background = "#67db67";
-        this.audioResult.element.setAttribute("src", "../../../../public/audio/win.mp3");
-        this.bar.animate(this.progressVal += 0.1);
-        localStorage.setItem("progressbarVal", `${this.progressVal}`);
-        correctWords.push(this.randomNum);
-      } else {
-        eventTarget.style.background = "#ff4c4c";
-        this.audioResult.element.setAttribute("src", "../../../../public/audio/wrong.mp3");
-        wrongWords.push(this.randomNum);
-      }
-      (<HTMLAudioElement>this.audioResult.element).play();
-      this.getCorrectWord();
+      this.splitEvents(id, eventTarget);
+      // if(this.randomNum.word === id) {
+      //   eventTarget.style.background = "#67db67";
+      //   this.audioResult.element.setAttribute("src", "../../../../public/audio/win.mp3");
+      //   this.bar.animate(this.progressVal += 0.1);
+      //   localStorage.setItem("progressbarVal", `${this.progressVal}`);
+      //   correctWords.push(this.randomNum);
+      // } else {
+      //   eventTarget.style.background = "#ff4c4c";
+      //   this.audioResult.element.setAttribute("src", "../../../../public/audio/wrong.mp3");
+      //   wrongWords.push(this.randomNum);
+      // }
+      // (<HTMLAudioElement>this.audioResult.element).play();
+      // this.getCorrectWord();
     }
   };
   
@@ -193,5 +220,21 @@ export class AudioCallMainPage extends Component {
     correctWords = [];
     wrongWords = [];
     this.bar.animate(0);
+  };
+
+  splitEvents = (id: string, event: HTMLElement) => {
+    if(this.randomNum.word === id) {
+      event.style.background = "#67db67";
+      this.audioResult.element.setAttribute("src", "../../../../public/audio/win.mp3");
+      this.bar.animate(this.progressVal += 0.1);
+      localStorage.setItem("progressbarVal", `${this.progressVal}`);
+      correctWords.push(this.randomNum);
+    } else {
+      event.style.background = "#ff4c4c";
+      this.audioResult.element.setAttribute("src", "../../../../public/audio/wrong.mp3");
+      wrongWords.push(this.randomNum);
+    }
+    (<HTMLAudioElement>this.audioResult.element).play();
+    this.getCorrectWord();
   };
 }
