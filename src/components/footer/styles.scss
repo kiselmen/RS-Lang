@@ -9,6 +9,9 @@
   font-weight: 700;
   padding: 30px 10px;
   border-top: 1px solid #f1f1f1;
+  &__disabled {
+    display: none;
+  }
 }
 @media (max-width: 660px) {
   .footer {
