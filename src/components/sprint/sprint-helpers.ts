@@ -49,7 +49,7 @@ function clearSprintState() {
 }
 
 /* Обновление стейта */
-function updateSprintState(pageUpdate: boolean | string, stepCounterUpdate: boolean | string, scoreUpdate: boolean | number, correctAnswerCountUpdate: boolean, currentContent?: []) {
+async function updateSprintState(pageUpdate: boolean | string, stepCounterUpdate: boolean | string, scoreUpdate: boolean | number, correctAnswerCountUpdate: boolean, currentContent: boolean) {
   if(pageUpdate && typeof pageUpdate !== "string") {
     sprintState.currentPage += 1;
   } else if(!pageUpdate){
@@ -94,7 +94,7 @@ function updateSprintState(pageUpdate: boolean | string, stepCounterUpdate: bool
     sprintState.correctAnswerCount = 0;
   }
   if(currentContent) {
-    sprintState.currentContent = currentContent;
+    sprintState.currentContent = await getInfo(sprintState.currentGroup, sprintState.currentPage );
   }
 }
 
