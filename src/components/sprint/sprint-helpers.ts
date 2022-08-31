@@ -1,7 +1,6 @@
 import {getWordsByChapterAndPage} from "../../utils/loader";
 import { BASE_URL } from "../../interfaces";
 
-
 const sprintState: ISprintState = {
   currentGroup: 0,
   currentPage: 0,
@@ -14,15 +13,19 @@ const sprintState: ISprintState = {
 
 /* Контент для первой страницы */
 async function getInfo(currentGroup: number, currentPage: number,) {
-  if(!localStorage.getItem("userId")) {
-    return await getWordsByChapterAndPage(currentGroup, currentPage);
-  }
+  // if(!localStorage.getItem("userId")) {
+  //   return await getWordsByChapterAndPage(currentGroup, currentPage);
+  // }
+  
+  return await getWordsByChapterAndPage(currentGroup, currentPage);  
 }
+
 /* Озвучка слова */
 function sayTheWord(player: HTMLAudioElement, link: string) {
   player.setAttribute("src", BASE_URL + link);
   player.play();
 }
+
 /* Рандомное число из диапазона */
 function getRandomIntInclusive(min = 0, max = 19) {
   let myMin = min;
@@ -38,7 +41,7 @@ function myRandom(currentNum: number): number {
 }
 
 /* Сброс стейта при закрытии страницы игры */
-function clearSprintState() {
+async function clearSprintState() {
   sprintState.currentGroup = 0;
   sprintState.currentPage = 0;
   sprintState.stepCounter = 0;
@@ -100,7 +103,7 @@ async function updateSprintState(pageUpdate: boolean | string, stepCounterUpdate
 
 
 /* Отображение нужной страницы Sprint */
-const makeVisibleCurrentSprintPage = async(hiddenEl1: HTMLElement, hiddenEl2: HTMLElement, visibleEl: HTMLElement, displayPropVisibleEl: string) => {
+const makeVisibleCurrentSprintPage = async (hiddenEl1: HTMLElement, hiddenEl2: HTMLElement, visibleEl: HTMLElement, displayPropVisibleEl: string) => {
   await changeVisible(hiddenEl1, false);
   await changeVisible(hiddenEl2, false);
   changeVisible(visibleEl, true, displayPropVisibleEl);

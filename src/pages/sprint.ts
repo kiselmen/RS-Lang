@@ -18,8 +18,7 @@ export class Sprint extends Component {
     super(parentNode, "div", ["sprint"]);
 
     if(parameters) {
-      this.parameters = parameters;
-      console.log(parameters);
+      this.parameters = parameters;      
     }
 
     this.sprintIntroCard = new SprintIntro(this.element);
@@ -80,8 +79,7 @@ export class Sprint extends Component {
     /* Прослушивание кнопок выбора ответа */
     [this.sprintGamePage.answerFalseBtn.element, this.sprintGamePage.answerTrueBtn.element].forEach(async (btn) => {
       btn.addEventListener("click", async (e) => {
-        const currentBtn = e.target as HTMLButtonElement;        
-        console.log(this.parameters);        
+        const currentBtn = e.target as HTMLButtonElement;  
 
         if(currentBtn.innerText === "CORRECT" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {          
           await this.responseProcessing(true);          
@@ -95,7 +93,7 @@ export class Sprint extends Component {
           await this.responseProcessing(false);          
         }
         console.log(sprintState);
-      });
+      });   
     });
 
     //** Sprint Results page **//
@@ -137,9 +135,9 @@ export class Sprint extends Component {
     if(bool) {
       await this.userResponseProcessing(sprintState.currentContent[sprintState.stepCounter].word.toString(), sprintState.currentContent[sprintState.stepCounter].transcription.toString(), sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString(), sprintState.currentContent[sprintState.stepCounter].audio.toString(), true);
 
-      updateSprintState("none", true, true, true, false);      
+      await updateSprintState("none", true, true, true, false);      
       await this.updateScore(true);   
-      this.updateSignalLampState();
+      await this.updateSignalLampState();
       this.makeAnswerVoise(true);  
       
       if(sprintState.stepCounter === 20) {
@@ -150,8 +148,8 @@ export class Sprint extends Component {
     } else {
       await this.userResponseProcessing(sprintState.currentContent[sprintState.stepCounter].word.toString(), sprintState.currentContent[sprintState.stepCounter].transcription.toString(), sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString(), sprintState.currentContent[sprintState.stepCounter].audio.toString(), false);
       
-      updateSprintState("none", true, true, false, false);      
-      this.updateSignalLampState();
+      await updateSprintState("none", true, true, false, false);      
+      await this.updateSignalLampState();
       this.makeAnswerVoise(false);
 
       if(sprintState.stepCounter === 20) {
@@ -178,8 +176,13 @@ export class Sprint extends Component {
 
   /* Для обнорвления контента карточки игры (следующее слово) */
   updateGameCardContent = async () => {
-    this.sprintGamePage.wordInEng.element.innerText =  sprintState.currentContent[sprintState.stepCounter].word.toString();
-    this.sprintGamePage.wordInRu.element.innerText =  sprintState.currentContent[myRandom(sprintState.stepCounter)].wordTranslate.toString();
+    try {
+      this.sprintGamePage.wordInEng.element.innerText =  sprintState.currentContent[sprintState.stepCounter].word.toString();
+      this.sprintGamePage.wordInRu.element.innerText =  sprintState.currentContent[myRandom(sprintState.stepCounter)].wordTranslate.toString();
+    }
+    catch (e){
+      console.error((e as Error).message);
+    } 
   };
 
   /* Для обнорвления счета */
@@ -191,7 +194,7 @@ export class Sprint extends Component {
   };
 
   /* Для обновления сигнальных ламп */
-  updateSignalLampState = () => {
+  updateSignalLampState = async () => {
     const signalLamps = [this.sprintGamePage.gameSignalOne.element, this.sprintGamePage.gameSignalTwo.element, this.sprintGamePage.gameSignalThree.element];
     signalLamps.forEach(lamp => lamp.classList.toggle("activate", false));
     for(let i = 1; i <= sprintState.correctAnswerCount; i += 1) {
@@ -214,7 +217,7 @@ export class Sprint extends Component {
   /* Подготовка к игре */
   prepareGame = async () => {
     sprintState.currentContent = await getInfo(sprintState.currentGroup, sprintState.currentPage );
-    makeVisibleCurrentSprintPage(this.sprintIntroCard.element, this.sprintResultsPage.element, this.sprintGamePage.element, "flex");
+    await makeVisibleCurrentSprintPage(this.sprintIntroCard.element, this.sprintResultsPage.element, this.sprintGamePage.element, "flex");
     await this.updateGameCardContent();
     this.timer = new Timer(this.sprintGamePage.timer.element);
     this.timer.specialFunc = this.showResults;
@@ -225,16 +228,15 @@ export class Sprint extends Component {
 
   checkLimit = async () => {
     if(!this.parameters) {
-      if(sprintState.stepCounter === 20 && sprintState.currentPage < 29) {  
-        console.log("19");        
+      if(sprintState.stepCounter === 20 && sprintState.currentPage < 29) {                
         await updateSprintState(true, "none", false, false,
           true);    
         sprintState.stepCounter = 0;    
       } else if(sprintState.stepCounter === 20 && sprintState.currentPage === 29) {
-        makeVisibleCurrentSprintPage(this.sprintGamePage.element, this.sprintIntroCard.element, this.sprintResultsPage.element, "block");
+        await makeVisibleCurrentSprintPage(this.sprintGamePage.element, this.sprintIntroCard.element, this.sprintResultsPage.element, "block");
         this.timer?.timerStop();
-        clearSprintState();
-        this.updateSignalLampState();
+        await clearSprintState();
+        await this.updateSignalLampState();
       }
     }
 
@@ -244,10 +246,10 @@ export class Sprint extends Component {
           await getInfo(sprintState.currentGroup, sprintState.currentPage ));
         sprintState.stepCounter = 0;
       } else if(sprintState.stepCounter === 20 && sprintState.currentPage === 0) {
-        makeVisibleCurrentSprintPage(this.sprintGamePage.element, this.sprintIntroCard.element, this.sprintResultsPage.element, "block");
+        await makeVisibleCurrentSprintPage(this.sprintGamePage.element, this.sprintIntroCard.element, this.sprintResultsPage.element, "block");
         this.timer?.timerStop();
-        clearSprintState();
-        this.updateSignalLampState();
+        await clearSprintState();
+        await this.updateSignalLampState();
       }
     }
   };  

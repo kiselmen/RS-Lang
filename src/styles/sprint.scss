@@ -44,8 +44,7 @@
   display: flex;
   text-align: center;
   justify-content: center;
-  -moz-column-gap: 15px;
-       column-gap: 15px;
+  gap: 15px;
 }
 .sprintIntro-card__Btn {
   height: 50px;
@@ -130,7 +129,7 @@
 .sprintCounters-container {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between;  
 }
 .sprint-timer, .sprint-points {
    width: 70px;
@@ -152,6 +151,7 @@
   -moz-column-gap: 30px;
        column-gap: 30px;
   margin-top: -50px;
+  text-align: center;
 }
 .sprintGameCardSignal {
   width: 50px;
@@ -204,12 +204,20 @@
   width: 170px;
   height: 40px;
   font-size: 20px;
-  background: #e4f4ff;
+  box-shadow: inset 0 0 30px 30px #e4f4ff;
+  background: none;
   border-radius: 10px;
   border: 2px solid #9cd2ff;
   color: #494a69;
   position: relative;
   padding: 0 10px;
+  transition: all 200ms ease-in-out;
+}
+
+.sprintAnswerFalse-btn:hover, .sprintAnswerTrue-btn:hover {
+  box-shadow: inset 0 0 0 0 #e4f4ff;
+  transition: all 200ms ease-in-out;
+  background: none;
 }
 .sprintAnswerFalse-btn {
   display: flex;
@@ -271,8 +279,8 @@
 }
 .toSprintGamePage-btn {
   position: absolute;
-  top: -15px;
-  right: 15px;
+  top: 15px;
+  right: -30px;
   width: 30px;
   height: 30px;
   background: url(../../public/sprint-images/close-page-X.svg) no-repeat top;
@@ -312,3 +320,48 @@
   background-size: 30px 30px;
   background-position-x: right;
 }
+
+@media (max-width: 620px) {
+  .sprintIntro-card__Btns {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  .sprintAnswersBtns-container {
+    flex-wrap: wrap;
+    gap: 15px;
+    flex-direction: column;
+    margin-top: 50px;
+  }
+  .sprintCounters-container {
+    position: relative;
+}
+  .sprint-game__wrap {
+    width: max-content;
+  }
+  .sprintGameCardSignals-container {
+    column-gap: 3px;
+    margin-top: -35px;
+  }
+  .sprintWordInEng, .sprintWordInRu {
+    font-size: calc(30px + 10 * ((100vw - 320px) / (1880 - 320)));;
+  }
+  .sprint-timer {
+    position: absolute;
+    top: 10px;
+    left: -10px
+  }
+  .sprint-points {
+    position: absolute;    
+    top: 10px;
+    right: -10px;
+  }
+  .sprintControlsBtns-container {    
+    justify-content: center;   
+    left: 0;   
+  }
+  .sprintWordInEng-container {
+    margin-top: 70px;
+  }
+  
+}
+

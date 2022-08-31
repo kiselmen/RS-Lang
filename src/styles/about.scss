@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bad+Script&family=Marck+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DynaPuff:wght@400;500;600;700&display=swap');
 
 .about h3 {
   font-size: 2rem;
@@ -8,7 +8,7 @@
 .about {
   min-height: calc(100vh - 165px);
   height: 100%;
-  padding: 120px 20px 20px 20px;
+  padding: 60px 20px 20px 20px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -157,7 +157,7 @@
   width: 100vw;
   padding: 20px 20px 20px 40px;
   color: #241b80;
-  font-family: 'Bad Script', cursive;
+  font-family: 'DynaPuff', cursive;
   gap: 30px;
   position: relative;
 }
@@ -175,8 +175,8 @@
   z-index: 1;
 }
 @media (max-width: 620px) {
-  .about .about-rsLang__page {
-    padding: 10px 10px 40px 30px;
+  body .about .about-rsLang__page {
+    padding: 10px 10px 40px 10px;
 }
   .about .aboutRsLang-section {
     width: calc(300px + 100 * ((100vw - 320px) / (620 - 320)));
@@ -187,6 +187,9 @@
     max-width: 320px;
     align-self: center;
     justify-content: center;
+  }
+  .about {    
+    padding: 40px 0 10px 0;
   }
 }
 .about .aboutRsLang-section:nth-child(3),
