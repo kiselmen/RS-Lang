@@ -5,10 +5,10 @@
 .master {
   @include games-wrapper;
   margin: 0 auto;
-  border-top-left-radius: rem(50);
   max-width: rem(1024);
-  padding-bottom: rem(20);
+  padding: rem(5) rem(5) rem(20) rem(5);
   min-height: unset;
+  background: white;
   display: none;
   &-content {
     display: flex;
@@ -48,12 +48,12 @@
       display: block;
       width: rem(80);
       height: rem(80);
-      background: url(../../../../public/speaker.svg) center no-repeat, #efe391;
+      background: url(../../../../public/speaker.svg) center no-repeat, #9cd2ff;
       background-size: 60%;
       box-shadow: unset;
       border-radius: 50%;
       &.showPicture {
-        background: url(../../../../public/speaker.svg) center no-repeat, #efe2915d;
+        background: url(../../../../public/speaker.svg) center no-repeat, #9cd2ff46;
         background-size: 60%;
       }
     }
@@ -63,7 +63,7 @@
     width: rem(150);
     height: rem(40);
     border-radius: rem(30);
-    background: #efe391;
+    background: #9cd2ff;
     box-shadow: unset;
     padding: rem(0);
   }
@@ -81,15 +81,11 @@
     box-shadow: unset;
     border: unset;
   }
-  &-volume {
-    background: url(../../../../public/sprint-images/sound-on.svg) no-repeat;
-    background-size: 99%;
-  }
   &-fullscreen {
-    background: url(../../../../public/sprint-images/full-screen.svg) no-repeat;
+    background: url(../../../../public/sprint-images/full-screen.svg) center / 70% no-repeat;
   }
   &-close {
-    background: url(../../../../public/sprint-images/close-page-X.svg) no-repeat;
+    background: url(../../../../public/sprint-images/close-page-X.svg) center / 100% no-repeat;
   }
 }
 
@@ -110,9 +106,11 @@
     height: 100%;
     text-transform: capitalize;
     box-shadow: unset;
-    background: transparent;
-    border: rem(3) solid #efe391;
     padding: rem(5);
+    background: #e4f4ff;
+    border-radius: 10px;
+    border: 2px solid #9cd2ff;
+    color: #494a69;
   }
 }
 

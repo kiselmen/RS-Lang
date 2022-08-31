@@ -16,7 +16,7 @@ export class LoginForm extends Component {
     super(parentNode, "form", ["form"], "");
 
     const eMailContainer = new Component(this.element, "div", ["form-item", "item"]);
-    new Component(eMailContainer.element, "label", ["item-label"], "EMail");
+    new Component(eMailContainer.element, "label", ["item-label"], "E-mail");
     this.eMailInput = new UIInput(eMailContainer.element, "email", ["item-input"]);
     this.eMailInput.element.setAttribute("placeholder", "E-mail");
     this.eMailInput.element.setAttribute("required", "");
@@ -24,7 +24,7 @@ export class LoginForm extends Component {
     const passContainer = new Component(this.element, "div", ["form-item", "item"]);
     new Component(passContainer.element, "label", ["item-label"], "Password");
     this.passInput = new UIInput(passContainer.element, "password", ["item-input"]);
-    this.passInput.element.setAttribute("placeholder", "password");
+    this.passInput.element.setAttribute("placeholder", "Password");
     this.passInput.element.setAttribute("required", "");
 
     const showPassContainer = new Component(this.element, "div", ["form-item", "item"]);
