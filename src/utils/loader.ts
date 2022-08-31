@@ -1,4 +1,4 @@
-import { BASE_URL, elementData } from "../interfaces";
+import { BASE_URL, elementData, statisticsData } from "../interfaces";
 
 function createGetSettings() {
   return {
@@ -164,6 +164,19 @@ const signInUser = async (userData: elementData) => {
   return await load(url, method);     
 };
 
+const getUserStatistics = async (userID: string) => {
+  const url = "users/" + userID + "/statistics";
+  const method = createGetSettings();
+  return await load(url, method);     
+};
+
+const createUserStatistics = async (statisticsData: statisticsData) => {
+  const url = "users/" + localStorage.getItem("userId") + "/statistics";
+  const method = createPutSettings();
+  method.body = JSON.stringify(statisticsData);
+  return await load(url, method);     
+};
+
 export { 
   getWordsByChapterAndPage, 
   getAlluserWords, 
@@ -174,4 +187,6 @@ export {
   getAllAgregatedWords, 
   registerUser,
   signInUser,
+  getUserStatistics,
+  createUserStatistics,
   preLoad } ;

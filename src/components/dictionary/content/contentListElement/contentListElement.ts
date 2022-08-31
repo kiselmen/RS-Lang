@@ -105,6 +105,7 @@ export class DictionaryContentElement extends Component {
           audioExample.onended = () => {
             this.elementBtnImg.element.setAttribute("src", "../../../../../sprint-images/sound-on.svg");
             this.elementBtnImg.element.setAttribute("alt", "stop");
+            this.isPlaying = !this.isPlaying;
           };
         };
       };

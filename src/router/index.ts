@@ -35,7 +35,7 @@ export class Router {
       {
         name: "/dictionary",
         component: () => {
-          this.dictionaryPage = new Dictionary(this.rootElement, () => this.onSignOnUser("/profile", "/login"));
+          this.dictionaryPage = new Dictionary(this.rootElement, () => this.onSignOnOffUser("/profile", "/login"));
           this.rootElement.append(this.dictionaryPage.element);
         },
       },
@@ -56,14 +56,14 @@ export class Router {
       {
         name: "/login",
         component: () => {
-          this.loginPage = new Login(this.rootElement, () => this.onSignOnUser("/login", "/profile"));
+          this.loginPage = new Login(this.rootElement, () => this.onSignOnOffUser("/login", "/profile"));
           this.rootElement.append(this.loginPage.element);
         },
       },
       {
         name: "/profile",
         component: () => {
-          this.profilePage = new Profile(this.rootElement);
+          this.profilePage = new Profile(this.rootElement, () => this.onSignOnOffUser("/profile", "/login"));
           this.rootElement.append(this.profilePage.element);
         },
       },
@@ -113,7 +113,7 @@ export class Router {
     this.updateRouter();
   }
 
-  onSignOnUser(removeRoute: string, addRoute: string): void {
+  onSignOnOffUser(removeRoute: string, addRoute: string): void {
     if (localStorage.getItem("token")) {
       this.routes = this.allRoutes.filter( item => item.name !== removeRoute);
     } else {
