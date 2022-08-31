@@ -95,14 +95,14 @@
 }
 .sprintControlsBtns-container {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   -moz-column-gap: 30px;
        column-gap: 30px;
-  position: absolute;
   top: -80px;
   left: calc(50% - 75px);
   padding: 10px;
+  margin-top: -90px;
 }
 .toSprintIntroPage-btn {
   justify-self: flex-end;
@@ -129,7 +129,7 @@
 .sprintCounters-container {
   display: flex;
   align-items: center;
-  justify-content: space-between;  
+  justify-content: space-between;
 }
 .sprint-timer, .sprint-points {
    width: 70px;
@@ -217,7 +217,7 @@
 .sprintAnswerFalse-btn:hover, .sprintAnswerTrue-btn:hover {
   box-shadow: inset 0 0 0 0 #e4f4ff;
   transition: all 200ms ease-in-out;
-  background: none;
+
 }
 .sprintAnswerFalse-btn {
   display: flex;
@@ -236,7 +236,8 @@
   left: 2px;
   width: 20px;
   height: 20px;
-  background: url(../../public/sprint-images/left-arrow.svg);
+  background: url(../../public/sprint-images/arrow-left.svg) no-repeat center;
+  background-size: contain;
 }
 .sprintAnswerTrue-btn::before {
   content: "";
@@ -245,7 +246,8 @@
   right: 2px;
   width: 20px;
   height: 20px;
-  background: url(../../public/sprint-images/right-arrow.svg);
+  background: url(../../public/sprint-images/arrow-right.svg) no-repeat center;
+  background-size: contain;
 }
 
 /***** Sprint Results Page*****/
@@ -332,36 +334,39 @@
     flex-direction: column;
     margin-top: 50px;
   }
+   .sprintAnswersBtns-container button{
+    font-size: calc(18px + 2 * ((100vw - 320px) / (620 - 320)));
+  }
   .sprintCounters-container {
+    align-items: center;
+    justify-content: center;
+    -moz-column-gap: 160px;
+    column-gap: 160px;
     position: relative;
-}
+    top: 70px;
+  }
+  .sprintControlsBtns-container div {
+    background-size: 25px 25px;
+  }
   .sprint-game__wrap {
+    width: -webkit-max-content;
+    width: -moz-max-content;
     width: max-content;
   }
   .sprintGameCardSignals-container {
-    column-gap: 3px;
-    margin-top: -35px;
+    -moz-column-gap: 3px;
+         column-gap: 3px;
+    margin-top: -50px;
   }
   .sprintWordInEng, .sprintWordInRu {
-    font-size: calc(30px + 10 * ((100vw - 320px) / (1880 - 320)));;
+    font-size: calc(30px + 10 * ((100vw - 320px) / (1880 - 320)));
   }
-  .sprint-timer {
-    position: absolute;
-    top: 10px;
-    left: -10px
-  }
-  .sprint-points {
-    position: absolute;    
-    top: 10px;
-    right: -10px;
-  }
-  .sprintControlsBtns-container {    
-    justify-content: center;   
-    left: 0;   
+  .sprintControlsBtns-container {
+    justify-content: center;
+    left: 0;
   }
   .sprintWordInEng-container {
     margin-top: 70px;
   }
-  
 }
 
