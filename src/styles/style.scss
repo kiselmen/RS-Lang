@@ -56,15 +56,6 @@ h6 {
   font-weight: 400;
 }
 
-// a,
-// a:visited {
-//   text-decoration: none;
-// }
-
-// a:visited {
-//   color: var(--border-color)
-// }
-
 a:hover {
   text-decoration: none;
 }
@@ -112,6 +103,8 @@ main {
   flex: 1 0 auto;
   display: flex;
   justify-content: center;
-  padding-top: rem(100);
+  padding-top: rem(117);
   align-items: center;
+  font-family: Arial, sans-serif;
+  color: #494a69;
 }

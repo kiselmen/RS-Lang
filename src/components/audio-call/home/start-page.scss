@@ -4,8 +4,12 @@
 .audiocall {
   width: 100%;
   height: 100%;
-  padding: rem(20) rem(10);
-  background: rgb(255, 246, 186);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #494a69;
+  padding: rem(10)
 }
 
 .home {
@@ -15,6 +19,7 @@
   &-heading {
     font-size: rem(32);
     font-weight: bold;
+    text-align: center;
   }
   &-content__descript {
     font-size: rem(22.4);
@@ -28,13 +33,16 @@
   }
   &-link__back {
     font-size: rem(18);
-    background: #baedff;
+    background: #a2dafe;
     font-weight: normal;
     text-transform: unset;
     max-width: rem(200);
     border-radius: rem(30);
     box-shadow: unset;
     text-decoration: none;
+    &:hover {
+      transform: scale(105%);
+    }
   }
   &-lvl {
     display: flex;
@@ -44,8 +52,37 @@
   &-lvl__btns {
     display: flex;
     column-gap: rem(20);
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: rem(10);
   }
   &-btn {
-    box-shadow: unset;
+    height: rem(50);
+    width: rem(50);
+    padding: rem(20) rem(15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #a2dafe;
+    font-size: rem(25);
+    border-radius: rem(25);
+    transition: all 200ms ease-in-out;
+    color: #494a69;
+    &:hover {
+      &::before {
+        content: "";
+        width: rem(65);
+        height: rem(65);
+        border-radius: 50%;
+        background: rgba(24, 213, 255, 0.1);
+        border: rem(3) solid #51a8e1;
+        position: absolute;
+        transition: all 200ms ease-in-out;
+      }
+    }
+    &:active {
+      background: #51a8e1;
+      transition: all 200ms ease-in-out;
+    }
   }
 }
