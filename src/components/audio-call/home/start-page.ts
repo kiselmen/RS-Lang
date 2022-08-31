@@ -29,5 +29,37 @@ export class AudioCallStartPage extends Component {
     );
 
     this.linkMainPage.element.setAttribute("href", "#/");
+    this.linkMainPage.element.setAttribute("tabindex", "0");
+
+    let position = 0;
+    document.addEventListener("keydown", (event) => {
+      const homeBtns = document.querySelectorAll(".home-btn") as NodeListOf<HTMLElement>;
+      const homeBtnBack = document.querySelector(".home-link__back") as HTMLElement;
+
+      if (event.code !== "ArrowRight" && event.code !== "ArrowLeft" &&
+      event.code !== "ArrowUp" && event.code !== "ArrowDown") {
+        event.preventDefault();
+      }
+
+      if (event.code === "ArrowRight") {
+        if (position === 6) {
+          position = 0;
+        }
+        homeBtns[position].focus();
+        position++;
+      } else if (event.code === "ArrowLeft") {
+        if (position === 0) {
+          position = homeBtns.length;
+        } else if (position === 1) {
+          position = 7;
+        }
+        position -= 2;
+        homeBtns[position].focus();
+        position++;
+      } else if (event.code === "ArrowDown") {
+        homeBtnBack.focus();
+      }
+      event.preventDefault();
+    });
   }
 }
