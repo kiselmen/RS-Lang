@@ -261,10 +261,10 @@
 .sprint-results__container {
   margin-top: 30px;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: flex-start;
   flex-direction: column;
-  padding: 20px;
+  padding: 20px 5px;
   gap: 10px;
   max-height: 65vh;
   min-height: 400px;
@@ -289,19 +289,23 @@
   background-size: 30px 30px;
 }
 .sprintReultSound-btn {
-  width: 30px;
-  height: 30px;
-  background: url(../../public/sprint-images/speaker-inSprint-result.svg) no-repeat top;
-  background-size: 30px 30px;
-  flex: 0 1 auto;
+  width: 25px;
+  height: 25px;
+  background: url(../../public/sprint-images/speaker-inSprint-result.svg) no-repeat center;
+  background-size: 25px 25px;
+  flex: 0 0 auto;
   cursor: pointer;
 }
-.sprintResultWordInEng, .sprintResultWordInRu{
-  flex: 0 1 130px;
+.sprintResultWordInEng {
+  flex: 1 1 130px;
+  text-align: start;
+}
+.sprintResultWordInRu {
+  flex: 1 1 130px;
   text-align: start;
 }
 .sprintResultWordInEng-transcription {
-  flex: 0 1 140px;
+  flex: 1 1 130px;
   text-align: start;
 }
 .sprintResultWordCheckingResult-img {
@@ -324,6 +328,9 @@
 }
 
 @media (max-width: 620px) {
+  .sprint {
+    height: auto;
+  }
   .sprintIntro-card__Btns {
     flex-wrap: wrap;
     gap: 15px;
@@ -367,6 +374,32 @@
   }
   .sprintWordInEng-container {
     margin-top: 70px;
+  }
+  .toSprintGamePage-btn {
+    top: -50px;
+    right: calc(5px + 55 * ((100vw - 320px) / (640 - 320)));
+  }
+  .sprint-resultsPage__container {
+    min-width: 100%;
+    padding: 0px 0px 20px 0px;
+  }
+  .sprint-result__wrap {
+    gap: 5px;
+    font-size: calc(12px + 4 * ((100vw - 320px) / (640 - 320)));;
+  }
+  .sprintResultWordInEng {
+    flex: 0 0 70px;
+   }
+   .sprintResultWordInRu{
+    flex: 0 0 90px;
+   }
+  .sprintResultWordInEng-transcription {
+    flex: 0 0 70px;
+    text-align: start;
+  }
+  .sprint-results__container {
+    width: 330px;
+    margin: 0 auto;
   }
 }
 
