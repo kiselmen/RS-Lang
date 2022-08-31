@@ -6,9 +6,10 @@
   text-align: center;
 }
 .about {
+  width: 100%;
   min-height: calc(100vh - 165px);
   height: 100%;
-  padding: 120px 20px 20px 20px;
+  padding: 60px 20px 20px 20px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -113,6 +114,9 @@
   row-gap: 15px;
   padding-bottom: 10px;
   box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
+  @media (max-width: 320px) {
+    box-shadow: unset;
+  }
 }
 .member-card__name {
   font-size: 1.4rem;
@@ -172,7 +176,7 @@
 }
 @media (max-width: 620px) {
   .about .about-rsLang__page {  
-    padding: 10px 10px 40px 30px;    
+    padding: 10px 10px 40px 10px;    
 }
   .about .aboutRsLang-section {
     width: calc(300px + 100 * ((100vw - 320px) / (620 - 320)));    

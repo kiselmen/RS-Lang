@@ -46,6 +46,7 @@
     align-content: stretch;
     justify-content: center;
     flex-wrap: nowrap;
+    background: white;
   }
   &-pagination {
     display: flex;
@@ -56,5 +57,83 @@
   &-wrapper__games {
     max-width: rem(200);
     width: 100%;
+  }
+}
+
+.dictionary-chapter-1 {
+  & .chapters,
+  & .game {
+    border: 0.25rem solid rgba(162, 219, 254, 0.862745098);
+  }
+  & .explain, 
+  & .example,
+  & .btn {
+    background: rgba(228, 244, 255, 0.5215686275);
+  }
+}
+.dictionary-chapter-2 {
+  & .chapters,
+  & .game {
+    border: 0.25rem solid #FFC53D;
+  }
+  & .explain, 
+  & .example,
+  & .btn {
+    background: #FFC53D;
+  }
+}
+.dictionary-chapter-3 {
+  & .chapters,
+  & .game {
+    border: 0.25rem solid #4CCBB7;
+  }
+  & .explain, 
+  & .example,
+  & .btn {
+    background: #4CCBB7;
+  }
+}
+.dictionary-chapter-4 {
+  & .chapters,
+  & .game {
+    border: 0.25rem solid #FF7171;
+  }
+  & .explain, 
+  & .example,
+  & .btn {
+    background: #FF7171;
+  }
+}
+.dictionary-chapter-5 {
+  & .chapters,
+  & .game {
+    border: 0.25rem solid #5D7CFD;
+  }
+  & .explain, 
+  & .example,
+  & .btn {
+    background: #5D7CFD;
+  }
+}
+.dictionary-chapter-6 {
+  & .chapters,
+  & .game {
+    border: 0.25rem solid #8A78FA;
+  }
+  & .explain, 
+  & .example,
+  & .btn {
+    background: #8A78FA;
+  }
+}
+.dictionary-chapter-7 {
+  & .chapters,
+  & .game {
+    border: 0.25rem solid #5a5674;
+  }
+  & .explain, 
+  & .example,
+  & .btn {
+    background: #5a5674;
   }
 }

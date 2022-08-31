@@ -6,7 +6,6 @@
   align-items: center;
   max-width: rem(650);
   min-height: rem(350);
-  background: rgb(255, 246, 186);
   border-radius: rem(40);
   padding: rem(30);
   font-size: rem(30);
@@ -14,12 +13,10 @@
 }
 
 @mixin games-wrapper {
-  background-color: rgb(255, 246, 186);
   background-size: rem(600) rem(450);
   max-width: rem(600);
   width: 100%;
   min-height: rem(450);
-  border-radius: rem(40);
   position: relative;
   display: flex;
   flex-direction: column;
