@@ -1,8 +1,7 @@
 import { Component } from "../utils/component";
 import { LoginForm } from "../components/forms/login";
-// import { load } from "../utils/loader";
-import { elementData } from "../interfaces";
-import { registerUser, signInUser } from "../utils/loader";
+import { elementData, statisticsData } from "../interfaces";
+import { registerUser, signInUser, getUserStatistics, createUserStatistics } from "../utils/loader";
 
 const EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
 
@@ -37,7 +36,12 @@ export class Login extends Component{
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("refreshToken", response.data.refreshToken);
         localStorage.setItem("userId", response.data.userId);
+        
         message.textContent = "";
+  
+        const responseStatistics = await getUserStatistics(response.data.userId);
+        this.setUserStatistics(responseStatistics.data);
+        
         window.location.hash = "#/profile";
         this.onUpdateRouter();
       }
@@ -55,6 +59,11 @@ export class Login extends Component{
       const userData = this.onDataConstruct(eMailElement, passElement);
       
       const response = await registerUser(userData);
+      const optional = {page : "0", chapter : "0", audiocall : JSON.stringify({}), sprint : JSON.stringify({}), words : JSON.stringify({})} as elementData;
+      const statistics = {learnedWords : "0", optional : optional} as statisticsData;
+      const responseStatistics = await createUserStatistics(statistics);
+      this.setUserStatistics(responseStatistics.data);
+
       if (response.status !== 200) {
         message.textContent = "This email is in use by another user";
       } else {
@@ -65,11 +74,21 @@ export class Login extends Component{
           localStorage.setItem("token", responseSign.data.token);
           localStorage.setItem("refreshToken", responseSign.data.refreshToken);
           localStorage.setItem("userId", responseSign.data.userId);
+  
+          window.location.hash = "#/profile";
+          this.onUpdateRouter();
         }
       }
     }
   };
   
+  setUserStatistics(statistics: statisticsData) {
+    statistics.optional.page ? localStorage.setItem("page", statistics.optional.page) : localStorage.setItem("page", "0");
+    statistics.optional.chapter ? localStorage.setItem("chapter", statistics.optional.chapter) : localStorage.setItem("chapter", "0");
+    statistics.optional.audiocall ? localStorage.setItem("audiocall", statistics.optional.audiocall) : localStorage.setItem("audiocall", JSON.stringify({}));
+    statistics.optional.sprint ? localStorage.setItem("sprint", statistics.optional.sprint) : localStorage.setItem("sprint", JSON.stringify({}));
+    statistics.optional.sprint ? localStorage.setItem("words", statistics.optional.sprint) : localStorage.setItem("words", JSON.stringify({}));
+  }
 
   onValidateEmail: (elem: HTMLInputElement) => boolean = (elem) => {
     const isEmailValidate = EMAIL_REGEXP.test(elem.value);
