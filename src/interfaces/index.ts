@@ -35,3 +35,14 @@ export interface IWordsElement {
   textMeaningTranslate: string,
   wordTranslate: string
 }
+
+export interface IGetUsersWords {
+  difficulty: string,
+  id: string,
+  optional: someData[]
+  wordId: string
+}
+
+export type someData = {
+  [key: string] : number 
+}
