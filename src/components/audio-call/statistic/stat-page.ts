@@ -59,6 +59,15 @@ export class AudioCallStatisticPage extends Component {
 
     (<HTMLElement>document.querySelector(".next")).addEventListener("click", this.updateStat);
 
+    document.addEventListener("keydown", (event) => {
+      const isAudiocallMain = document.querySelector(".audiocall-main") as HTMLElement;
+      if (isAudiocallMain && isAudiocallMain.style.display === "flex") {
+        if (event.code === "Space") {
+          this.updateStat();
+        }
+      }
+    });
+
     this.statTotalCont.element.addEventListener("click", (e) => {
       const eventTarget = e.target as HTMLElement;
       const btn = eventTarget.closest(".total-item__btn");

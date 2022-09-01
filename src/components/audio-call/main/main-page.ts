@@ -14,7 +14,9 @@ export class AudioCallMainPage extends Component {
   private audioCallHeader: Component;
   private audioCallContent: Component;
   private audioCallControls: Component;
-  // private controlsVolume: UIButton;
+  private controlsInfoCont: Component;
+  private controlsInfo: UIButton;
+  private dropDownList: Component;
   private controlsScreen: UIButton;
   private controlsClose: UIButton;
   private voiceWrapper: Component;
@@ -28,6 +30,13 @@ export class AudioCallMainPage extends Component {
   private listWords: Component;
   private textDontKnow: Component;
   private textNext: Component;
+  private infoHeading: Component;
+  private infoVoice: Component;
+  private infoChoose: Component;
+  private infoNext: Component;
+  private infoInfo: Component;
+  private infoFullScreen: Component;
+  private infoExit: Component;
   listBtn!: UIButton;
   listItem!: Component;
   private bar: Circle;
@@ -42,7 +51,16 @@ export class AudioCallMainPage extends Component {
     this.audioCallHeader = new Component(this.element, "div", ["master-header"]);
     this.audioCallContent = new Component(this.element, "div", ["master-content"]);
     this.audioCallControls = new Component(this.audioCallHeader.element, "div", ["master-controls", "controls"]);
-    // this.controlsVolume = new UIButton(this.audioCallControls.element, ["controls-btn", "btn", "controls-volume"], "");
+    this.controlsInfoCont = new Component(this.audioCallControls.element, "div", ["controls-btn__cont"],);
+    this.controlsInfo = new UIButton(this.controlsInfoCont.element, ["controls-btn", "btn", "controls-info"], "");
+    this.dropDownList = new Component(this.controlsInfoCont.element, "div", ["controls-dropDownList", "info"],);
+    this.infoHeading = new Component(this.dropDownList.element, "h3", ["info-heading"], "Hotkeys:");
+    this.infoVoice = new Component(this.dropDownList.element, "span", ["info-item", "info-voice"],);
+    this.infoChoose = new Component(this.dropDownList.element, "span", ["info-item", "info-choose"],);
+    this.infoNext = new Component(this.dropDownList.element, "span", ["info-item", "info-next"],);
+    this.infoInfo = new Component(this.dropDownList.element, "span", ["info-item", "info-info"],);
+    this.infoFullScreen = new Component(this.dropDownList.element, "span", ["info-item", "info-fullscreen"],);
+    this.infoExit = new Component(this.dropDownList.element, "span", ["info-item", "info-exit"],);
     this.controlsScreen = new UIButton(this.audioCallControls.element, ["controls-btn", "btn", "controls-fullscreen"], "");
     this.controlsClose = new UIButton(this.audioCallControls.element, ["controls-btn", "btn", "controls-close"], "");
     this.audioCallProgressbar = new Component(this.audioCallHeader.element, "div", ["master-progressbar"]);
@@ -66,24 +84,27 @@ export class AudioCallMainPage extends Component {
     this.textDontKnow.element.setAttribute("id", "Space-Dont");
     this.textNext.element.setAttribute("id", "Space-Next");
 
+    this.infoVoice.element.innerHTML = "Listen: <i>Shift</i>";
+    this.infoChoose.element.innerHTML = "Choose: <i>1-5</i>";
+    this.infoNext.element.innerHTML = "Next: <i>Space</i>";
+    this.infoInfo.element.innerHTML = "Hotkeys: <i>I</i>";
+    this.infoFullScreen.element.innerHTML = "Fullscreen: <i>F</i>";
+    this.infoExit.element.innerHTML = "Close: <i>Esc</i>";
+
     this.bar = progressBarMixin(this.audioCallProgressbar.element);
 
-    this.controlsClose.element.addEventListener("click", () => {
-      if(document.fullscreenElement) {
-        document.exitFullscreen();
+    this.controlsInfo.element.addEventListener("click", () => this.openInfo());
+
+    document.addEventListener("click", (e) => {
+      const event = e.target as HTMLElement;
+      if (!event.closest(".controls-btn__cont")) {
+        this.dropDownList.element.classList.remove("openInfo");
       }
-      this.resetVal();
-      (<HTMLElement>document.querySelector(".master")).style.display = "none";
-      (<HTMLElement>document.querySelector(".home")).style.display = "flex";
     });
 
-    this.controlsScreen.element.addEventListener("click", () => {
-      if(document.fullscreenElement) {
-        document.exitFullscreen();
-      } else {
-        this.element.requestFullscreen();
-      }
-    });
+    this.controlsClose.element.addEventListener("click", () => this.closeGame());
+
+    this.controlsScreen.element.addEventListener("click", () => this.getFullScreen());
     
     (<HTMLElement>document.querySelector(".home-lvl__btns")).addEventListener("click", (e) => {
       const eventTarget = e.target as HTMLElement;
@@ -106,25 +127,41 @@ export class AudioCallMainPage extends Component {
     });
 
     document.addEventListener("keydown", (event) => {
-      const valueKeyDont = this.textDontKnow.element.id.replace(/-Dont/gi, "");
-      // const valueKeyNext = this.textNext.element.id.replace(/-Next/gi, "");
-      
-      if (event.key === (<HTMLButtonElement>this.voiceBtn.element).value) {
-        (<HTMLAudioElement>this.audio.element).play();
-      }
-      document.querySelectorAll(".words-btn").forEach( el => {
-        if (event.key === (<HTMLButtonElement>el).value && !(<HTMLButtonElement>el).disabled) {
-          this.splitEvents((<HTMLButtonElement>el).id, <HTMLElement>el);
+      const isAudiocallMain = document.querySelector(".audiocall-main") as HTMLElement;
+      if (isAudiocallMain && isAudiocallMain.style.display === "flex") {
+        if (event.key === "Shift") {
+          (<HTMLAudioElement>this.audio.element).play();
         }
-      });
-      if (event.code === valueKeyDont && this.textNext.element.style.display === "none") {
-        this.getCorrectWord();
-        wrongWords.push(this.randomNum);
+  
+        document.querySelectorAll(".words-btn").forEach( el => {
+          if (event.key === (<HTMLButtonElement>el).value && !(<HTMLButtonElement>el).disabled) {
+            this.splitEvents((<HTMLButtonElement>el).id, <HTMLElement>el);
+          }
+        });
+  
+        if (event.code === "Space") {
+          if ((<HTMLElement>document.getElementById("Space-Dont")).style.display === "flex") {
+            this.getCorrectWord();
+            wrongWords.push(this.randomNum);
+          } else if ((<HTMLElement>document.getElementById("Space-Next")).style.display === "flex") {
+            this.getWords(this.valChapter, this.valPage +=1);
+          }
+        }
+  
+        if (event.code === "Escape") {
+          this.closeGame();
+        }
+  
+        if (event.code === "KeyF") {
+          this.getFullScreen();
+        }
+        
+        if (event.code === "KeyI") {
+          this.openInfo();
+        }
+
+        event.preventDefault();
       }
-      // if (event.code === valueKeyNext && this.textDontKnow.element.style.display === "none") {
-      //   this.getWords(this.valChapter, this.valPage +=1);
-      // }
-      // event.preventDefault();
     });
 
     this.textDontKnow.element.addEventListener("click", () => {
@@ -186,19 +223,6 @@ export class AudioCallMainPage extends Component {
     if (eventTarget.classList.contains("words-btn")) {
       const { id } = eventTarget;
       this.splitEvents(id, eventTarget);
-      // if(this.randomNum.word === id) {
-      //   eventTarget.style.background = "#67db67";
-      //   this.audioResult.element.setAttribute("src", "../../../../public/audio/win.mp3");
-      //   this.bar.animate(this.progressVal += 0.1);
-      //   localStorage.setItem("progressbarVal", `${this.progressVal}`);
-      //   correctWords.push(this.randomNum);
-      // } else {
-      //   eventTarget.style.background = "#ff4c4c";
-      //   this.audioResult.element.setAttribute("src", "../../../../public/audio/wrong.mp3");
-      //   wrongWords.push(this.randomNum);
-      // }
-      // (<HTMLAudioElement>this.audioResult.element).play();
-      // this.getCorrectWord();
     }
   };
   
@@ -236,5 +260,26 @@ export class AudioCallMainPage extends Component {
     }
     (<HTMLAudioElement>this.audioResult.element).play();
     this.getCorrectWord();
+  };
+
+  closeGame = () => {
+    if(document.fullscreenElement) {
+      document.exitFullscreen();
+    }
+    this.resetVal();
+    (<HTMLElement>document.querySelector(".master")).style.display = "none";
+    (<HTMLElement>document.querySelector(".home")).style.display = "flex";
+  };
+
+  getFullScreen = () => {
+    if(document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      this.element.requestFullscreen();
+    }
+  };
+
+  openInfo = () => {
+    this.dropDownList.element.classList.toggle("openInfo");
   };
 }
