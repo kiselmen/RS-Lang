@@ -9,16 +9,24 @@ export class Chapters extends Component {
   dictionaryChaptersListEl: Component | undefined;
 
   chapter: number;
+  chapterColor: string;
 
   constructor(parentNode: HTMLElement, onChangePage: () => void) {
     super(parentNode, "div", ["dictionary-wrapper__chapters"]);
 
     this.chapter = 0;
+    this.chapterColor = "1";
     if (localStorage.getItem("chapter")) {
       this.chapter = Number(localStorage.getItem("chapter"));
     } else {
       localStorage.setItem("chapter", String(this.chapter));
     }
+    if (localStorage.getItem("chapterColor")) {
+      this.chapterColor = String(localStorage.getItem("chapterColor"));
+    } else {
+      localStorage.setItem("chapterColor", String(this.chapterColor));
+    }
+    this.changeTheme(this.chapterColor);
     onChangePage();
     this.dictionaryHeading = new Component(this.element, "h2", ["dictionary-heading"], "Choose a section:");
     this.dictionaryChapters = new Component(this.element, "div", ["dictionary-chapters", "chapters"]);
@@ -30,6 +38,7 @@ export class Chapters extends Component {
     }
     for(let i = 1; i <= chaptersCount; i++) {
       this.dictionaryChaptersListEl = new Component(this.dictionaryChaptersList.element, "li", ["chapters-item"], `Chapter ${i}`);
+      this.dictionaryChaptersListEl.element.setAttribute("id", `chapter-${i}`);
       if (i === this.chapter + 1) this.dictionaryChaptersListEl.element.classList.add("active");
     }
 
@@ -52,6 +61,8 @@ export class Chapters extends Component {
         this.dictionaryChaptersList.element.classList.remove("open");
       }
       if (event.classList.contains("chapters-item")) {
+        this.changeTheme(String(event.id[event.id.length - 1]));
+        localStorage.setItem("chapterColor", String(event.id[event.id.length - 1]));
         const curChapter = Number(event.textContent?.slice(-1)) - 1;
         if (this.chapter !== curChapter) {
           localStorage.setItem("chapter", String(curChapter));
@@ -61,4 +72,8 @@ export class Chapters extends Component {
       }
     });
   }
+  changeTheme = (id: string) => {
+    (<HTMLElement>document.querySelector(".dictionary")).setAttribute("class", "dictionary");
+    (<HTMLElement>document.querySelector(".dictionary")).classList.add("dictionary", `dictionary-chapter-${id}`);
+  };
 }

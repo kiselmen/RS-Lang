@@ -5,8 +5,8 @@ export const progressBarMixin = (barContainer: HTMLElement) => {
     strokeWidth: 6,
     easing: "easeInOut",
     duration: 1400,
-    color: "#ff9f00",
-    trailColor: "#f6e369",
+    color: "#494a69",
+    trailColor: "#9cd2ff",
     trailWidth: 4,
     svgStyle: null,
     step: function (state, circle) {

@@ -13,6 +13,11 @@ export class DictionaryPagination extends Component {
     super(parentNode, "div", ["dictionary-pagination", "pagination"],);
     this.onChangePage = () => onChangePage();
     this.page = 0;
+    if (localStorage.getItem("page")) {
+      this.page = Number(localStorage.getItem("page"));
+    } else {
+      localStorage.setItem("page", String(this.page));
+    }
     this.btnPrev = new UIButton(this.element, ["btn"], "Prev");
     this.numberPage = new Component(this.element, "span", ["pagination-number"], `Page: ${this.page + 1}`);
     this.btnNext = new UIButton(this.element, ["btn"], "Next");

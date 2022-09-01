@@ -77,7 +77,7 @@ export class AudioCallMainPage extends Component {
       if(document.fullscreenElement) {
         document.exitFullscreen();
       } else {
-        parentNode.requestFullscreen();
+        this.element.requestFullscreen();
       }
     });
     
@@ -115,7 +115,7 @@ export class AudioCallMainPage extends Component {
     document.querySelectorAll(".words-btn").forEach( el => {
       el.innerHTML = "";
       el.removeAttribute("disabled");
-      (<HTMLElement>el).style.background = "transparent";
+      (<HTMLElement>el).style.background = "rgb(228 244 255)";
     });
     this.voiceWrapper.element.style.background = `none`;
     this.voiceBtn.element.classList.remove("showPicture");

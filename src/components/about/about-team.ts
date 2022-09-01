@@ -14,11 +14,11 @@ class AboutTeam extends Component {
     this.contentWrapper = new Component(this.element, "div", ["about-team__wrapper"]);
 
     this.firstMemberCard = new TeamMemberCard(this.contentWrapper.element, "Василий", "https://github.com/kiselmen", "kiselmen",
-      ["Настройка рабочей среды", "Развертывание Back-End", "Каркас приложения", "Авторизация"]);
+      ["Настройка рабочей среды", "Развертывание Back-End", "Каркас приложения", "Авторизация"], "../../../public/about-images/kiselmen.png");
     this.secondMemberCard = new TeamMemberCard(this.contentWrapper.element, "Максим", "https://github.com/maxomeleneckii", "maxomeleneckii",
-      ["Анализ проекта", "Каркас Dictionary", "Каркас Audio Call"]);
+      ["Анализ проекта", "Каркас Dictionary", "Каркас Audio Call"], "../../../public/about-images/maxomeleneckii.jpg");
     this.thirdMemberCard = new TeamMemberCard(this.contentWrapper.element, "Александр", "https://github.com/pitbrest", "pitbrest",
-      ["Футер", "Каркас Sprint", "Страница About"]);
+      ["Футер", "Каркас Sprint", "Страница About"], "../../../public/about-images/pitbrest.jpg");
 
     this.element.style.display = "none";
   }

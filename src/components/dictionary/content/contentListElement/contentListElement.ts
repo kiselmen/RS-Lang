@@ -20,6 +20,8 @@ export class DictionaryContentElement extends Component {
   private elementAudio: Component;
   private elementAudioMeaning: Component;
   private elementAudioExample: Component;
+  private elementExplainHeading: Component;
+  private elementExampleHeading: Component;
   onAddWordToUserWords: (word: elementData, type: string) => void = () => {};
   onClickPLay: (word: elementData) => void = () => {};
   onRemoveWordFromDifficult: (word: elementData) => void = () => {};
@@ -41,18 +43,20 @@ export class DictionaryContentElement extends Component {
     new Component(this.elementWord.element, "span", ["word-rus"], " - " + word.wordTranslate);
 
     this.elementExplain = new Component(this.elementDiscription.element, "div", ["element-explain", "explain"]);
+    this.elementExplainHeading = new Component(this.elementExplain.element, "h3", ["explain-heading"], "Meaning:");
     const elementEngExplain = new Component(this.elementExplain.element, "p", ["explain-en"], "");
     elementEngExplain.element.innerHTML = word.textMeaning;
     new Component(this.elementExplain.element, "p", ["explain-rus"], word.textMeaningTranslate);
-
+    
     this.elementExample = new Component(this.elementDiscription.element, "div", ["element-example", "example"]);
+    this.elementExampleHeading = new Component(this.elementExample.element, "h3", ["example-heading"], "Example:");
     const elementEngExample = new Component(this.elementExample.element, "p", ["example-en"], "");
     elementEngExample.element.innerHTML = word.textExample;
     new Component(this.elementExample.element, "p", ["example-rus"], word.textExampleTranslate);
 
     this.elementBtns = new Component(this.elementDiscription.element, "div", ["element-btns"],);
 
-    this.elementBtnListen = new UIButton(this.elementBtns.element, ["btn"], "");
+    this.elementBtnListen = new UIButton(this.elementBtns.element, ["btn", "btn-listen"], "");
     this.elementBtnImg = new Component(this.elementBtnListen.element, "img", ["element-btn__img"],);
     this.elementBtnImg.element.setAttribute("src", "../../../../../sprint-images/sound-on.svg");
     this.elementBtnImg.element.setAttribute("alt", "play");
@@ -105,6 +109,7 @@ export class DictionaryContentElement extends Component {
           audioExample.onended = () => {
             this.elementBtnImg.element.setAttribute("src", "../../../../../sprint-images/sound-on.svg");
             this.elementBtnImg.element.setAttribute("alt", "stop");
+            this.isPlaying = !this.isPlaying;
           };
         };
       };

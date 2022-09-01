@@ -64,7 +64,7 @@ export class Dictionary extends Component {
             const worPerPage = 100;
             this.dictionaryPagination.disabletButtons();
             getAgregatedWordsByPage(page, worPerPage).then( data => {
-              const allPages = Math.ceil(data.totalCount[0].count / worPerPage);
+              const allPages = data.totalCount.length !== 0 ? Math.ceil(data.totalCount[0].count / worPerPage) : 0;
               if (page < allPages - 1) {
                 getAllAgregatedWords(allPages, worPerPage).then( data => {
                   this.words = data;
@@ -129,18 +129,16 @@ export class Dictionary extends Component {
   };
 
   onRemoveWordFromDifficult =  (word: elementData) => {
-    const isInHard = this.userWords.filter( item => item.wordId === word.id);
-    console.log(isInHard, this.userWords);
+    // const isInHard = this.userWords.filter( item => item.wordId === word.id);
     
     this.checkToken().then( () => {
-
-      this.dictionaryContent.loading = true;
-      this.dictionaryContent.renderContent();
       removeWordFromDifficult(word).then( () => {
         if (this.dictionaryHeader.chapters.chapter !== 6) {
           this.userWords = this.userWords.filter(item => item.wordId !== word.id);
           this.words = this.words.filter(item => item.wordId !== word.id);
         } else {
+          this.dictionaryContent.loading = true;
+          this.dictionaryContent.renderContent();
           this.userWords = this.userWords.filter(item => item.wordId !== word._id);
           this.words = this.words.filter(item => item._id !== word._id);
         }

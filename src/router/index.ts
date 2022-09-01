@@ -13,6 +13,7 @@ export class Router {
   private defaultRoute: IRoute;
 
   onInitNavSignUser: () => void;
+  onRenderFooter: () => void;
 
   // Pages
   aboutPage: Component;
@@ -21,10 +22,12 @@ export class Router {
   sprintPage: Component | undefined;
   loginPage: Component | undefined;
   profilePage: Component | undefined;
+  currRoute: string;
 
-  constructor(private rootElement: HTMLElement, onInitNav: () => void ) {
+  constructor(private rootElement: HTMLElement, onInitNav: () => void, onRenderFooter: () => void ) {
     this.aboutPage = new About(this.rootElement);
     this.onInitNavSignUser = () => onInitNav();
+    this.onRenderFooter = () => onRenderFooter();
     this.routes = [
       {
         name: "/",
@@ -35,7 +38,7 @@ export class Router {
       {
         name: "/dictionary",
         component: () => {
-          this.dictionaryPage = new Dictionary(this.rootElement, () => this.onSignOnUser("/profile", "/login"));
+          this.dictionaryPage = new Dictionary(this.rootElement, () => this.onSignOnOffUser("/profile", "/login"));
           this.rootElement.append(this.dictionaryPage.element);
         },
       },
@@ -56,21 +59,21 @@ export class Router {
       {
         name: "/login",
         component: () => {
-          this.loginPage = new Login(this.rootElement, () => this.onSignOnUser("/login", "/profile"));
+          this.loginPage = new Login(this.rootElement, () => this.onSignOnOffUser("/login", "/profile"));
           this.rootElement.append(this.loginPage.element);
         },
       },
       {
         name: "/profile",
         component: () => {
-          this.profilePage = new Profile(this.rootElement);
+          this.profilePage = new Profile(this.rootElement, () => this.onSignOnOffUser("/profile", "/login"));
           this.rootElement.append(this.profilePage.element);
         },
       },
     ];
 
     this.allRoutes = [...this.routes];
-
+    this.currRoute = "/";
     if (localStorage.getItem("token")) {
       this.routes = this.routes.filter( item => item.name !== "/login");
     } else {
@@ -102,6 +105,8 @@ export class Router {
     
     !currentRouteParam ? window.location.hash = (currentRoute || this.defaultRoute).name : window.location.hash = (currentRoute || this.defaultRoute).name + "?" + currentRouteParam;
     (currentRoute || this.defaultRoute).component(currentRouteParam);
+    this.currRoute = (currentRoute || this.defaultRoute).name;
+    this.onRenderFooter();
   }
 
   initRouter(): void {
@@ -113,7 +118,7 @@ export class Router {
     this.updateRouter();
   }
 
-  onSignOnUser(removeRoute: string, addRoute: string): void {
+  onSignOnOffUser(removeRoute: string, addRoute: string): void {
     if (localStorage.getItem("token")) {
       this.routes = this.allRoutes.filter( item => item.name !== removeRoute);
     } else {
