@@ -10,7 +10,7 @@ export class Login extends Component{
   onUpdateRouter: () => void;
 
   constructor(parentNode: HTMLElement, updateRouter: () => void) {
-    super(parentNode, "div", ["container"], "");
+    super(parentNode, "div", ["container", "container-login"], "");
     this.onUpdateRouter = () => updateRouter();
 
     this.loginForm = new LoginForm(this.element);
