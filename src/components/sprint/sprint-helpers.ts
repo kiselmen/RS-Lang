@@ -1,5 +1,6 @@
 import {getWordsByChapterAndPage} from "../../utils/loader";
 import { BASE_URL } from "../../interfaces";
+import { elementData  } from "../../interfaces";
 
 const sprintState: ISprintState = {
   currentGroup: 0,
@@ -9,6 +10,8 @@ const sprintState: ISprintState = {
   correctAnswerCount: 0,
   currentContent: [],
   parentNodeInfo: {"about": 0},
+  userHardWords: [],
+  userHardWordsCounter: 0,
 };
 
 /* Контент для первой страницы */
@@ -16,8 +19,8 @@ async function getInfo(currentGroup: number, currentPage: number,) {
   // if(!localStorage.getItem("userId")) {
   //   return await getWordsByChapterAndPage(currentGroup, currentPage);
   // }
-  
-  return await getWordsByChapterAndPage(currentGroup, currentPage);  
+
+  return await getWordsByChapterAndPage(currentGroup, currentPage);
 }
 
 /* Озвучка слова */
@@ -49,6 +52,8 @@ async function clearSprintState() {
   sprintState.correctAnswerCount = 0;
   sprintState.currentContent = [];
   sprintState.parentNodeInfo = {};
+  sprintState.userHardWords = [];
+  sprintState.userHardWordsCounter = 0;
 }
 
 /* Обновление стейта */
@@ -124,8 +129,9 @@ interface ISprintState {
   score: number,
   correctAnswerCount: number,
   currentContent: IContent[],
-  parentNodeInfo: {[key: string]: number | null}
-
+  parentNodeInfo: {[key: string]: number | null},
+  userHardWords: elementData[];
+  userHardWordsCounter: number;
 }
 
 interface IContent {
