@@ -87,11 +87,12 @@
   color: #494a69;
   background-size: 600px 450px;
   width: 600px;
-  height: 450px;
+  height: auto;
   border-radius: 40px;
   position: relative;
   display: flex;
   flex-direction: column;
+  padding-bottom: 20px;
 }
 .sprintControlsBtns-container {
   display: flex;
@@ -359,7 +360,7 @@
     width: -webkit-max-content;
     width: -moz-max-content;
     width: max-content;
-    margin-top: 100px;
+    margin-top: 100px;    
   }
   .sprintGameCardSignals-container {
     -moz-column-gap: 3px;
