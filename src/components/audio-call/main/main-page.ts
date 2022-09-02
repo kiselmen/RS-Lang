@@ -37,6 +37,7 @@ export class AudioCallMainPage extends Component {
   private infoInfo: Component;
   private infoFullScreen: Component;
   private infoExit: Component;
+  // private parameters: Component;
   listBtn!: UIButton;
   listItem!: Component;
   private bar: Circle;
@@ -45,9 +46,12 @@ export class AudioCallMainPage extends Component {
   arrWords: IWordsElement[] = [];
   randomNum!: IWordsElement;
 
-  constructor(parentNode: HTMLElement) {
+  constructor(parentNode: HTMLElement, parameters: string) {
     super(parentNode, "div", ["audiocall-main", "master"]);
 
+    console.log(parameters);
+    
+    
     this.audioCallHeader = new Component(this.element, "div", ["master-header"]);
     this.audioCallContent = new Component(this.element, "div", ["master-content"]);
     this.audioCallControls = new Component(this.audioCallHeader.element, "div", ["master-controls", "controls"]);
@@ -102,6 +106,26 @@ export class AudioCallMainPage extends Component {
       }
     });
 
+    this.controlsClose.element.addEventListener("click", () => {
+      if(document.fullscreenElement) {
+        document.exitFullscreen();
+      }
+      this.resetVal();
+      if(parameters) {
+        window.location.hash = "/dictionary";
+      }
+      (<HTMLElement>document.querySelector(".master")).style.display = "none";
+      (<HTMLElement>document.querySelector(".home")).style.display = "flex";
+    });
+    
+    this.controlsScreen.element.addEventListener("click", () => {
+      if(document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        this.element.requestFullscreen();
+      }
+    });
+
     this.controlsClose.element.addEventListener("click", () => this.closeGame());
 
     this.controlsScreen.element.addEventListener("click", () => this.getFullScreen());
@@ -112,13 +136,7 @@ export class AudioCallMainPage extends Component {
       this.valChapter = +id;
       
       if (eventTarget.classList.contains("home-btn")) {
-        this.resetVal();
-        (<HTMLElement>document.querySelector(".master")).style.display = "flex";
-        (<HTMLElement>document.querySelector(".home")).style.display = "none";
-        this.textDontKnow.element.style.display = "flex";
-        this.textNext.element.style.display = "none";
-        this.getWords(this.valChapter, this.valPage);
-        localStorage. removeItem("progressbarVal");
+        this.hidenIntroPage(this.valChapter, this.valPage);
       }
     });
     
@@ -172,8 +190,14 @@ export class AudioCallMainPage extends Component {
     this.textNext.element.addEventListener("click", () => this.getWords(this.valChapter, this.valPage +=1));
     
     this.listWords.element.addEventListener("click", this.guessWord);
+    
+    if (parameters) {
+      const currPage = Number(localStorage.getItem("page"));
+      const currChapter = Number(localStorage.getItem("chapter"));
+      this.hidenIntroPage(currChapter, currPage);
+    }
   }
-
+  
   getWords = (numChapter: number, numPage: number) => {
     document.querySelectorAll(".words-btn").forEach( el => {
       el.innerHTML = "";
@@ -281,5 +305,15 @@ export class AudioCallMainPage extends Component {
 
   openInfo = () => {
     this.dropDownList.element.classList.toggle("openInfo");
+  };
+
+  hidenIntroPage = (numChapter: number, numPage: number) => {
+    this.resetVal();
+    (<HTMLElement>document.querySelector(".master")).style.display = "flex";
+    (<HTMLElement>document.querySelector(".home")).style.display = "none";
+    this.textDontKnow.element.style.display = "flex";
+    this.textNext.element.style.display = "none";
+    this.getWords(numChapter, numPage);
+    localStorage.removeItem("progressbarVal");
   };
 }

@@ -17,7 +17,7 @@ export class Nav extends Component {
     super(parentNode, "nav", ["nav"], "");
     this.navBody = new Component(this.element, "div", ["nav-body"]);
     this.linkToAbout = new Component(this.navBody.element, "a", ["nav-link"], "About");
-    this.linkToDictionary = new Component(this.navBody.element, "a", ["nav-link"], "Dictionary");
+    this.linkToDictionary = new Component(this.navBody.element, "a", ["nav-link", "nav-dictionary"], "Dictionary");
     this.linkToAudioCall = new Component(this.navBody.element, "a", ["nav-link"], "Audio call");
     this.linkToSprint = new Component(this.navBody.element, "a", ["nav-link"], "Sprint");
     this.linkToLogin = null;
