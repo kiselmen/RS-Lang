@@ -23,16 +23,6 @@ class SprintGamePage extends Component {
   answerFalseBtn;
   answerTrueBtn;
   audioPlayer;
-  controlsInfoCont: Component;
-  controlsInfo: UIButton;
-  dropDownList: Component;
-  infoHeading: Component;
-  infoVoice: Component;
-  infoChoose: Component;
-  infoInfo: Component;
-  infoFullScreen: Component;
-  infoExit: Component;
-  infoVolume: Component;
 
   constructor(parentNode: HTMLElement) {
     super(parentNode, "div", ["sprint-game__wrap"]);
@@ -42,34 +32,6 @@ class SprintGamePage extends Component {
     this.soundToggleBtn = new Component(this.gamePageControlsBtnsContainer.element, "div", ["sprintSoundToggle-btn"]);
     this.toFullScreenBtn = new Component(this.gamePageControlsBtnsContainer.element, "div", ["sprintToFullScreen-btn"]);
     this.toSprintIntroPageBtn = new Component(this.gamePageControlsBtnsContainer.element, "div", ["toSprintIntroPage-btn"]);
-    this.controlsInfoCont = new Component(this.gamePageControlsBtnsContainer.element, "div", ["controls-btn__cont"],);
-    this.controlsInfo = new UIButton(this.controlsInfoCont.element, ["controls-btn", "btn", "controls-info"], "");
-    this.dropDownList = new Component(this.controlsInfoCont.element, "div", ["controls-dropDownList", "info"],);
-    this.infoHeading = new Component(this.dropDownList.element, "h4", ["info-heading"], "Hotkeys:");
-    this.infoVolume = new Component(this.dropDownList.element, "span", ["info-item", "info-volume"],);
-    this.infoFullScreen = new Component(this.dropDownList.element, "span", ["info-item", "info-fullscreen"],);
-    this.infoExit = new Component(this.dropDownList.element, "span", ["info-item", "info-exit"],);
-    this.infoInfo = new Component(this.dropDownList.element, "span", ["info-item", "info-info"],);
-    this.infoVoice = new Component(this.dropDownList.element, "span", ["info-item", "info-voice"],);
-    this.infoChoose = new Component(this.dropDownList.element, "span", ["info-item", "info-choose"],);
-
-    this.infoVolume.element.innerHTML = "Mute: <i>M</i>";
-    this.infoFullScreen.element.innerHTML = "Fullscreen: <i>F</i>";
-    this.infoExit.element.innerHTML = "Close: <i>Esc</i>";
-    this.infoInfo.element.innerHTML = "Hotkeys: <i>I</i>";
-    this.infoVoice.element.innerHTML = "Listen: <i>Shift</i>";
-    this.infoChoose.element.innerHTML = "Choose: <i><- -></i>";
-
-    this.controlsInfo.element.addEventListener("click", () => {
-      this.dropDownList.element.classList.toggle("openInfoSprint");
-    });
-
-    document.addEventListener("click", (e) => {
-      const event = e.target as HTMLElement;
-      if (!event.closest(".controls-btn__cont")) {
-        this.dropDownList.element.classList.remove("openInfoSprint");
-      }
-    });
 
     this.countersContainer = new Component(this.element, "div", ["sprintCounters-container"]);
     this.timer = new Component(this.countersContainer.element, "div", ["sprint-timer"], "60");
