@@ -14,7 +14,7 @@ export class AudioCall extends Component {
     console.log(parameters);
     
     this.homePage = new AudioCallStartPage(this.element);
-    this.mainPage = new AudioCallMainPage(this.element);
-    this.statPage = new AudioCallStatisticPage(this.element);
+    this.mainPage = new AudioCallMainPage(this.element, parameters);
+    this.statPage = new AudioCallStatisticPage(this.element, parameters);
   }
 }
