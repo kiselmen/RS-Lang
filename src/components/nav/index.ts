@@ -27,6 +27,10 @@ export class Nav extends Component {
     this.linkToDictionary.element.setAttribute("href", "#/dictionary");
     this.linkToAudioCall.element.setAttribute("href", "#/audiocall");
     this.linkToSprint.element.setAttribute("href", "#/sprint");
+    this.linkToAbout.element.setAttribute("tabindex", "-1");
+    this.linkToDictionary.element.setAttribute("tabindex", "-1");
+    this.linkToAudioCall.element.setAttribute("tabindex", "-1");
+    this.linkToSprint.element.setAttribute("tabindex", "-1");
 
     // this.element.addEventListener("click", (e: Event) => this.onNavClick(e));
     this.onInitNavSignUser();
@@ -67,6 +71,7 @@ export class Nav extends Component {
       if (!this.linkToProfile) {
         this.linkToProfile = new Component(this.navBody.element, "a", ["nav-link"], "Profile");
         this.linkToProfile.element.setAttribute("href", "#/profile");
+        this.linkToProfile.element.setAttribute("tabindex", "-1");
       }
       if (this.linkToLogin) {
         this.linkToLogin.element.remove();
@@ -77,6 +82,7 @@ export class Nav extends Component {
       if (!this.linkToLogin) {
         this.linkToLogin = new Component(this.navBody.element, "a", ["nav-link"], "Login");
         this.linkToLogin.element.setAttribute("href", "#/login");
+        this.linkToLogin.element.setAttribute("tabindex", "-1");
       }
       if (this.linkToProfile) {
         this.linkToProfile.element.remove();

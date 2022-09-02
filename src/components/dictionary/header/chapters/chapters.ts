@@ -39,7 +39,7 @@ export class Chapters extends Component {
     for(let i = 1; i <= chaptersCount; i++) {
       this.dictionaryChaptersListEl = new Component(this.dictionaryChaptersList.element, "li", ["chapters-item"], `Chapter ${i}`);
       this.dictionaryChaptersListEl.element.setAttribute("id", `chapter-${i}`);
-      if (i === this.chapter + 1) this.dictionaryChaptersListEl.element.classList.add("active");
+      // if (i === this.chapter + 1) this.dictionaryChaptersListEl.element.classList.add("active");
     }
 
     this.dictionaryChapters.element.addEventListener("click", () => {
@@ -47,12 +47,12 @@ export class Chapters extends Component {
     });
     this.dictionaryChaptersList.element.addEventListener("mousedown", (e) => {
       const event = e.target as HTMLElement;
-      const listItems = document.querySelectorAll(".chapters-item");
-      listItems.forEach((el) => {
-        const element = el as HTMLElement;
-        element.classList.remove("active");
-      });
-      event.classList.add("active");
+      // const listItems = document.querySelectorAll(".chapters-item");
+      // listItems.forEach((el) => {
+      //   const element = el as HTMLElement;
+      //   element.classList.remove("active");
+      // });
+      // event.classList.add("active");
       this.dictionaryChapterName.element.textContent = event.textContent;
     });
     document.addEventListener("click", (e) => {

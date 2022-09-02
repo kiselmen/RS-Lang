@@ -53,19 +53,6 @@
       &:last-child {
         border: none;
       }
-      &.active {
-        position: relative;
-        &::after {
-          content: "";
-          position: absolute;
-          top: 0;
-          right: rem(5);
-          bottom: 0;
-          width: rem(5);
-          display: block;
-          background: url(../../../../public/dot.svg) no-repeat 50% 50%;
-        }
-      }
     }
     &.open {
       display: block;

@@ -80,12 +80,40 @@
     height: rem(30);
     box-shadow: unset;
     border: unset;
+    &__cont {
+      position: relative;
+    }
+  }
+  &-info {
+    background: url(../../../../public/info.png) center / 90% no-repeat;
   }
   &-fullscreen {
     background: url(../../../../public/sprint-images/full-screen.svg) center / 70% no-repeat;
   }
   &-close {
     background: url(../../../../public/sprint-images/close-page-X.svg) center / 100% no-repeat;
+  }
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  row-gap: rem(3);
+  position: absolute;
+  min-width: rem(82);
+  top: rem(30);
+  left: rem(-54);
+  font-size: rem(12);
+  padding: rem(5);
+  background: #e4f4ff;
+  border-radius: rem(5);
+  box-shadow: rem(0) rem(0) rem(5);
+  display: none;
+  &-heading {
+    font-weight: 700;
+  }
+  &.openInfo {
+    display: flex;
   }
 }
 
