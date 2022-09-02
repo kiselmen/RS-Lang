@@ -37,7 +37,6 @@ export class AudioCallMainPage extends Component {
   private infoInfo: Component;
   private infoFullScreen: Component;
   private infoExit: Component;
-  // private parameters: Component;
   listBtn!: UIButton;
   listItem!: Component;
   private bar: Circle;
@@ -106,27 +105,7 @@ export class AudioCallMainPage extends Component {
       }
     });
 
-    this.controlsClose.element.addEventListener("click", () => {
-      if(document.fullscreenElement) {
-        document.exitFullscreen();
-      }
-      this.resetVal();
-      if(parameters) {
-        window.location.hash = "/dictionary";
-      }
-      (<HTMLElement>document.querySelector(".master")).style.display = "none";
-      (<HTMLElement>document.querySelector(".home")).style.display = "flex";
-    });
-    
-    this.controlsScreen.element.addEventListener("click", () => {
-      if(document.fullscreenElement) {
-        document.exitFullscreen();
-      } else {
-        this.element.requestFullscreen();
-      }
-    });
-
-    this.controlsClose.element.addEventListener("click", () => this.closeGame());
+    this.controlsClose.element.addEventListener("click", () => this.closeGame(parameters));
 
     this.controlsScreen.element.addEventListener("click", () => this.getFullScreen());
     
@@ -144,7 +123,7 @@ export class AudioCallMainPage extends Component {
       (<HTMLAudioElement>this.audio.element).play();
     });
 
-    document.addEventListener("keydown", (event) => {
+    document.addEventListener("keyup", (event) => {
       const isAudiocallMain = document.querySelector(".audiocall-main") as HTMLElement;
       if (isAudiocallMain && isAudiocallMain.style.display === "flex") {
         if (event.key === "Shift") {
@@ -167,7 +146,7 @@ export class AudioCallMainPage extends Component {
         }
   
         if (event.code === "Escape") {
-          this.closeGame();
+          this.closeGame(parameters);
         }
   
         if (event.code === "KeyF") {
@@ -177,7 +156,6 @@ export class AudioCallMainPage extends Component {
         if (event.code === "KeyI") {
           this.openInfo();
         }
-
         event.preventDefault();
       }
     });
@@ -286,13 +264,17 @@ export class AudioCallMainPage extends Component {
     this.getCorrectWord();
   };
 
-  closeGame = () => {
+  closeGame = (parameters: string) => {
     if(document.fullscreenElement) {
       document.exitFullscreen();
     }
     this.resetVal();
-    (<HTMLElement>document.querySelector(".master")).style.display = "none";
-    (<HTMLElement>document.querySelector(".home")).style.display = "flex";
+    if(parameters) {
+      window.location.hash = "/dictionary";
+    } else {
+      (<HTMLElement>document.querySelector(".home")).style.display = "flex";
+      (<HTMLElement>document.querySelector(".master")).style.display = "none";
+    }
   };
 
   getFullScreen = () => {
