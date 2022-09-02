@@ -11,18 +11,20 @@ export class LoginForm extends Component {
   buttonLogin: UIButton;
   message: Component;
   showPass: Component;
+  formHeading: Component;
 
   constructor(parentNode: HTMLElement) {
     super(parentNode, "form", ["form"], "");
 
+    this.formHeading = new Component(this.element, "h2", ["form-heading"], "Hello!");
     const eMailContainer = new Component(this.element, "div", ["form-item", "item"]);
-    new Component(eMailContainer.element, "label", ["item-label"], "E-mail");
+    // new Component(eMailContainer.element, "label", ["item-label"], "");
     this.eMailInput = new UIInput(eMailContainer.element, "email", ["item-input"]);
     this.eMailInput.element.setAttribute("placeholder", "E-mail");
     this.eMailInput.element.setAttribute("required", "");
 
     const passContainer = new Component(this.element, "div", ["form-item", "item"]);
-    new Component(passContainer.element, "label", ["item-label"], "Password");
+    // new Component(passContainer.element, "label", ["item-label"], "");
     this.passInput = new UIInput(passContainer.element, "password", ["item-input"]);
     this.passInput.element.setAttribute("placeholder", "Password");
     this.passInput.element.setAttribute("required", "");
@@ -35,9 +37,9 @@ export class LoginForm extends Component {
     const messageContainer = new Component(this.element, "div", ["form-item", "item"], "");
     this.message = new Component(messageContainer.element, "div", ["item-message"], "");
 
-    const buttonContainer = new Component(this.element, "div", ["form-item", "item"]);
-    this.buttonLogin = new UIButton(buttonContainer.element, ["btn"], "Login");
-    this.buttonRegister = new UIButton(buttonContainer.element, ["btn"], "Register");
+    const buttonContainer = new Component(this.element, "div", ["form-item", "item", "form-btns"]);
+    this.buttonLogin = new UIButton(buttonContainer.element, ["btn", "btn-login"], "Login");
+    this.buttonRegister = new UIButton(buttonContainer.element, ["btn", "btn-register"], "Register");
   }
 
   toggleShow() {
