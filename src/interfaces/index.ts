@@ -40,6 +40,7 @@ export interface IStatisticGame {
   totalWords: number;
   correctWordsPercent: number;
   series: number;
+  maxSeries: number;
   correctArr: IWordsElement[];
   wrongArr: IWordsElement[];
 }

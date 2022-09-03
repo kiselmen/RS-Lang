@@ -60,9 +60,6 @@ export class Login extends Component{
       
       const response = await registerUser(userData);
       const optional = {page : "0", chapter : "0", audiocall : JSON.stringify({}), sprint : JSON.stringify({}), words : JSON.stringify({})} as elementData;
-      const statistics = {learnedWords : "0", optional : optional} as statisticsData;
-      const responseStatistics = await createUserStatistics(statistics);
-      this.setUserStatistics(responseStatistics.data);
 
       if (response.status !== 200) {
         message.textContent = "This email is in use by another user";
@@ -75,6 +72,10 @@ export class Login extends Component{
           localStorage.setItem("refreshToken", responseSign.data.refreshToken);
           localStorage.setItem("userId", responseSign.data.userId);
   
+          const statistics = {learnedWords : "0", optional : optional} as statisticsData;
+          const responseStatistics = await createUserStatistics(statistics);
+          this.setUserStatistics(responseStatistics.data);
+
           window.location.hash = "#/profile";
           this.onUpdateRouter();
         }
@@ -85,9 +86,17 @@ export class Login extends Component{
   setUserStatistics(statistics: statisticsData) {
     statistics.optional.page ? localStorage.setItem("page", statistics.optional.page) : localStorage.setItem("page", "0");
     statistics.optional.chapter ? localStorage.setItem("chapter", statistics.optional.chapter) : localStorage.setItem("chapter", "0");
-    statistics.optional.audiocall ? localStorage.setItem("audiocall", statistics.optional.audiocall) : localStorage.setItem("audiocall", JSON.stringify({}));
-    statistics.optional.sprint ? localStorage.setItem("sprint", statistics.optional.sprint) : localStorage.setItem("sprint", JSON.stringify({}));
-    statistics.optional.sprint ? localStorage.setItem("words", statistics.optional.sprint) : localStorage.setItem("words", JSON.stringify({}));
+    statistics.optional.audiocall ? localStorage.setItem("audiocall", statistics.optional.audiocall) : localStorage.setItem("audiocall", JSON.stringify({
+      maxSeria : 0,
+      currSeria: 0,
+      dayStata : [],
+    }));
+    statistics.optional.sprint ? localStorage.setItem("sprint", statistics.optional.sprint) : localStorage.setItem("sprint", JSON.stringify({
+      maxSeria : 0,
+      currSeria: 0,
+      dayStata : [],
+    }));
+    // statistics.optional.sprint ? localStorage.setItem("words", statistics.optional.sprint) : localStorage.setItem("words", JSON.stringify({}));
   }
 
   onValidateEmail: (elem: HTMLInputElement) => boolean = (elem) => {

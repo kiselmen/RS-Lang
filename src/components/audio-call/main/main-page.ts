@@ -12,6 +12,7 @@ export const dataAudiocall: IStatisticGame = {
   totalWords: 0,
   correctWordsPercent: 0,
   series: 0,
+  maxSeries :0,
   correctArr: [],
   wrongArr: []
 };
@@ -275,7 +276,8 @@ export class AudioCallMainPage extends Component {
     this.getCorrectWord();
     dataAudiocall.totalWords = correctWords.length + wrongWords.length;
     dataAudiocall.correctWordsPercent = Math.floor((dataAudiocall.correctArr.length / dataAudiocall.totalWords) * 100);
-    console.log(dataAudiocall);
+    // console.log(dataAudiocall);
+    this.updateCurrentStatistic(dataAudiocall);
   };
 
   closeGame = (parameters: string) => {
@@ -312,4 +314,9 @@ export class AudioCallMainPage extends Component {
     this.getWords(numChapter, numPage);
     localStorage.removeItem("progressbarVal");
   };
+
+  updateCurrentStatistic(data: IStatisticGame){
+    console.log("11111",data);
+    
+  }
 }

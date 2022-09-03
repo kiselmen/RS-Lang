@@ -99,6 +99,7 @@ export class AudioCallStatisticPage extends Component {
   
   updateStat = () => {
     if (correctWords.length + wrongWords.length === 10) {
+      console.log("QQQQQ", correctWords, wrongWords, this);
       const animateVal = localStorage.getItem("progressbarVal") as string;
       (<HTMLElement>document.querySelector(".audiocall-main")).style.display = "none";
       this.element.style.display = "flex";
