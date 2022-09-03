@@ -3,7 +3,7 @@ import { DictionaryHeader } from "../components/dictionary/header/dictionaryHead
 import { DictionaryContent } from "../components/dictionary/content/dictionaryContent";
 import { DictionaryPagination } from "../components/dictionary/pagination/dictionaryPagination";
 import { getWordsByChapterAndPage, getAlluserWords} from "../utils/loader";
-import { elementData } from "../interfaces";
+import { elementData, wordOptional } from "../interfaces";
 import { preLoad, addWordToUserWords, updateWordInUserWords, removeWordFromDifficult, getAgregatedWordsByPage, getAllAgregatedWords } from "../utils/loader";
 
 export class Dictionary extends Component {
@@ -105,12 +105,12 @@ export class Dictionary extends Component {
       this.checkToken().then( () => {
         const isWordPresent = this.userWords.filter(item => item.wordId === word.id);
         if (isWordPresent.length) {
-          updateWordInUserWords(word, type).then( data => {
+          updateWordInUserWords(word, type, {} as wordOptional).then( data => {
             isWordPresent[0].difficulty = data.difficulty;
             this.onSetupButtons();
           });
         } else {
-          addWordToUserWords(word, type).then( data => {
+          addWordToUserWords(word, type, {} as wordOptional).then( data => {
             this.userWords.push(data);
             this.onSetupButtons();
           });
@@ -119,7 +119,7 @@ export class Dictionary extends Component {
     } else {
       this.dictionaryContent.loading = true;
       this.dictionaryContent.renderContent();
-      updateWordInUserWords(word, "study").then( data => {
+      updateWordInUserWords(word, "study", {} as wordOptional).then( data => {
         this.userWords = this.userWords.filter(item => item.wordId !== data.wordId);
         this.words = this.words.filter(item => item._id !== data.wordId);
         this.dictionaryContent.loading = false;

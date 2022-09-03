@@ -1,7 +1,8 @@
 import { Component } from "../utils/component";
 import { LoginForm } from "../components/forms/login";
-import { elementData, statisticsData } from "../interfaces";
+import { elementData, userOptional, statisticsData } from "../interfaces";
 import { registerUser, signInUser, getUserStatistics, createUserStatistics } from "../utils/loader";
+// import { getTodayInString } from "../utils/helper";
 
 const EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
 
@@ -59,7 +60,22 @@ export class Login extends Component{
       const userData = this.onDataConstruct(eMailElement, passElement);
       
       const response = await registerUser(userData);
-      const optional = {page : "0", chapter : "0", audiocall : JSON.stringify({}), sprint : JSON.stringify({}), words : JSON.stringify({})} as elementData;
+      
+      const optional = {} as userOptional;
+      optional.page = "0";
+      optional.chapter = "0";
+      const audiocall = {
+        currSeria : 0,
+        maxSeria : 0,
+        dayStata: [] as Array<elementData>,
+      };
+      const sprint = {
+        currSeria : 0,
+        maxSeria : 0,
+        dayStata: [] as Array<elementData>,
+      };
+      optional.audiocall = audiocall;
+      optional.sprint = sprint;
 
       if (response.status !== 200) {
         message.textContent = "This email is in use by another user";
@@ -72,7 +88,7 @@ export class Login extends Component{
           localStorage.setItem("refreshToken", responseSign.data.refreshToken);
           localStorage.setItem("userId", responseSign.data.userId);
   
-          const statistics = {learnedWords : "0", optional : optional} as statisticsData;
+          const statistics = {learnedWords : "0", optional : optional};
           const responseStatistics = await createUserStatistics(statistics);
           this.setUserStatistics(responseStatistics.data);
 
@@ -84,19 +100,19 @@ export class Login extends Component{
   };
   
   setUserStatistics(statistics: statisticsData) {
+    statistics.learnedWords ? localStorage.setItem("learnedWords", statistics.learnedWords) : localStorage.setItem("learnedWords", "0");
     statistics.optional.page ? localStorage.setItem("page", statistics.optional.page) : localStorage.setItem("page", "0");
     statistics.optional.chapter ? localStorage.setItem("chapter", statistics.optional.chapter) : localStorage.setItem("chapter", "0");
-    statistics.optional.audiocall ? localStorage.setItem("audiocall", statistics.optional.audiocall) : localStorage.setItem("audiocall", JSON.stringify({
+    statistics.optional.audiocall ? localStorage.setItem("audiocall", JSON.stringify(statistics.optional.audiocall)) : localStorage.setItem("audiocall", JSON.stringify({
       maxSeria : 0,
       currSeria: 0,
       dayStata : [],
     }));
-    statistics.optional.sprint ? localStorage.setItem("sprint", statistics.optional.sprint) : localStorage.setItem("sprint", JSON.stringify({
+    statistics.optional.sprint ? localStorage.setItem("sprint", JSON.stringify(statistics.optional.sprint)) : localStorage.setItem("sprint", JSON.stringify({
       maxSeria : 0,
       currSeria: 0,
       dayStata : [],
     }));
-    // statistics.optional.sprint ? localStorage.setItem("words", statistics.optional.sprint) : localStorage.setItem("words", JSON.stringify({}));
   }
 
   onValidateEmail: (elem: HTMLInputElement) => boolean = (elem) => {

@@ -3,6 +3,7 @@ import { UIButton } from "../../UI/button";
 import "./start-page.scss";
 import { dataAudiocall } from "../main/main-page";
 import { elementData } from "../../../interfaces";
+import { getTodayInString, createNewDayStata } from "../../../utils/helper";
 
 export class AudioCallStartPage extends Component {
   private homeHeading: Component;
@@ -32,11 +33,11 @@ export class AudioCallStartPage extends Component {
 
     this.linkMainPage.element.setAttribute("href", "#/");
     this.linkMainPage.element.setAttribute("tabindex", "0");
-    console.log("Start game");
-    this.initStatisticData();
+    // console.log("Start game");
+    this.initStatisticDataAudioCall();
   }
 
-  initStatisticData(){
+  initStatisticDataAudioCall(){
     const isLogin = localStorage.getItem("token");
     if (isLogin) {
       // console.log(Авторизован");
@@ -46,47 +47,34 @@ export class AudioCallStartPage extends Component {
         if (!audioCallStata.maxSeria) audioCallStata.maxSeria = 0;
         if (!audioCallStata.currSeria) audioCallStata.currSeria = 0;
         if (audioCallStata.dayStata) {
-          const day = this.getTodayInString();
+          const day = getTodayInString();
           const isDay = audioCallStata.dayStata.filter( (item: elementData) => item.day === day);
           if (isDay.length === 0) {
-            const currentDataStata = this.createNewDayStata();
+            const currentDataStata = createNewDayStata();
             audioCallStata.dayStata.push(currentDataStata);
           }
         } else {
           audioCallStata.dayStata = [];
-          const currentDataStata = this.createNewDayStata();
+          const currentDataStata = createNewDayStata();
           audioCallStata.dayStata.push(currentDataStata);
         }
         localStorage.setItem("audiocall", JSON.stringify(audioCallStata));
         dataAudiocall.maxSeries = audioCallStata.maxSeria;
+        dataAudiocall.series = audioCallStata.currSeria;
       } else {
         const audioCallStata = {
-          maxSeria: 0,
-          currSeria: 0,
+          maxSeria: "0",
+          currSeria: "0",
           dayStata : [] as elementData[],
         };
-        const currentDataStata = this.createNewDayStata();
+        const currentDataStata = createNewDayStata();
         audioCallStata.dayStata.push(currentDataStata);
         localStorage.setItem("audiocall", JSON.stringify(audioCallStata));
-        dataAudiocall.maxSeries = audioCallStata.maxSeria;
+        dataAudiocall.maxSeries = Number(audioCallStata.maxSeria);
+        dataAudiocall.series = Number(audioCallStata.currSeria);
       }
     }
-  }
-
-  getTodayInString(): string {
-    const currDay = new Date();
-    const day = String(currDay.getFullYear()) + "-" + String(currDay.getMonth()) + "-" + String(currDay.getDate());
-    return day;
-  }
-
-  createNewDayStata(){
-    const day = this.getTodayInString();
-    return {
-      day: day,
-      newWords: "0",
-      totalQuestions: "0",
-      correctAnswers: "0",
-    } as elementData;
+    // console.log(dataAudiocall);
   }
 }
 

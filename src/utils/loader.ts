@@ -1,4 +1,4 @@
-import { BASE_URL, elementData, statisticsData } from "../interfaces";
+import { BASE_URL, elementData, statisticsData, wordOptional, userOptional } from "../interfaces";
 
 function createGetSettings() {
   return {
@@ -96,16 +96,17 @@ const getAlluserWords = async () => {
   if (response.status !== 200) {
     return [];
   } else {
+    console.log(response.data);
     return response.data;
   }
 };
 
-const addWordToUserWords = async (word: elementData, type: string) => {
+const addWordToUserWords = async (word: elementData, type: string, optional: wordOptional) => {
   const url = "users/" + localStorage.getItem("userId") + "/words/" + word.id;
   const method = createPostSettings();
   method.body = JSON.stringify({
     difficulty : type,
-    optional : { total : 0, wrong : 0 }
+    optional : optional
   });
   const response = await load(url, method);
   if (response.status !== 200) {
@@ -115,13 +116,13 @@ const addWordToUserWords = async (word: elementData, type: string) => {
   }
 };
 
-const updateWordInUserWords = async (word: elementData, type: string) => {
+const updateWordInUserWords = async (word: elementData, type: string, optional: wordOptional) => {
   const wordId = word.id !== undefined ? word.id : word._id;
   const url = "users/" + localStorage.getItem("userId") + "/words/" + wordId;
   const method = createPutSettings();
   method.body = JSON.stringify({
     difficulty : type,
-    optional : { total : 0, wrong : 0 }
+    optional : optional,
   });
   const response = await load(url, method);
   if (response.status !== 200) {
@@ -187,6 +188,17 @@ const createUserStatistics = async (statisticsData: statisticsData) => {
   return await load(url, method);
 };
 
+const updateUserStatistics = async () => {
+  const newStata = {} as statisticsData;
+  newStata.learnedWords = localStorage.getItem("learnedWords") as string;
+  newStata.optional = {} as userOptional;
+  newStata.optional.page = localStorage.getItem("page") as string;
+  newStata.optional.chapter = localStorage.getItem("chapter") as string;
+  newStata.optional.audiocall = JSON.parse(localStorage.getItem("audiocall") as string);
+  newStata.optional.sprint = JSON.parse(localStorage.getItem("sprint") as string);
+  createUserStatistics(newStata);
+};
+
 export {
   getWordsByChapterAndPage,
   getAlluserWords,
@@ -199,5 +211,6 @@ export {
   signInUser,
   getUserStatistics,
   createUserStatistics,
+  updateUserStatistics,
   preLoad,
   getWordById } ;
