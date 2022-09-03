@@ -3,12 +3,18 @@ import Circle from "progressbar.js/circle";
 import "./main-page.scss";
 import { UIButton } from "../../UI/button";
 import { getWordsByChapterAndPage } from "../../../utils/loader";
-import { BASE_URL, IWordsElement } from "../../../interfaces";
+import { BASE_URL, IStatisticGame, IWordsElement } from "../../../interfaces";
 import { progressBarMixin } from "../progressBar";
-
 
 export let correctWords: IWordsElement[] = [];
 export let wrongWords: IWordsElement[] = [];
+export const dataAudiocall: IStatisticGame = {
+  totalWords: 0,
+  correctWordsPercent: 0,
+  series: 0,
+  correctArr: [],
+  wrongArr: []
+};
 
 export class AudioCallMainPage extends Component {
   private audioCallHeader: Component;
@@ -48,7 +54,7 @@ export class AudioCallMainPage extends Component {
   constructor(parentNode: HTMLElement, parameters: string) {
     super(parentNode, "div", ["audiocall-main", "master"]);
 
-    console.log(parameters);
+    console.log(dataAudiocall);
     
     
     this.audioCallHeader = new Component(this.element, "div", ["master-header"]);
@@ -255,13 +261,21 @@ export class AudioCallMainPage extends Component {
       this.bar.animate(this.progressVal += 0.1);
       localStorage.setItem("progressbarVal", `${this.progressVal}`);
       correctWords.push(this.randomNum);
+      dataAudiocall.correctArr = correctWords;
     } else {
+      if (dataAudiocall.series <= correctWords.length) {
+        dataAudiocall.series = correctWords.length;
+      }
       event.style.background = "#ff4c4c";
       this.audioResult.element.setAttribute("src", "../../../../public/audio/wrong.mp3");
       wrongWords.push(this.randomNum);
+      dataAudiocall.wrongArr = wrongWords;
     }
     (<HTMLAudioElement>this.audioResult.element).play();
     this.getCorrectWord();
+    dataAudiocall.totalWords = correctWords.length + wrongWords.length;
+    dataAudiocall.correctWordsPercent = Math.floor((dataAudiocall.correctArr.length / dataAudiocall.totalWords) * 100);
+    console.log(dataAudiocall);
   };
 
   closeGame = (parameters: string) => {

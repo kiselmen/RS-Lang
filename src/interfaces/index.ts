@@ -35,3 +35,11 @@ export interface IWordsElement {
   textMeaningTranslate: string,
   wordTranslate: string
 }
+
+export interface IStatisticGame {
+  totalWords: number;
+  correctWordsPercent: number;
+  series: number;
+  correctArr: IWordsElement[];
+  wrongArr: IWordsElement[];
+}
