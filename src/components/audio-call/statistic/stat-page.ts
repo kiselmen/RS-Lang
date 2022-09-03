@@ -33,7 +33,7 @@ export class AudioCallStatisticPage extends Component {
   totalItem!: Component;
   totalItemAudio!: Component;
 
-  constructor(parentNode: HTMLElement) {
+  constructor(parentNode: HTMLElement, parameters: string) {
     super(parentNode, "div", ["audiocall-stat", "statistic"]);
 
     this.statHeading = new Component(this.element, "h3", ["statistic-heading"],"Here is your result");
@@ -52,12 +52,26 @@ export class AudioCallStatisticPage extends Component {
     this.linkDictionary = new Component(this.btnDictionary.element, "a", ["statistic-link"], "");
 
     this.linkAgain.element.setAttribute("href", "#/audiocall");
+    if(parameters) {
+      this.linkAgain.element.addEventListener("click", () => {
+        location.reload();
+      });
+    } 
     this.linkDictionary.element.setAttribute("href", "#/dictionary");
     
     this.progressbarCount = new Component(this.statProgressbar.element, "span", ["master-progressbar__count"],);
     this.bar = progressBarMixin(this.statProgressbar.element);
 
     (<HTMLElement>document.querySelector(".next")).addEventListener("click", this.updateStat);
+
+    document.addEventListener("keydown", (event) => {
+      const isAudiocallMain = document.querySelector(".audiocall-main") as HTMLElement;
+      if (isAudiocallMain && isAudiocallMain.style.display === "flex") {
+        if (event.code === "Space") {
+          this.updateStat();
+        }
+      }
+    });
 
     this.statTotalCont.element.addEventListener("click", (e) => {
       const eventTarget = e.target as HTMLElement;

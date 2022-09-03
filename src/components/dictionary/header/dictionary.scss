@@ -62,77 +62,84 @@
 
 .dictionary-chapter-1 {
   & .chapters,
-  & .game {
+  & .game,
+  & .element {
     border: 0.25rem solid rgba(162, 219, 254, 0.862745098);
   }
-  & .explain, 
-  & .example,
+  // & .explain, 
+  // & .example,
   & .btn {
     background: rgba(228, 244, 255, 0.5215686275);
   }
 }
 .dictionary-chapter-2 {
   & .chapters,
-  & .game {
+  & .game,
+  & .element {
     border: 0.25rem solid #f0f2b6dc;
   }
-  & .explain, 
-  & .example,
+  // & .explain, 
+  // & .example,
   & .btn {
     background: #f0f2b6dc;
   }
 }
 .dictionary-chapter-3 {
   & .chapters,
-  & .game {
+  & .game,
+  & .element {
     border: 0.25rem solid #d7f5dddc;
   }
-  & .explain, 
-  & .example,
+  // & .explain, 
+  // & .example,
   & .btn {
     background: #d7f5dddc;
   }
 }
 .dictionary-chapter-4 {
   & .chapters,
-  & .game {
+  & .game,
+  & .element {
     border: 0.25rem solid #f5d8cbdc;
   }
-  & .explain, 
-  & .example,
+  // & .explain, 
+  // & .example,
   & .btn {
     background: #f5d8cbdc;
   }
 }
 .dictionary-chapter-5 {
   & .chapters,
-  & .game {
+  & .game,
+  & .element {
     border: 0.25rem solid #cfcef0dc;
   }
-  & .explain, 
-  & .example,
+  // & .explain, 
+  // & .example,
   & .btn {
     background: #cfcef0dc;
   }
 }
 .dictionary-chapter-6 {
   & .chapters,
-  & .game {
+  & .game,
+  & .element {
     border: 0.25rem solid #e4cef0dc;
   }
-  & .explain, 
-  & .example,
+  // & .explain, 
+  // & .example,
   & .btn {
     background: #e4cef0dc;
   }
 }
 .dictionary-chapter-7 {
   & .chapters,
-  & .game {
+  & .game,
+  & .element {
     border: 0.25rem solid #bbbdbddc;
   }
-  & .explain, 
-  & .example,
+  // & .explain, 
+  // & .example,
   & .btn {
     background: #bbbdbddc;
   }

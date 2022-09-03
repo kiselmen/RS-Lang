@@ -52,20 +52,17 @@ class SprintGamePage extends Component {
     this.pronounceWordBtn.element.innerHTML = "<svg class='MuiSvgIcon-root' focusable='false' viewBox='0 0 24 24' aria-hidden='true'><path d='M7.58 4.08L6.15 2.65C3.75 4.48 2.17 7.3 2.03 10.5h2c.15-2.65 1.51-4.97 3.55-6.42zm12.39 6.42h2c-.15-3.2-1.73-6.02-4.12-7.85l-1.42 1.43c2.02 1.45 3.39 3.77 3.54 6.42zM18 11c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2v-5zm-6 11c.14 0 .27-.01.4-.04.65-.14 1.18-.58 1.44-1.18.1-.24.15-.5.15-.78h-4c.01 1.1.9 2 2.01 2z'></path></svg>";
 
     this.wordInEngContainer = new Component(this.element, "div", ["sprintWordInEng-container"]);
-    this.wordInEng = new Component(this.wordInEngContainer.element, "p", ["sprintWordInEng"], "satisfy");
+    this.wordInEng = new Component(this.wordInEngContainer.element, "p", ["sprintWordInEng"]);
 
     this.wordInRuContainer = new Component(this.element, "div", ["sprintWordInRu-container"]);
-    this.wordInRu = new Component(this.wordInRuContainer.element, "p", ["sprintWordInRu"], "эмоция");
+    this.wordInRu = new Component(this.wordInRuContainer.element, "p", ["sprintWordInRu"]);
 
     this.answersBtnsContainer = new Component(this.element, "div", ["sprintAnswersBtns-container"]);
     this.answerFalseBtn = new UIButton(this.answersBtnsContainer.element, ["sprintAnswerFalse-btn"], "Incorrect");
     this.answerTrueBtn = new UIButton(this.answersBtnsContainer.element, ["sprintAnswerTrue-btn"], "Correct");
 
-
-
     this.audioPlayer = new Component(this.element, "audio", ["sprintAudioPlayer"]);
-    this.audioPlayer.element.style.cssText = "display: none; visibility: hidden";
-    // (this.audioPlayer.element as HTMLAudioElement).volume = 0;
+    this.audioPlayer.element.style.cssText = "display: none; visibility: hidden";    
   }
 
   clearLamp() {

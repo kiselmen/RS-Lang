@@ -2,6 +2,7 @@ import { Component } from "../../../utils/component";
 import { UIButton } from "../../UI/button";
 import "./start-page.scss";
 
+
 export class AudioCallStartPage extends Component {
   private homeHeading: Component;
   private homeContent: Component;
@@ -11,10 +12,10 @@ export class AudioCallStartPage extends Component {
   private homeLvlBtnsWrapper: Component;
   homeLvlBtns: UIButton | undefined;
   private linkMainPage: Component;
-
+  
   constructor(parentNode: HTMLElement) {
     super(parentNode, "div", ["audiocall-home", "home"]);
-
+    
     this.homeHeading = new Component(this.element, "h2", ["home-heading"], "Audio Сall Game");
     this.homeContent = new Component(this.element, "div", ["home-content"]);
     this.homeDescription = new Component(this.homeContent.element, "p", ["home-content__descript"], "It will help to understand the pronunciation of sounds, words and connectives in phrases. Improves listening comprehension.");
@@ -29,5 +30,7 @@ export class AudioCallStartPage extends Component {
     );
 
     this.linkMainPage.element.setAttribute("href", "#/");
+    this.linkMainPage.element.setAttribute("tabindex", "0");
   }
 }
+

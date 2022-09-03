@@ -3,18 +3,26 @@ import Circle from "progressbar.js/circle";
 import "./main-page.scss";
 import { UIButton } from "../../UI/button";
 import { getWordsByChapterAndPage } from "../../../utils/loader";
-import { BASE_URL, IWordsElement } from "../../../interfaces";
+import { BASE_URL, IStatisticGame, IWordsElement } from "../../../interfaces";
 import { progressBarMixin } from "../progressBar";
-
 
 export let correctWords: IWordsElement[] = [];
 export let wrongWords: IWordsElement[] = [];
+export const dataAudiocall: IStatisticGame = {
+  totalWords: 0,
+  correctWordsPercent: 0,
+  series: 0,
+  correctArr: [],
+  wrongArr: []
+};
 
 export class AudioCallMainPage extends Component {
   private audioCallHeader: Component;
   private audioCallContent: Component;
   private audioCallControls: Component;
-  // private controlsVolume: UIButton;
+  private controlsInfoCont: Component;
+  private controlsInfo: UIButton;
+  private dropDownList: Component;
   private controlsScreen: UIButton;
   private controlsClose: UIButton;
   private voiceWrapper: Component;
@@ -28,6 +36,13 @@ export class AudioCallMainPage extends Component {
   private listWords: Component;
   private textDontKnow: Component;
   private textNext: Component;
+  private infoHeading: Component;
+  private infoVoice: Component;
+  private infoChoose: Component;
+  private infoNext: Component;
+  private infoInfo: Component;
+  private infoFullScreen: Component;
+  private infoExit: Component;
   listBtn!: UIButton;
   listItem!: Component;
   private bar: Circle;
@@ -36,13 +51,25 @@ export class AudioCallMainPage extends Component {
   arrWords: IWordsElement[] = [];
   randomNum!: IWordsElement;
 
-  constructor(parentNode: HTMLElement) {
+  constructor(parentNode: HTMLElement, parameters: string) {
     super(parentNode, "div", ["audiocall-main", "master"]);
 
+    console.log(dataAudiocall);
+    
+    
     this.audioCallHeader = new Component(this.element, "div", ["master-header"]);
     this.audioCallContent = new Component(this.element, "div", ["master-content"]);
     this.audioCallControls = new Component(this.audioCallHeader.element, "div", ["master-controls", "controls"]);
-    // this.controlsVolume = new UIButton(this.audioCallControls.element, ["controls-btn", "btn", "controls-volume"], "");
+    this.controlsInfoCont = new Component(this.audioCallControls.element, "div", ["controls-btn__cont"],);
+    this.controlsInfo = new UIButton(this.controlsInfoCont.element, ["controls-btn", "btn", "controls-info"], "");
+    this.dropDownList = new Component(this.controlsInfoCont.element, "div", ["controls-dropDownList", "info"],);
+    this.infoHeading = new Component(this.dropDownList.element, "h3", ["info-heading"], "Hotkeys:");
+    this.infoVoice = new Component(this.dropDownList.element, "span", ["info-item", "info-voice"],);
+    this.infoChoose = new Component(this.dropDownList.element, "span", ["info-item", "info-choose"],);
+    this.infoNext = new Component(this.dropDownList.element, "span", ["info-item", "info-next"],);
+    this.infoInfo = new Component(this.dropDownList.element, "span", ["info-item", "info-info"],);
+    this.infoFullScreen = new Component(this.dropDownList.element, "span", ["info-item", "info-fullscreen"],);
+    this.infoExit = new Component(this.dropDownList.element, "span", ["info-item", "info-exit"],);
     this.controlsScreen = new UIButton(this.audioCallControls.element, ["controls-btn", "btn", "controls-fullscreen"], "");
     this.controlsClose = new UIButton(this.audioCallControls.element, ["controls-btn", "btn", "controls-close"], "");
     this.audioCallProgressbar = new Component(this.audioCallHeader.element, "div", ["master-progressbar"]);
@@ -55,31 +82,38 @@ export class AudioCallMainPage extends Component {
     for(let i = 0; i < 5; i+=1) {
       this.listItem = new Component(this.listWords.element, "li", ["words-item"],);
       this.listBtn = new UIButton(this.listItem.element, ["words-btn", "btn"], "");
+      this.listBtn.element.setAttribute("value", `${i + 1}`);
     }
     this.actionBtn = new UIButton(this.audioCallContent.element, ["master-action__btn", "btn"], "");
     this.textDontKnow = new Component(this.actionBtn.element, "span", ["action-item"], "I don't know");
     this.textNext = new Component(this.actionBtn.element, "span", ["action-item", "next"], "Next");
     
     this.audioCallProgressbar.element.setAttribute("id", "container");
+    this.voiceBtn.element.setAttribute("value", "Shift");
+    this.textDontKnow.element.setAttribute("id", "Space-Dont");
+    this.textNext.element.setAttribute("id", "Space-Next");
+
+    this.infoVoice.element.innerHTML = "Listen: <i>Shift</i>";
+    this.infoChoose.element.innerHTML = "Choose: <i>1-5</i>";
+    this.infoNext.element.innerHTML = "Next: <i>Space</i>";
+    this.infoInfo.element.innerHTML = "Hotkeys: <i>I</i>";
+    this.infoFullScreen.element.innerHTML = "Fullscreen: <i>F</i>";
+    this.infoExit.element.innerHTML = "Close: <i>Esc</i>";
 
     this.bar = progressBarMixin(this.audioCallProgressbar.element);
 
-    this.controlsClose.element.addEventListener("click", () => {
-      if(document.fullscreenElement) {
-        document.exitFullscreen();
+    this.controlsInfo.element.addEventListener("click", () => this.openInfo());
+
+    document.addEventListener("click", (e) => {
+      const event = e.target as HTMLElement;
+      if (!event.closest(".controls-btn__cont")) {
+        this.dropDownList.element.classList.remove("openInfo");
       }
-      this.resetVal();
-      (<HTMLElement>document.querySelector(".master")).style.display = "none";
-      (<HTMLElement>document.querySelector(".home")).style.display = "flex";
     });
 
-    this.controlsScreen.element.addEventListener("click", () => {
-      if(document.fullscreenElement) {
-        document.exitFullscreen();
-      } else {
-        this.element.requestFullscreen();
-      }
-    });
+    this.controlsClose.element.addEventListener("click", () => this.closeGame(parameters));
+
+    this.controlsScreen.element.addEventListener("click", () => this.getFullScreen());
     
     (<HTMLElement>document.querySelector(".home-lvl__btns")).addEventListener("click", (e) => {
       const eventTarget = e.target as HTMLElement;
@@ -87,18 +121,49 @@ export class AudioCallMainPage extends Component {
       this.valChapter = +id;
       
       if (eventTarget.classList.contains("home-btn")) {
-        this.resetVal();
-        (<HTMLElement>document.querySelector(".master")).style.display = "flex";
-        (<HTMLElement>document.querySelector(".home")).style.display = "none";
-        this.textDontKnow.element.style.display = "flex";
-        this.textNext.element.style.display = "none";
-        this.getWords(this.valChapter, this.valPage);
-        localStorage. removeItem("progressbarVal");
+        this.hidenIntroPage(this.valChapter, this.valPage);
       }
     });
     
     this.voiceBtn.element.addEventListener("click", () => {
       (<HTMLAudioElement>this.audio.element).play();
+    });
+
+    document.addEventListener("keyup", (event) => {
+      const isAudiocallMain = document.querySelector(".audiocall-main") as HTMLElement;
+      if (isAudiocallMain && isAudiocallMain.style.display === "flex") {
+        if (event.key === "Shift") {
+          (<HTMLAudioElement>this.audio.element).play();
+        }
+  
+        document.querySelectorAll(".words-btn").forEach( el => {
+          if (event.key === (<HTMLButtonElement>el).value && !(<HTMLButtonElement>el).disabled) {
+            this.splitEvents((<HTMLButtonElement>el).id, <HTMLElement>el);
+          }
+        });
+  
+        if (event.code === "Space") {
+          if ((<HTMLElement>document.getElementById("Space-Dont")).style.display === "flex") {
+            this.getCorrectWord();
+            wrongWords.push(this.randomNum);
+          } else if ((<HTMLElement>document.getElementById("Space-Next")).style.display === "flex") {
+            this.getWords(this.valChapter, this.valPage +=1);
+          }
+        }
+  
+        if (event.code === "Escape") {
+          this.closeGame(parameters);
+        }
+  
+        if (event.code === "KeyF") {
+          this.getFullScreen();
+        }
+        
+        if (event.code === "KeyI") {
+          this.openInfo();
+        }
+        event.preventDefault();
+      }
     });
 
     this.textDontKnow.element.addEventListener("click", () => {
@@ -109,8 +174,14 @@ export class AudioCallMainPage extends Component {
     this.textNext.element.addEventListener("click", () => this.getWords(this.valChapter, this.valPage +=1));
     
     this.listWords.element.addEventListener("click", this.guessWord);
+    
+    if (parameters) {
+      const currPage = Number(localStorage.getItem("page"));
+      const currChapter = Number(localStorage.getItem("chapter"));
+      this.hidenIntroPage(currChapter, currPage);
+    }
   }
-
+  
   getWords = (numChapter: number, numPage: number) => {
     document.querySelectorAll(".words-btn").forEach( el => {
       el.innerHTML = "";
@@ -159,19 +230,7 @@ export class AudioCallMainPage extends Component {
     const eventTarget = e.target as HTMLElement;
     if (eventTarget.classList.contains("words-btn")) {
       const { id } = eventTarget;
-      if(this.randomNum.word === id) {
-        eventTarget.style.background = "#67db67";
-        this.audioResult.element.setAttribute("src", "../../../../public/audio/win.mp3");
-        this.bar.animate(this.progressVal += 0.1);
-        localStorage.setItem("progressbarVal", `${this.progressVal}`);
-        correctWords.push(this.randomNum);
-      } else {
-        eventTarget.style.background = "#ff4c4c";
-        this.audioResult.element.setAttribute("src", "../../../../public/audio/wrong.mp3");
-        wrongWords.push(this.randomNum);
-      }
-      (<HTMLAudioElement>this.audioResult.element).play();
-      this.getCorrectWord();
+      this.splitEvents(id, eventTarget);
     }
   };
   
@@ -193,5 +252,64 @@ export class AudioCallMainPage extends Component {
     correctWords = [];
     wrongWords = [];
     this.bar.animate(0);
+  };
+
+  splitEvents = (id: string, event: HTMLElement) => {
+    if(this.randomNum.word === id) {
+      event.style.background = "#67db67";
+      this.audioResult.element.setAttribute("src", "../../../../public/audio/win.mp3");
+      this.bar.animate(this.progressVal += 0.1);
+      localStorage.setItem("progressbarVal", `${this.progressVal}`);
+      correctWords.push(this.randomNum);
+      dataAudiocall.correctArr = correctWords;
+    } else {
+      if (dataAudiocall.series <= correctWords.length) {
+        dataAudiocall.series = correctWords.length;
+      }
+      event.style.background = "#ff4c4c";
+      this.audioResult.element.setAttribute("src", "../../../../public/audio/wrong.mp3");
+      wrongWords.push(this.randomNum);
+      dataAudiocall.wrongArr = wrongWords;
+    }
+    (<HTMLAudioElement>this.audioResult.element).play();
+    this.getCorrectWord();
+    dataAudiocall.totalWords = correctWords.length + wrongWords.length;
+    dataAudiocall.correctWordsPercent = Math.floor((dataAudiocall.correctArr.length / dataAudiocall.totalWords) * 100);
+    console.log(dataAudiocall);
+  };
+
+  closeGame = (parameters: string) => {
+    if(document.fullscreenElement) {
+      document.exitFullscreen();
+    }
+    this.resetVal();
+    if(parameters) {
+      window.location.hash = "/dictionary";
+    } else {
+      (<HTMLElement>document.querySelector(".home")).style.display = "flex";
+      (<HTMLElement>document.querySelector(".master")).style.display = "none";
+    }
+  };
+
+  getFullScreen = () => {
+    if(document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      this.element.requestFullscreen();
+    }
+  };
+
+  openInfo = () => {
+    this.dropDownList.element.classList.toggle("openInfo");
+  };
+
+  hidenIntroPage = (numChapter: number, numPage: number) => {
+    this.resetVal();
+    (<HTMLElement>document.querySelector(".master")).style.display = "flex";
+    (<HTMLElement>document.querySelector(".home")).style.display = "none";
+    this.textDontKnow.element.style.display = "flex";
+    this.textNext.element.style.display = "none";
+    this.getWords(numChapter, numPage);
+    localStorage.removeItem("progressbarVal");
   };
 }

@@ -15,6 +15,7 @@ class SprintResultesPage extends Component {
     this.toSprintGamePageBtn = new Component(this.element, "div", ["toSprintGamePage-btn"]);
     this.title = new Component(this.element, "h3", ["sprintGameReults-title"], "Results");
     this.results = new Component(this.element, "div", ["sprint-results__container"]);
+    this.results.element.setAttribute("autofocus", "true");
 
     // this.result = new SprintResult(this.results.element);
     // this.result = new SprintResult(this.results.element);
