@@ -23,10 +23,10 @@ class AboutRsLang extends Component {
     this.img4 = new Component(this.element, "img", ["about-RsLang__image4", "aboutRsLang-section"]);
     this.img5 = new Component(this.element, "img", ["about-RsLang__image5", "aboutRsLang-section"]);
     
-    this.title.element.innerHTML = `<p>RS Lang</p><p>поможет вам окунуться в удивительный мир изучения английского языка</p>`;
-    this.dictionary.element.innerHTML = `<p>Dictionary</p><p>поможет увеличить ваш словарный запас, запоминая новые английские слова</p>`;      
-    this.audioCall.element.innerHTML = `<p>Audio call</p><p>поможет разобраться с произношением звуков, слов и связок во фразах</p>`;      
-    this.sprint.element.innerHTML = `<p>Sprint</p><p>поможет поддерживать в тонусе словарный запас, тренирует внимание</p>`;      
+    this.title.element.innerHTML = `<p>RS Lang</p><p>will help you dive into the wonderful world of learning English</p>`;
+    this.dictionary.element.innerHTML = `<p>Dictionary</p><p>help you increase your vocabulary by memorizing new English words</p>`;      
+    this.audioCall.element.innerHTML = `<p>Audio call</p><p>help with pronunciation of sounds, words, and ligatures in phrases</p>`;      
+    this.sprint.element.innerHTML = `<p>Sprint</p><p>will help maintain vocabulary, train attention</p>`;      
     this.img1.element.setAttribute("src", "./public/about-images/play-and-learn.png");
     this.img2.element.setAttribute("src", "./public/about-images/vocabruary.png");
     this.img3.element.setAttribute("src", "./public/about-images/words.png");
