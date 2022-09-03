@@ -12,8 +12,6 @@ export class AudioCallStartPage extends Component {
   private homeLvlBtnsWrapper: Component;
   homeLvlBtns: UIButton | undefined;
   private linkMainPage: Component;
-  // private position = 0;
-  // private flag = true;
   
   constructor(parentNode: HTMLElement) {
     super(parentNode, "div", ["audiocall-home", "home"]);
@@ -33,42 +31,6 @@ export class AudioCallStartPage extends Component {
 
     this.linkMainPage.element.setAttribute("href", "#/");
     this.linkMainPage.element.setAttribute("tabindex", "0");
-
-    // document.addEventListener("keydown", (event) => {
-    //   const isAudiocall = document.querySelector(".audiocall") as HTMLElement;
-    //   if (isAudiocall) {
-    //     const homeBtns = document.querySelectorAll(".home-btn") as NodeListOf<HTMLElement>;
-    //     const homeBtnBack = document.querySelector(".home-link__back") as HTMLElement;
-  
-    //     if (event.code !== "ArrowRight" && event.code !== "ArrowLeft" &&
-    //     event.code !== "ArrowUp" && event.code !== "ArrowDown" && event.code !== "Enter") {
-    //       event.preventDefault();
-    //     }
-  
-    //     if (event.code === "ArrowRight" && !this.flag) {
-    //       if (this.position === 5) {
-    //         this.position = -1;
-    //       }
-    //       this.position += 1;
-    //       homeBtns[this.position].focus();
-    //     } else if (event.code === "ArrowLeft" && !this.flag) {
-    //       if (this.position === 0) {
-    //         this.position = homeBtns.length;
-    //       } 
-    //       this.position -= 1;
-    //       homeBtns[this.position].focus();
-    //     } else if (event.code === "ArrowDown") {
-    //       if (!this.flag) {
-    //         homeBtnBack.focus();
-    //       } else {
-    //         homeBtns[this.position].focus();
-    //         this.flag = false;
-    //       }
-    //     } else if (event.code === "ArrowUp") {
-    //       homeBtns[this.position].focus();
-    //     }
-    //   }
-    // });
   }
 }
 

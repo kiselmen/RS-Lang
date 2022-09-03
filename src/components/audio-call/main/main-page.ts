@@ -3,12 +3,18 @@ import Circle from "progressbar.js/circle";
 import "./main-page.scss";
 import { UIButton } from "../../UI/button";
 import { getWordsByChapterAndPage } from "../../../utils/loader";
-import { BASE_URL, IWordsElement } from "../../../interfaces";
+import { BASE_URL, IStatisticGame, IWordsElement } from "../../../interfaces";
 import { progressBarMixin } from "../progressBar";
-
 
 export let correctWords: IWordsElement[] = [];
 export let wrongWords: IWordsElement[] = [];
+export const dataAudiocall: IStatisticGame = {
+  totalWords: 0,
+  correctWordsPercent: 0,
+  series: 0,
+  correctArr: [],
+  wrongArr: []
+};
 
 export class AudioCallMainPage extends Component {
   private audioCallHeader: Component;
@@ -37,7 +43,6 @@ export class AudioCallMainPage extends Component {
   private infoInfo: Component;
   private infoFullScreen: Component;
   private infoExit: Component;
-  // private parameters: Component;
   listBtn!: UIButton;
   listItem!: Component;
   private bar: Circle;
@@ -49,7 +54,7 @@ export class AudioCallMainPage extends Component {
   constructor(parentNode: HTMLElement, parameters: string) {
     super(parentNode, "div", ["audiocall-main", "master"]);
 
-    console.log(parameters);
+    console.log(dataAudiocall);
     
     
     this.audioCallHeader = new Component(this.element, "div", ["master-header"]);
@@ -106,27 +111,7 @@ export class AudioCallMainPage extends Component {
       }
     });
 
-    this.controlsClose.element.addEventListener("click", () => {
-      if(document.fullscreenElement) {
-        document.exitFullscreen();
-      }
-      this.resetVal();
-      if(parameters) {
-        window.location.hash = "/dictionary";
-      }
-      (<HTMLElement>document.querySelector(".master")).style.display = "none";
-      (<HTMLElement>document.querySelector(".home")).style.display = "flex";
-    });
-    
-    this.controlsScreen.element.addEventListener("click", () => {
-      if(document.fullscreenElement) {
-        document.exitFullscreen();
-      } else {
-        this.element.requestFullscreen();
-      }
-    });
-
-    this.controlsClose.element.addEventListener("click", () => this.closeGame());
+    this.controlsClose.element.addEventListener("click", () => this.closeGame(parameters));
 
     this.controlsScreen.element.addEventListener("click", () => this.getFullScreen());
     
@@ -144,7 +129,7 @@ export class AudioCallMainPage extends Component {
       (<HTMLAudioElement>this.audio.element).play();
     });
 
-    document.addEventListener("keydown", (event) => {
+    document.addEventListener("keyup", (event) => {
       const isAudiocallMain = document.querySelector(".audiocall-main") as HTMLElement;
       if (isAudiocallMain && isAudiocallMain.style.display === "flex") {
         if (event.key === "Shift") {
@@ -167,7 +152,7 @@ export class AudioCallMainPage extends Component {
         }
   
         if (event.code === "Escape") {
-          this.closeGame();
+          this.closeGame(parameters);
         }
   
         if (event.code === "KeyF") {
@@ -177,7 +162,6 @@ export class AudioCallMainPage extends Component {
         if (event.code === "KeyI") {
           this.openInfo();
         }
-
         event.preventDefault();
       }
     });
@@ -277,22 +261,34 @@ export class AudioCallMainPage extends Component {
       this.bar.animate(this.progressVal += 0.1);
       localStorage.setItem("progressbarVal", `${this.progressVal}`);
       correctWords.push(this.randomNum);
+      dataAudiocall.correctArr = correctWords;
     } else {
+      if (dataAudiocall.series <= correctWords.length) {
+        dataAudiocall.series = correctWords.length;
+      }
       event.style.background = "#ff4c4c";
       this.audioResult.element.setAttribute("src", "../../../../public/audio/wrong.mp3");
       wrongWords.push(this.randomNum);
+      dataAudiocall.wrongArr = wrongWords;
     }
     (<HTMLAudioElement>this.audioResult.element).play();
     this.getCorrectWord();
+    dataAudiocall.totalWords = correctWords.length + wrongWords.length;
+    dataAudiocall.correctWordsPercent = Math.floor((dataAudiocall.correctArr.length / dataAudiocall.totalWords) * 100);
+    console.log(dataAudiocall);
   };
 
-  closeGame = () => {
+  closeGame = (parameters: string) => {
     if(document.fullscreenElement) {
       document.exitFullscreen();
     }
     this.resetVal();
-    (<HTMLElement>document.querySelector(".master")).style.display = "none";
-    (<HTMLElement>document.querySelector(".home")).style.display = "flex";
+    if(parameters) {
+      window.location.hash = "/dictionary";
+    } else {
+      (<HTMLElement>document.querySelector(".home")).style.display = "flex";
+      (<HTMLElement>document.querySelector(".master")).style.display = "none";
+    }
   };
 
   getFullScreen = () => {
