@@ -5,7 +5,9 @@ import SprintGamePage from "../components/sprint/game-page";
 import {SprintResultesPage, SprintResult} from "../components/sprint/sprint-results-page";
 import Timer from "../components/sprint/timer";
 import {sprintState, getInfo, sayTheWord, myRandom, clearSprintState, makeVisibleCurrentSprintPage, updateSprintState} from "../components/sprint/sprint-helpers";
-// import { BASE_URL } from "../interfaces";
+import { getAlluserWords, getWordById } from "../utils/loader";
+import { IGetUsersWords, someData } from "../interfaces";
+
 
 export class Sprint extends Component {
   private sprintIntroCard;
@@ -15,34 +17,339 @@ export class Sprint extends Component {
 
   constructor(parentNode: HTMLElement, parameters: string) {
     super(parentNode, "div", ["sprint"]);
-    console.log(parameters);
-    
+
+    clearSprintState();
+    if(parameters) sprintState.parentNodeInfo = "dictionary";
     this.sprintIntroCard = new SprintIntro(this.element);
     this.sprintGamePage = new SprintGamePage(this.element);
     this.sprintResultsPage = new SprintResultesPage(this.element);
 
-    //** Sprint intro page **//
+    this.starterKit();
+  }
 
-    [this.sprintIntroCard.cardBtn1, this.sprintIntroCard.cardBtn2, this.sprintIntroCard.cardBtn3, this.sprintIntroCard.cardBtn4, this.sprintIntroCard.cardBtn5, this.sprintIntroCard.cardBtn6].forEach((btn) => {
-      btn.element.addEventListener("click", async() => {
-        makeVisibleCurrentSprintPage(this.sprintIntroCard.element, this.sprintResultsPage.element, this.sprintGamePage.element, "flex");
+  //* Начало игры, определение откуда совершен переход *//
 
-        this.timer = new Timer(this.sprintGamePage.timer.element);
-        this.timer.specialFunc = showResults;
-        this.timer.timerRun();
+  sprintStart = async () => {
+    if(sprintState.parentNodeInfo === "about") {
+      await makeVisibleCurrentSprintPage(this.sprintResultsPage.element,
+        this.sprintGamePage.element, this.sprintIntroCard.element, "flex");
+    }
+    if(sprintState.parentNodeInfo === "dictionary") {
+      if(localStorage.userId) {
+        if(localStorage.chapter !== "6") {
+          await this.gamePreparation();
+        }
+        if(localStorage.chapter === "6") {
+          await this.gamePreparation();
+        }
+      }
+      if(!localStorage.userId) {
+        await this.gamePreparation();
+      }
+    }
+  };
 
-        sprintState.currentGroup = +btn.element.innerText;
+  //* */ Получение данных для начала игры с сервера
+  //* в зависимости от того, откуда был переход на страницу
 
+  gamePreparation = async () => {
+    if(sprintState.parentNodeInfo === "about") {
+      sprintState.currentContent = await getInfo(sprintState.currentGroup, sprintState.currentPage);
+      await this.gamePreparationActions("default");
+    }
+    if(sprintState.parentNodeInfo === "dictionary") {
+      if(!localStorage.userId) {
+        sprintState.currentGroup = +localStorage.chapter;
+        sprintState.currentPage = +localStorage.page;
+        sprintState.currentContent = await getInfo(sprintState.currentGroup, sprintState.currentPage);
+        await this.gamePreparationActions("default");
+      }
+      if(localStorage.userId && localStorage.chapter !== "6") {
+        sprintState.currentGroup = +localStorage.chapter;
+        sprintState.currentPage = +localStorage.page;
         sprintState.currentContent = await getInfo(sprintState.currentGroup, sprintState.currentPage );
+        const allUserWords = await getAlluserWords();
 
-        this.sprintGamePage.wordInEng.element.innerText =  sprintState.currentContent[sprintState.stepCounter].word.toString();
-        this.sprintGamePage.wordInRu.element.innerText =  sprintState.currentContent[myRandom(sprintState.stepCounter)].wordTranslate.toString();
+
+        const supportFunc = async () => {
+          const studiedUserWordsId = allUserWords.filter((word: IGetUsersWords) => word.difficulty !== "hard").map((word: someData) => word.wordId);
+          for(const id of studiedUserWordsId) {
+            sprintState.currentContent = sprintState.currentContent.filter(item => item.id !== id);
+          }
+        };
+        await supportFunc();
+        await this.gamePreparationActions("default");
+      }
+      if(localStorage.userId && localStorage.chapter === "6") {
+        const allUserWords = await getAlluserWords();
+
+        const supportFunc = async () => {
+          const allUserWordId = allUserWords.filter((word: IGetUsersWords) => word.difficulty !== "study").map((word: someData) => word.wordId);
+
+          for(let i=0; i<allUserWordId.length; i+=1) {
+            const word = await getWordById(allUserWordId[i]);
+            sprintState.userHardWords[i] = word;
+          }
+        };
+        await supportFunc();
+        await this.gamePreparationActions("custom");
+      }
+    }
+  };
+
+  /* Обновление контента игры */
+  updateGameContent = async (options: string) => {
+
+    if(options === "default") {
+      if(sprintState.stepCounter !== sprintState.currentContent.length) {
+        try {
+          this.sprintGamePage.wordInEng.element.innerText =  sprintState.currentContent[sprintState.stepCounter].word.toString();
+          this.sprintGamePage.wordInRu.element.innerText =  sprintState.currentContent[myRandom(sprintState.stepCounter)].wordTranslate.toString();
+        }
+        catch (e) {
+          console.error((e as Error).message, "Запрос на сервер по дефолту не вернул данных !!!");
+        }
+      }
+    }
+
+    if(options === "custom") {
+      if(sprintState.userHardWordsCounter !== sprintState.userHardWords.length) {
+        try {
+          this.sprintGamePage.wordInEng.element.innerText =  sprintState.userHardWords[sprintState.userHardWordsCounter].word.toString();
+          this.sprintGamePage.wordInRu.element.innerText =  sprintState.userHardWords[myRandom(sprintState.userHardWordsCounter, [0, sprintState.userHardWords.length])].wordTranslate.toString();
+        }
+        catch (e) {
+          console.error((e as Error).message, "Запрос на сервер (кастомный) не вернул данных !!!");
+        }
+      }
+    }
+  };
+
+  /* Проверка на крайнее слово */
+  checkLimit = async (options: string) => {
+
+    if(options === "default" && sprintState.parentNodeInfo === "about") {
+      const length = sprintState.currentContent.length;
+
+      if(sprintState.stepCounter === length && sprintState.currentPage < 29) {
+        await updateSprintState(true, "none", false, false, true, false);
+        sprintState.stepCounter = 0;
+        console.log("about, def, 1");
+      } else if (sprintState.stepCounter === length && sprintState.currentPage === 29) {
+        await makeVisibleCurrentSprintPage(this.sprintGamePage.element, this.sprintIntroCard.element, this.sprintResultsPage.element, "block");
+        await this.timer?.timerStop();
+        console.log("about, def, 2");
+      }
+    }
+
+    if(options === "default" && sprintState.parentNodeInfo === "dictionary") {
+      const length = sprintState.currentContent.length;
+
+      if(sprintState.stepCounter === length && sprintState.currentPage < 29 && sprintState.currentPage !== 0) {
+        await updateSprintState(false, "none", false, false,
+          true, false);
+        sprintState.stepCounter = 0;
+        console.log("dict, def, 1");
+      } else if(sprintState.stepCounter === length && sprintState.currentPage === 0) {
+        await makeVisibleCurrentSprintPage(this.sprintGamePage.element, this.sprintIntroCard.element, this.sprintResultsPage.element, "block");
+        await this.timer?.timerStop();
+        console.log("dict, def, 2");
+      }
+    }
+
+    if(options === "custom" && sprintState.parentNodeInfo === "dictionary") {
+      if(sprintState.userHardWordsCounter === sprintState.userHardWords.length) {
+        await makeVisibleCurrentSprintPage(this.sprintGamePage.element, this.sprintIntroCard.element, this.sprintResultsPage.element, "block");
+        await this.timer?.timerStop();
+        /* Проверить нужно ли !!! */
+        await this.updateSignalLampState(false);
+      }
+    }
+  };
+
+  /* Встроенная в таймер функция */
+  showResults = async () => {
+    makeVisibleCurrentSprintPage(this.sprintGamePage.element, this.sprintIntroCard.element, this.sprintResultsPage.element, "block");
+    this.timer?.timerStop();
+    /* Проверить нужно ли !!! */
+    this.updateScore(false);
+  };
+
+  /* Озвучка правильных и неправильных ответов */
+  makeAnswerVoise = async (soundLinkToBool: boolean) => {
+    const player = this.sprintGamePage.audioPlayer.element as HTMLAudioElement;
+
+    if(soundLinkToBool) {
+      player.setAttribute("src", "./public/sprint-music/true.mp3");
+    } else {
+      player.setAttribute("src", "./public/sprint-music/false.mp3");
+    }
+    player.play();
+  };
+
+  //*********** Sprint Intro ************//
+
+  /* Обработка кнопок выбора раздела в Sprint Intro */
+  introChapterBtnsListener = () => {
+    [this.sprintIntroCard.cardBtn1, this.sprintIntroCard.cardBtn2, this.sprintIntroCard.cardBtn3,
+      this.sprintIntroCard.cardBtn4, this.sprintIntroCard.cardBtn5, this.sprintIntroCard.cardBtn6].forEach((btn) => {
+      btn.element.addEventListener("click", async() => {
+        sprintState.currentGroup = +btn.element.innerText - 1;
+        this.gamePreparation();
       });
     });
+  };
 
-    //** Sprint game page **//
 
-    /* Кнопка включения и отключения звука */
+  //*********** Sprint Game ************//
+
+  /* Прослушка кнопок выбора ответа */
+  answerBtnsListener = async () => {
+    [this.sprintGamePage.answerFalseBtn.element, this.sprintGamePage.answerTrueBtn.element].forEach(async (btn) => {
+      btn.addEventListener("click", async (e) => {
+        await this.unswersBtnsBlockToggle(true);
+        const currentBtn = e.target as HTMLButtonElement;
+
+        if(localStorage.userId && sprintState.parentNodeInfo === "dictionary" && localStorage.chapter === "6") {
+
+          if(currentBtn.innerText === "CORRECT" && this.sprintGamePage.wordInRu.element.innerText === sprintState.userHardWords[sprintState.userHardWordsCounter].wordTranslate.toString()) {
+            await this.responseProcessing(true, "custom");
+          } else if (currentBtn.innerText === "CORRECT" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.userHardWords[sprintState.userHardWordsCounter].wordTranslate.toString()) {
+            await this.responseProcessing(false, "custom");
+          }
+
+          if(currentBtn.innerText === "INCORRECT" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.userHardWords[sprintState.userHardWordsCounter].wordTranslate.toString()) {
+            await this.responseProcessing(true, "custom");
+          } else if (currentBtn.innerText === "INCORRECT" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.userHardWords[sprintState.userHardWordsCounter].wordTranslate.toString()) {
+            await this.responseProcessing(false, "custom");
+          }
+
+        } else {
+          if(currentBtn.innerText === "CORRECT" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
+            await this.responseProcessing(true, "default");
+          } else if (currentBtn.innerText === "CORRECT" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
+            await this.responseProcessing(false, "default");
+          }
+
+          if(currentBtn.innerText === "INCORRECT" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
+            await this.responseProcessing(true, "default");
+          } else if (currentBtn.innerText === "INCORRECT" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
+            await this.responseProcessing(false, "default");
+          }
+        }
+        await this.unswersBtnsBlockToggle(false);
+      });
+    });
+  };
+
+  /* Обработка ответов пользователя */
+  responseProcessing = async (bool: boolean, options: string) => {
+    if(options === "default") {
+      if(bool) {
+        await this.userResponseProcessing(sprintState.currentContent[sprintState.stepCounter].word.toString(), sprintState.currentContent[sprintState.stepCounter].transcription.toString(), sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString(), sprintState.currentContent[sprintState.stepCounter].audio.toString(), true);
+
+        if(localStorage.userId) {
+          sprintState.userResult.push({"id": sprintState.currentContent[sprintState.stepCounter].id as string, "answer": true});
+        }
+
+        await updateSprintState("none", true, true, true, false, false);
+        await this.updateScore(true);
+        await this.updateSignalLampState(true);
+        await this.makeAnswerVoise(true);
+        await this.checkLimit("default");
+        await this.updateGameContent("default");
+
+      } else {
+        await this.userResponseProcessing(sprintState.currentContent[sprintState.stepCounter].word.toString(), sprintState.currentContent[sprintState.stepCounter].transcription.toString(), sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString(), sprintState.currentContent[sprintState.stepCounter].audio.toString(), false);
+
+        if(localStorage.userId) {
+          sprintState.userResult.push({"id": sprintState.currentContent[sprintState.stepCounter].id as string, "answer": false});
+        }
+
+        await updateSprintState("none", true, true, false, false, false);
+        await this.updateSignalLampState(true);
+        await this.makeAnswerVoise(false);
+        await this.checkLimit("default");
+        await this.updateGameContent("default");
+      }
+    }
+    if(options === "custom") {
+      if(bool) {
+        await this.userResponseProcessing(sprintState.userHardWords[sprintState.userHardWordsCounter].word.toString(), sprintState.userHardWords[sprintState.userHardWordsCounter].transcription.toString(), sprintState.userHardWords[sprintState.userHardWordsCounter].wordTranslate.toString(), sprintState.userHardWords[sprintState.userHardWordsCounter].audio.toString(), true);
+
+        if(localStorage.userId) {
+          sprintState.userResult.push({"id": sprintState.userHardWords[sprintState.userHardWordsCounter].id as string, "answer": true});
+        }
+
+        await updateSprintState("none", true, true, true, false, true);
+        await this.updateScore(true);
+        await this.updateSignalLampState(true);
+        await this.makeAnswerVoise(true);
+        await this.checkLimit("custom");
+        await this.updateGameContent("custom");
+
+      } else {
+        await this.userResponseProcessing(sprintState.userHardWords[sprintState.userHardWordsCounter].word.toString(), sprintState.userHardWords[sprintState.userHardWordsCounter].transcription.toString(), sprintState.userHardWords[sprintState.userHardWordsCounter].wordTranslate.toString(), sprintState.userHardWords[sprintState.userHardWordsCounter].audio.toString(), false);
+
+        if(localStorage.userId) {
+          sprintState.userResult.push({"id": sprintState.userHardWords[sprintState.userHardWordsCounter].id as string, "answer": false});
+        }
+
+        await updateSprintState("", true, false, false, false, true);
+        await this.updateSignalLampState(true);
+        await this.makeAnswerVoise(false);
+        await this.checkLimit("custom");
+        await this.updateGameContent("custom");
+      }
+    }
+  };
+
+  /* Для обработки ответа пользователя и вывода результата Sprint */
+  userResponseProcessing = async (wordInEng: string, wordInEngTranscription: string, wordInRu: string, wordVoiceLink: string, boolean: boolean) => {
+    this.sprintResultsPage.result = new SprintResult(this.sprintResultsPage.results.element, wordInEng, wordInEngTranscription, wordInRu, wordVoiceLink, boolean);
+    this.sprintResultsPage.result.specialFunc =  () => sayTheWord(this.sprintGamePage.audioPlayer.element as HTMLAudioElement, wordVoiceLink);
+  };
+
+  /* Блокировка/разблокировка кнопок ответа */
+  unswersBtnsBlockToggle = async (bool: boolean) => {
+    if(bool) {
+      [this.sprintGamePage.answerTrueBtn.element, this.sprintGamePage.answerFalseBtn.element].forEach((btn) => {
+        btn.setAttribute("disabled", "true");
+      });
+    } else {
+      [this.sprintGamePage.answerTrueBtn.element, this.sprintGamePage.answerFalseBtn.element].forEach((btn) => {
+        btn.removeAttribute("disabled");
+      });
+    }
+  };
+
+  /* Обновление сигнальных ламп */
+  updateSignalLampState = async (bool: boolean) => {
+    if(bool) {
+      const signalLamps = [this.sprintGamePage.gameSignalOne.element, this.sprintGamePage.gameSignalTwo.element, this.sprintGamePage.gameSignalThree.element];
+
+      signalLamps.forEach(lamp => lamp.classList.toggle("activate", false));
+      for(let i = 1; i <= sprintState.correctAnswerCount; i += 1) {
+        signalLamps[i-1].classList.toggle("activate", true);
+      }
+    }
+    else {
+      const signalLamps = [this.sprintGamePage.gameSignalOne.element, this.sprintGamePage.gameSignalTwo.element, this.sprintGamePage.gameSignalThree.element];
+
+      signalLamps.forEach(lamp => lamp.classList.toggle("activate", false));
+    }
+  };
+
+  /* Обновление счета игры */
+  updateScore = async (bool: boolean) => {
+    if(bool) {
+      this.sprintGamePage.points.element.innerText = sprintState.score.toString();
+    } else
+      this.sprintGamePage.points.element.innerText = "0";
+  };
+
+  /* Кнопка включения и отключения звука на странице игры */
+  gamePageGlobalSoundToggle = async () => {
     this.sprintGamePage.soundToggleBtn.element.addEventListener("click", () => {
       this.sprintGamePage.soundToggleBtn.element.classList.toggle("active");
 
@@ -52,8 +359,10 @@ export class Sprint extends Component {
         (this.sprintGamePage.audioPlayer.element as HTMLAudioElement).volume = 0;
       }
     });
+  };
 
-    /* Кнопка full-screen */
+  /* Кнопка full-screen на странице игры */
+  gamePageFullScreenToggle = async () => {
     this.sprintGamePage.toFullScreenBtn.element.addEventListener("click", () => {
       const el = document.documentElement,
         rfs = el.requestFullscreen;
@@ -65,134 +374,97 @@ export class Sprint extends Component {
         document.exitFullscreen();
       }
     });
+  };
 
-    /* Кнопка озвучки слова */
-    this.sprintGamePage.pronounceWordBtn.element.addEventListener("click", () => {
-      sayTheWord(this.sprintGamePage.audioPlayer.element as HTMLAudioElement, sprintState.currentContent[sprintState.stepCounter].audio.toString());
+  /* Кнопка закрытия страницы игры ( Х ) */
+  closeGamePage = async () => {
+    this.sprintGamePage.toSprintIntroPageBtn.element.addEventListener("click", async () => {
+      await this.closeGameActions();
     });
+  };
 
-    /* Закрытие страницы игры нажатием на Х */
-    this.sprintGamePage.toSprintIntroPageBtn.element.addEventListener("click", () => {
-      makeVisibleCurrentSprintPage(this.sprintGamePage.element, this.sprintResultsPage.element, this.sprintIntroCard.element, "flex");
-      clearSprintState();
-      this.timer?.timerStop();
-      updateScore(false);
-      this.sprintGamePage.clearLamp();
-    });
 
-    /* Прослушивание кнопок выбора ответа */
-    [this.sprintGamePage.answerFalseBtn.element, this.sprintGamePage.answerTrueBtn.element].forEach(btn => {
-      btn.addEventListener("click", async (e) => {
-        const currentBtn = e.target as HTMLButtonElement;
+  //*********** Sprint Result ************//
 
-        if(sprintState.stepCounter === 19 && sprintState.currentPage < 30) {
-          updateSprintState(true, 0, false, false,
-            await getInfo(sprintState.currentGroup, sprintState.currentPage ));
-
-        } else if(sprintState.stepCounter === 19 && sprintState.currentPage === 30) {
-          makeVisibleCurrentSprintPage(this.sprintGamePage.element, this.sprintIntroCard.element, this.sprintResultsPage.element, "block");
-          this.timer?.timerStop();
-          clearSprintState();
-          updateSignalLampState();
-        }
-
-        if(currentBtn.innerText === "CORRECT" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
-          updateSprintState(false, true, true, true);
-          updateScore(true);
-          updateGameCardContent();
-          updateSignalLampState();
-          makeAnswerVoise(true);
-          userResponseProcessing(sprintState.currentContent[sprintState.stepCounter].word.toString(), sprintState.currentContent[sprintState.stepCounter].transcription.toString(), sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString(), sprintState.currentContent[sprintState.stepCounter].audio.toString(), true);
-
-        } else if (currentBtn.innerText === "CORRECT" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
-          updateSprintState(false, true, false, false);
-          updateGameCardContent();
-          updateSignalLampState();
-          makeAnswerVoise(false);
-          userResponseProcessing(sprintState.currentContent[sprintState.stepCounter].word.toString(), sprintState.currentContent[sprintState.stepCounter].transcription.toString(), sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString(), sprintState.currentContent[sprintState.stepCounter].audio.toString(), false);
-        }
-
-        if(currentBtn.innerText === "INCORRECT" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
-          updateSprintState(false, true, true, true);
-          updateScore(true);
-          updateGameCardContent();
-          updateSignalLampState();
-          makeAnswerVoise(true);
-          userResponseProcessing(sprintState.currentContent[sprintState.stepCounter].word.toString(), sprintState.currentContent[sprintState.stepCounter].transcription.toString(), sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString(), sprintState.currentContent[sprintState.stepCounter].audio.toString(), true);
-
-        } else if (currentBtn.innerText === "INCORRECT" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
-          updateSprintState(false, true, false, false);
-          updateGameCardContent();
-          updateSignalLampState();
-          makeAnswerVoise(false);
-          userResponseProcessing(sprintState.currentContent[sprintState.stepCounter].word.toString(), sprintState.currentContent[sprintState.stepCounter].transcription.toString(), sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString(), sprintState.currentContent[sprintState.stepCounter].audio.toString(), false);
-        }
-      });
-    });
-
-    //** Sprint Results page **//
-
-    /* Закрытие страницы Результатов нажатием на крестик */
-    this.sprintResultsPage.toSprintGamePageBtn.element.onclick = () => {
-      makeVisibleCurrentSprintPage(this.sprintResultsPage.element, this.sprintGamePage.element, this.sprintIntroCard.element, "flex");
-      clearSprintState();
-      this.sprintResultsPage.clearResults();
-      this.sprintGamePage.clearLamp();
+  /* Кнопка закрытия страницы игры ( Х ) */
+  closeResultsPage = async () => {
+    this.sprintResultsPage.toSprintGamePageBtn.element.onclick = async () => {
+      await this.closeGameActions();
     };
+  };
 
-    //* Вспомогательные *//
+  /* Задачи при закрытиее игры */
+  closeGameActions = async () => {
+    await makeVisibleCurrentSprintPage(this.sprintGamePage.element, this.sprintResultsPage.element, this.sprintIntroCard.element, "flex");
+    console.log(sprintState.userResult);
+    clearSprintState();
+    this.sprintResultsPage.clearResults();
+    this.timer?.timerStop();
+    this.updateScore(false);
+    this.updateSignalLampState(false);
+  };
 
-    /* Для таймера */
-    const showResults = () => {
-      makeVisibleCurrentSprintPage(this.sprintGamePage.element, this.sprintIntroCard.element, this.sprintResultsPage.element, "block");
-      this.timer?.timerStop();
-      clearSprintState();
-      updateScore(true);
-    };
-
-    /* Для обработки ответа пользователя и вывода резултата Sprint */
-    const userResponseProcessing = (wordInEng: string, wordInEngTranscription: string, wordInRu: string, wordVoiceLink: string, boolean: boolean) => {
-      this.sprintResultsPage.result = new SprintResult(this.sprintResultsPage.results.element, wordInEng, wordInEngTranscription, wordInRu, wordVoiceLink, boolean);
-
-      this.sprintResultsPage.result.specialFunc =  () => sayTheWord(this.sprintGamePage.audioPlayer.element as HTMLAudioElement,
-        wordVoiceLink);
-    };
-
-    /* Для обнорвления контента карточки игры (следующее слово) */
-    const updateGameCardContent = () => {
-      this.sprintGamePage.wordInEng.element.innerText =  sprintState.currentContent[sprintState.stepCounter].word.toString();
-      this.sprintGamePage.wordInRu.element.innerText =  sprintState.currentContent[myRandom(sprintState.stepCounter)].wordTranslate.toString();
-    };
-
-    /* Для обнорвления счета */
-    const updateScore = (bool: boolean) => {
-      if(bool) {
-        this.sprintGamePage.points.element.innerText = sprintState.score.toString();
-      } else
-        this.sprintGamePage.points.element.innerText = "0";
-    };
-
-    /* Для обновления сигнальных ламп */
-    const updateSignalLampState = () => {
-      const signalLamps = [this.sprintGamePage.gameSignalOne.element, this.sprintGamePage.gameSignalTwo.element, this.sprintGamePage.gameSignalThree.element];
-
-      signalLamps.forEach(lamp => lamp.classList.toggle("activate", false));
-
-      for(let i = 1; i <= sprintState.correctAnswerCount; i += 1) {
-        signalLamps[i-1].classList.toggle("activate", true);
-      }
-    };
-
-    /* Для озвучки  правильных и неправильных ответов */
-    const makeAnswerVoise = (soundLinkToBool: boolean) => {
-      const player = this.sprintGamePage.audioPlayer.element as HTMLAudioElement;
-
-      if(soundLinkToBool) {
-        player.setAttribute("src", "./public/sprint-music/true.mp3");
+  /* Задачи при подготовке к игре */
+  gamePreparationActions = async (options: string) => {
+    const myFunc = async () => {
+      if(options === "default") {
+        await this.updateGameContent("default");
       } else {
-        player.setAttribute("src", "./public/sprint-music/false.mp3");
+        await this.updateGameContent("custom");
       }
-      player.play();
     };
-  }
+    await myFunc();
+    await makeVisibleCurrentSprintPage(this.sprintIntroCard.element, this.sprintResultsPage.element, this.sprintGamePage.element, "flex");
+    this.timer = new Timer(this.sprintGamePage.timer.element);
+    this.timer.specialFunc = this.showResults;
+    this.timer.timerRun();
+  };
+
+  keybordListener = async () => {
+    document.addEventListener("keydown", async (e) => {
+
+      if(localStorage.userId && sprintState.parentNodeInfo === "dictionary" && localStorage.chapter === "6") {
+
+        if(e.code === "ArrowRight" && this.sprintGamePage.wordInRu.element.innerText === sprintState.userHardWords[sprintState.userHardWordsCounter].wordTranslate.toString()) {
+          await this.responseProcessing(true, "custom");
+        } else if (e.code === "ArrowRight" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.userHardWords[sprintState.userHardWordsCounter].wordTranslate.toString()) {
+          await this.responseProcessing(false, "custom");
+        }
+
+        if(e.code === "ArrowLeft" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.userHardWords[sprintState.userHardWordsCounter].wordTranslate.toString()) {
+          await this.responseProcessing(true, "custom");
+        } else if (e.code === "ArrowLeft" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.userHardWords[sprintState.userHardWordsCounter].wordTranslate.toString()) {
+          await this.responseProcessing(false, "custom");
+        }
+
+      } else {
+        if(e.code === "ArrowRight" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
+          await this.responseProcessing(true, "default");
+        } else if (e.code === "ArrowRight" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
+          await this.responseProcessing(false, "default");
+        }
+
+        if(e.code === "ArrowLeft" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
+          await this.responseProcessing(true, "default");
+        } else if (e.code === "ArrowLeft" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
+          await this.responseProcessing(false, "default");
+        }
+      }
+      if(e.code === "ArrowRight" || e.code === "ArrowLeft") {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    });
+  };
+
+  starterKit = () => {
+    this.sprintStart();
+    this.introChapterBtnsListener();
+    this.gamePageGlobalSoundToggle();
+    this.gamePageFullScreenToggle();
+    this.closeGamePage();
+    this.answerBtnsListener();
+    this.closeResultsPage();
+    this.keybordListener();
+  };
 }
