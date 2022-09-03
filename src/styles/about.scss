@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bad+Script&family=Marck+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DynaPuff:wght@400;500;600;700&display=swap');
 
 .about h3 {
   font-size: 2rem;
@@ -14,6 +14,10 @@
   align-items: center;
   justify-content: flex-start;
   flex-direction: column;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 .aboutControls-wrap {
   display: flex;
@@ -104,7 +108,7 @@
   align-items: flex-start;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 30px;  
+  gap: 30px;
 }
 .team-member__card {
   display: flex;
@@ -156,37 +160,40 @@
   flex-wrap: wrap;
   width: 100vw;
   padding: 20px 20px 20px 40px;
-  color: #241b80;  
-  font-family: 'Bad Script', cursive;
+  color: #241b80;
+  font-family: 'DynaPuff', cursive;
   gap: 30px;
-  position: relative;  
+  position: relative;
 }
 .about .aboutRsLang-section {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;  
+  flex-direction: column;
   text-align: center;
   max-width: 45%;
   min-width: 570px;
   height: auto;
-  color: #241b80; 
+  color: #241b80;
   flex: 1 0 40%;
   z-index: 1;
 }
 @media (max-width: 620px) {
-  .about .about-rsLang__page {  
-    padding: 10px 10px 40px 10px;    
+  body .about .about-rsLang__page {
+    padding: 10px 10px 40px 10px;
 }
   .about .aboutRsLang-section {
-    width: calc(300px + 100 * ((100vw - 320px) / (620 - 320)));    
-    justify-content: center;  
-    min-width: 300px;  
+    width: calc(300px + 100 * ((100vw - 320px) / (620 - 320)));
+    justify-content: center;
+    min-width: 300px;
   }
   .about .aboutRsLang-section img {
     max-width: 320px;
     align-self: center;
     justify-content: center;
+  }
+  .about {    
+    padding: 40px 0 10px 0;
   }
 }
 .about .aboutRsLang-section:nth-child(3),
@@ -212,7 +219,7 @@
 }
 .about .about-RsLang__image5 {
   position: absolute;
-  top: 51%;  
+  top: 51%;
   z-index: 0;
 }
 .aboutSupImgs-container img {
@@ -220,7 +227,7 @@
   top: 0;
   left: 0;
   width: 200px;
-  height: 200px; 
+  height: 200px;
 }
 .about .about-RsLang__image2 {
   left: 60%;

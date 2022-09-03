@@ -8,7 +8,7 @@ function createGetSettings() {
       "Authorization": `Bearer ${localStorage.getItem("token")}`
     },
   };
-} 
+}
 
 function createPostSettings() {
   return {
@@ -57,21 +57,31 @@ async function load(endpoint = "", method = { method : "GET" }) {
   try {
     const url = BASE_URL + endpoint;
     const response = await fetch(url, method);
-    
+
     const data = response.status === 200 ? await response.json() : response;
     const status = response.status;
-    
-    return { data, status };  
+
+    return { data, status };
 
   } catch(error) {
     console.log(error);
-    
+
     throw new Error("Can't fetch data");
   }
 }
 
 const getWordsByChapterAndPage = async (chapter = 1, page = 1) => {
   const url = "words?group=" + chapter + "&page=" + page;
+  const response = await load(url, createGetSettings());
+  if (response.status !== 200) {
+    return [];
+  } else {
+    return response.data;
+  }
+};
+
+const getWordById = async (id: string) => {
+  const url = `words/${id}`;
   const response = await load(url, createGetSettings());
   if (response.status !== 200) {
     return [];
@@ -137,7 +147,7 @@ const getAllAgregatedWords = async(allPages: number, wordPerPage: number) => {
   for (let page = 0; page < allPages; page++){
     const currResult = await getAgregatedWordsByPage(page, wordPerPage);
     const curData = currResult.paginatedResults;
-    
+
     allData = [...allData, ...curData];
   }
   return allData;
@@ -154,39 +164,40 @@ const registerUser = async (userData: elementData) => {
   const url = "users";
   const method = createPostSettings();
   method.body = JSON.stringify(userData);
-  return await load(url, method);     
+  return await load(url, method);
 };
 
 const signInUser = async (userData: elementData) => {
   const url = "signin";
   const method = createPostSettings();
   method.body = JSON.stringify(userData);
-  return await load(url, method);     
+  return await load(url, method);
 };
 
 const getUserStatistics = async (userID: string) => {
   const url = "users/" + userID + "/statistics";
   const method = createGetSettings();
-  return await load(url, method);     
+  return await load(url, method);
 };
 
 const createUserStatistics = async (statisticsData: statisticsData) => {
   const url = "users/" + localStorage.getItem("userId") + "/statistics";
   const method = createPutSettings();
   method.body = JSON.stringify(statisticsData);
-  return await load(url, method);     
+  return await load(url, method);
 };
 
-export { 
-  getWordsByChapterAndPage, 
-  getAlluserWords, 
+export {
+  getWordsByChapterAndPage,
+  getAlluserWords,
   addWordToUserWords,
-  updateWordInUserWords, 
+  updateWordInUserWords,
   removeWordFromDifficult,
   getAgregatedWordsByPage,
-  getAllAgregatedWords, 
+  getAllAgregatedWords,
   registerUser,
   signInUser,
   getUserStatistics,
   createUserStatistics,
-  preLoad } ;
+  preLoad,
+  getWordById } ;
