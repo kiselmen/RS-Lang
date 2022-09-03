@@ -422,8 +422,6 @@ export class Sprint extends Component {
 
   keybordListener = async () => {
     document.addEventListener("keydown", async (e) => {
-      e.preventDefault();
-      e.stopPropagation();
 
       if(localStorage.userId && sprintState.parentNodeInfo === "dictionary" && localStorage.chapter === "6") {
 
@@ -451,6 +449,10 @@ export class Sprint extends Component {
         } else if (e.code === "ArrowLeft" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
           await this.responseProcessing(false, "default");
         }
+      }
+      if(e.code === "ArrowRight" || e.code === "ArrowLeft") {
+        e.preventDefault();
+        e.stopPropagation();
       }
     });
   };
