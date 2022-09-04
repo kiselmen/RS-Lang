@@ -1,6 +1,9 @@
 import "../styles/profile.scss";
 import { Component } from "../utils/component";
 import { UIButton } from "../components/UI/button";
+import { getUserStatistics } from "../utils/loader";
+import * as am5 from "@amcharts/amcharts5";
+import * as am5percent from "@amcharts/amcharts5/percent";
 
 export class Profile extends Component {
   profileHeaderContainer;
@@ -20,6 +23,8 @@ export class Profile extends Component {
   learnedWordsTextContentContainer;
   todayAudioCallStatContent;
   todaySprintStatContent;
+  allTimeFirstBlockWrap;
+  allTimeSecondBlockWrap;
   onUpdateRouter: () => void;
 
   constructor(parentNode: HTMLElement, updateRouter: () => void) {
@@ -40,8 +45,17 @@ export class Profile extends Component {
 
     this.allTimeSubTitle = new Component(this.contentWrapper.element, "h3", ["statistics-subTitle", "allTime-subTitle"], "All Time");
     this.allTimeContentWrapper = new Component(this.contentWrapper.element, "div", ["allTimeContent-wrapper"]);
-    this.allTimeLearnedWords = new Component(this.allTimeContentWrapper.element, "div", ["allTimeLearnedWords-wrapper"]);
-    this.allTimeProgress = new Component(this.allTimeContentWrapper.element, "div", ["allTimeProgress-wrapper"]);
+
+    this.allTimeFirstBlockWrap = new Component(this.allTimeContentWrapper.element, "div", ["firstBlock-wrapper"],);
+    new Component(this.allTimeFirstBlockWrap.element, "div", ["allTimeLearnedWords-title", "allTime-title"], "Learned words");
+    this.allTimeLearnedWords = new Component(this.allTimeFirstBlockWrap.element, "div", ["allTimeLearnedWords-wrapper"]);
+
+    this.allTimeSecondBlockWrap = new Component(this.allTimeContentWrapper.element, "div", ["second-wrapper"],);
+    new Component(this.allTimeSecondBlockWrap.element, "div", ["allTimeProgress-title", "allTime-title"], "Progress");
+    this.allTimeProgress = new Component(this.allTimeSecondBlockWrap.element, "div", ["allTimeLearnedWords-wrapper"]);
+
+    this.allTimeLearnedWords.element.id = "chart1";
+    this.allTimeProgress.element.id = "chart2";
 
     /* Внутиренние блоки */
     this.learnedWordsCounter = new Component(this.todayLearnedWordsStatWrapper.element, "div", ["learnedWords-counter"], "0");
@@ -52,6 +66,10 @@ export class Profile extends Component {
     this.todayAudioCallStatContent = new StatisticsContentPart(this.todayAudioCallStatWrapper.element, "Audio call");
     this.todaySprintStatContent = new StatisticsContentPart(this.todaySprintStatWrapper.element, "Sprint");
 
+
+    this.requestUserStatInfo();
+    this.createPiechart1();
+    this.createPiechart2();
   }
 
   onLogout() {
@@ -67,9 +85,156 @@ export class Profile extends Component {
     window.location.hash = "#/";
     this.onUpdateRouter();
   }
+
+
+
+  /* Вывод статистики */
+  requestUserStatInfo = async () => {
+
+    if(localStorage.userId && localStorage.token) {
+      const currentUserId = localStorage.userId;
+      const response = await getUserStatistics(currentUserId);
+      const userStatistics = response.data;
+
+      const audiocallStatistics = userStatistics.optional.audiocall;
+
+      console.log(userStatistics);
+
+      // const sprintStatistics = userStatistics.optional.sprint;
+
+      //* Еежедневная //*
+
+      /* Vocabruary */
+      this.learnedWordsCounter.element.innerText = userStatistics.learnedWords;
+      /* Sprint */
+      const audiocallAccuracy = +audiocallStatistics.dayStata[0].correctAnswers * 100 / +audiocallStatistics.dayStata[0].totalQuestions;
+      // const sprintAccuracy = +sprintStatistics.dayStata[0].correctAnswers * 100 / +sprintStatistics.dayStata[0].totalQuestions;
+
+      // this.todaySprintStatContent.setCounter(0, sprintStatistics.dayStata[0].totalQuestions);
+      // this.todaySprintStatContent.setCounter(1,  sprintAccuracy + " %");
+      // this.todaySprintStatContent.setCounter(2, sprintStatistics.maxSeria);
+      /* Audio Call */
+      this.todayAudioCallStatContent.setCounter(0, audiocallStatistics.dayStata[0].totalQuestions);
+      this.todayAudioCallStatContent.setCounter(1, audiocallAccuracy + " %");
+      this.todayAudioCallStatContent.setCounter(2, audiocallStatistics.maxSeria);
+
+      // //* Общая //*
+      // this.allTimeLearnedWords.element.style.cssText = "width: 45%; height: auto;";
+
+    }
+  };
+
+  createPiechart1 = () => {
+    // Create root and chart
+    const root = am5.Root.new("chart1");
+    const chart = root.container.children.push(
+      am5percent.PieChart.new(root, {
+        layout: root.horizontalLayout,
+        radius: am5.percent(70),
+        innerRadius: am5.percent(50),
+
+      })
+    );
+
+    // Define data
+    const data = [{
+      source: "vocabruary",
+      value: 100
+    }, {
+      source: "audio call",
+      value: 100
+    }, {
+      source: "sprint",
+      value: 100
+    }];
+
+    // Create series
+    const series = chart.series.push(
+      am5percent.PieSeries.new(root, {
+        name: "Words",
+        valueField: "value",
+        categoryField: "source",
+        alignLabels: false
+      })
+    );
+
+    series.data.setAll(data);
+
+    series.slices.template.set("tooltipText", "[bold]{value}");
+    series.labels.template.setAll({
+      radius: 500
+    });
+
+    series.labels.template.setAll({
+      text: "{category}",
+      textType: "circular",
+      inside: false,
+      radius: 25
+    });
+
+    // series.labels.template.set("text", "{category}: [bold]{Total.formatNumber()} ({value})");
+    // series.labels.template.set("forceHidden", true);
+    // // Add legend
+    // const legend = chart.children.push(am5.Legend.new(root, {
+    //   centerX: am5.percent(50),
+    //   x: am5.percent(50),
+    //   layout: root.horizontalLayout
+    // }));
+
+    // legend.data.setAll(series.dataItems);
+  };
+
+  createPiechart2 = () => {
+    // Create root and chart
+    const root = am5.Root.new("chart2");
+    const chart = root.container.children.push(
+      am5percent.PieChart.new(root, {
+        layout: root.horizontalLayout,
+        radius: am5.percent(70),
+        innerRadius: am5.percent(50),
+
+      })
+    );
+
+    // Define data
+    const data = [{
+      source: "vocabruary",
+      value: 100
+    }, {
+      source: "audio call",
+      value: 100
+    }, {
+      source: "sprint",
+      value: 100
+    }];
+
+    // Create series
+    const series = chart.series.push(
+      am5percent.PieSeries.new(root, {
+        name: "Words",
+        valueField: "value",
+        categoryField: "source",
+        alignLabels: false
+      })
+    );
+
+    series.data.setAll(data);
+
+    series.slices.template.set("tooltipText", "[bold]{value}");
+    series.labels.template.setAll({
+      radius: 500
+    });
+
+    series.labels.template.setAll({
+      text: "{category}",
+      textType: "circular",
+      inside: false,
+      radius: 25
+    });
+  };
 }
 
-
+/* Класс для отдельных компонентов статистики - Sprint и Audiocall */
 
 class StatisticsContentPart extends Component {
   contentWrapper;
