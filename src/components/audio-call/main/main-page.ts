@@ -12,6 +12,7 @@ export const dataAudiocall: IStatisticGame = {
   totalWords: 0,
   correctWordsPercent: 0,
   series: 0,
+  maxSeries :0,
   correctArr: [],
   wrongArr: []
 };
@@ -54,9 +55,6 @@ export class AudioCallMainPage extends Component {
   constructor(parentNode: HTMLElement, parameters: string) {
     super(parentNode, "div", ["audiocall-main", "master"]);
 
-    console.log(dataAudiocall);
-    
-    
     this.audioCallHeader = new Component(this.element, "div", ["master-header"]);
     this.audioCallContent = new Component(this.element, "div", ["master-content"]);
     this.audioCallControls = new Component(this.audioCallHeader.element, "div", ["master-controls", "controls"]);
@@ -255,6 +253,7 @@ export class AudioCallMainPage extends Component {
   };
 
   splitEvents = (id: string, event: HTMLElement) => {
+    const isLogin = localStorage.getItem("token");
     if(this.randomNum.word === id) {
       event.style.background = "#67db67";
       this.audioResult.element.setAttribute("src", "../../../../public/audio/win.mp3");
@@ -262,10 +261,12 @@ export class AudioCallMainPage extends Component {
       localStorage.setItem("progressbarVal", `${this.progressVal}`);
       correctWords.push(this.randomNum);
       dataAudiocall.correctArr = correctWords;
-    } else {
-      if (dataAudiocall.series <= correctWords.length) {
-        dataAudiocall.series = correctWords.length;
+      if (isLogin) {
+        dataAudiocall.series++;
+        if (dataAudiocall.maxSeries < dataAudiocall.series) dataAudiocall.maxSeries = dataAudiocall.series;
       }
+    } else {
+      dataAudiocall.series = 0;
       event.style.background = "#ff4c4c";
       this.audioResult.element.setAttribute("src", "../../../../public/audio/wrong.mp3");
       wrongWords.push(this.randomNum);
@@ -275,7 +276,7 @@ export class AudioCallMainPage extends Component {
     this.getCorrectWord();
     dataAudiocall.totalWords = correctWords.length + wrongWords.length;
     dataAudiocall.correctWordsPercent = Math.floor((dataAudiocall.correctArr.length / dataAudiocall.totalWords) * 100);
-    console.log(dataAudiocall);
+    // this.updateCurrentStatistic(dataAudiocall);
   };
 
   closeGame = (parameters: string) => {
@@ -312,4 +313,8 @@ export class AudioCallMainPage extends Component {
     this.getWords(numChapter, numPage);
     localStorage.removeItem("progressbarVal");
   };
+
+  updateCurrentStatistic(data: IStatisticGame){
+    console.log("11111",data);
+  }
 }

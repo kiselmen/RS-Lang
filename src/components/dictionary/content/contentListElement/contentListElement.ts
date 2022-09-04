@@ -16,6 +16,9 @@ export class DictionaryContentElement extends Component {
   elementBtnAdd: UIButton;
   elementBtnRemove: UIButton;
   elementBtnStudied: UIButton;
+  elementTotalAttempts: Component;
+  elementCorrectAnswers: Component;
+  elementStata: Component;
   private elementBtnImg: Component;
   private elementAudio: Component;
   private elementAudioMeaning: Component;
@@ -65,10 +68,16 @@ export class DictionaryContentElement extends Component {
     this.elementBtnRemove = new UIButton(this.elementBtns.element, ["btn"], "Remove");
     this.elementBtnStudied = new UIButton(this.elementBtns.element, ["btn"], "Studied");
   
+    this.elementStata = new Component(this.elementBtns.element, "div", ["element-stata"],);
+    this.elementTotalAttempts = new Component(this.elementStata.element, "div", ["element-questions"],);
+    new Component(this.elementStata.element, "div", ["element-separator"], "/");
+    this.elementCorrectAnswers = new Component(this.elementStata.element, "div", ["element-questions"],);
+  
     if (localStorage.getItem("token")) {
       this.elementBtnAdd.onClickButton = async () => this.onAddClick("hard");
       this.elementBtnRemove.onClickButton = async () => this.onRemoveClick();
       this.elementBtnStudied.onClickButton = async () => this.onAddClick("study");
+
     } else {
       this.elementBtnAdd.setDisabled(true);
       this.elementBtnRemove.setDisabled(true);
