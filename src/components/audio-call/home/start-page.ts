@@ -1,7 +1,9 @@
 import { Component } from "../../../utils/component";
 import { UIButton } from "../../UI/button";
 import "./start-page.scss";
-
+import { dataAudiocall } from "../main/main-page";
+import { elementData } from "../../../interfaces";
+import { getTodayInString, createNewDayStata } from "../../../utils/helper";
 
 export class AudioCallStartPage extends Component {
   private homeHeading: Component;
@@ -31,6 +33,48 @@ export class AudioCallStartPage extends Component {
 
     this.linkMainPage.element.setAttribute("href", "#/");
     this.linkMainPage.element.setAttribute("tabindex", "0");
+    // console.log("Start game");
+    this.initStatisticDataAudioCall();
+  }
+
+  initStatisticDataAudioCall(){
+    const isLogin = localStorage.getItem("token");
+    if (isLogin) {
+      // console.log(Авторизован");
+      const audiocallStorage = localStorage.getItem("audiocall");
+      if (audiocallStorage){
+        const audioCallStata = JSON.parse(audiocallStorage);
+        if (!audioCallStata.maxSeria) audioCallStata.maxSeria = 0;
+        if (!audioCallStata.currSeria) audioCallStata.currSeria = 0;
+        if (audioCallStata.dayStata) {
+          const day = getTodayInString();
+          const isDay = audioCallStata.dayStata.filter( (item: elementData) => item.day === day);
+          if (isDay.length === 0) {
+            const currentDataStata = createNewDayStata();
+            audioCallStata.dayStata.push(currentDataStata);
+          }
+        } else {
+          audioCallStata.dayStata = [];
+          const currentDataStata = createNewDayStata();
+          audioCallStata.dayStata.push(currentDataStata);
+        }
+        localStorage.setItem("audiocall", JSON.stringify(audioCallStata));
+        dataAudiocall.maxSeries = audioCallStata.maxSeria;
+        dataAudiocall.series = audioCallStata.currSeria;
+      } else {
+        const audioCallStata = {
+          maxSeria: "0",
+          currSeria: "0",
+          dayStata : [] as elementData[],
+        };
+        const currentDataStata = createNewDayStata();
+        audioCallStata.dayStata.push(currentDataStata);
+        localStorage.setItem("audiocall", JSON.stringify(audioCallStata));
+        dataAudiocall.maxSeries = Number(audioCallStata.maxSeria);
+        dataAudiocall.series = Number(audioCallStata.currSeria);
+      }
+    }
+    // console.log(dataAudiocall);
   }
 }
 

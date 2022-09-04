@@ -9,17 +9,17 @@ export type elementData = {
 
 export type statisticsData = {
   learnedWords: string,
-  optional : elementData
+  optional : userOptional
 }
 
 export const BASE_URL = "http://localhost:8081/";
 
-type IdValue = {
-  $oid: string
-}
+// export type IdValue = {
+//   $oid: string
+// }
 
 export interface IWordsElement {
-  _id: IdValue,
+  id: string,
   group: number,
   page: number,
   word: string,
@@ -40,6 +40,7 @@ export interface IStatisticGame {
   totalWords: number;
   correctWordsPercent: number;
   series: number;
+  maxSeries: number;
   correctArr: IWordsElement[];
   wrongArr: IWordsElement[];
 }
@@ -53,4 +54,31 @@ export interface IGetUsersWords {
 
 export type someData = {
   [key: string] : number
+}
+
+export type wordOptional = {
+  learned : string,
+  learnDate: string,
+  games: {
+    sprint: someData,
+    audiocall: someData,
+  },
+  totalAttempts: number,
+  correctAnswers: number,
+  isNew: boolean,
+}
+
+export type userOptional = {
+  page : string,
+  chapter: string,
+  audiocall: {
+    currSeria: number,
+    maxSeria: number,
+    dayStata: Array<elementData>
+  },
+  sprint: {
+    currSeria: number,
+    maxSeria: number,
+    dayStata: Array<elementData>
+  },
 }

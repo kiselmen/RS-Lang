@@ -134,11 +134,9 @@ export class Sprint extends Component {
       if(sprintState.stepCounter === length && sprintState.currentPage < 29) {
         await updateSprintState(true, "none", false, false, true, false);
         sprintState.stepCounter = 0;
-        console.log("about, def, 1");
       } else if (sprintState.stepCounter === length && sprintState.currentPage === 29) {
         await makeVisibleCurrentSprintPage(this.sprintGamePage.element, this.sprintIntroCard.element, this.sprintResultsPage.element, "block");
         await this.timer?.timerStop();
-        console.log("about, def, 2");
       }
     }
 
@@ -149,11 +147,9 @@ export class Sprint extends Component {
         await updateSprintState(false, "none", false, false,
           true, false);
         sprintState.stepCounter = 0;
-        console.log("dict, def, 1");
-      } else if(sprintState.stepCounter === length && sprintState.currentPage === 0) {
+      } else if (sprintState.stepCounter === length && sprintState.currentPage === 0) {
         await makeVisibleCurrentSprintPage(this.sprintGamePage.element, this.sprintIntroCard.element, this.sprintResultsPage.element, "block");
         await this.timer?.timerStop();
-        console.log("dict, def, 2");
       }
     }
 
@@ -420,42 +416,55 @@ export class Sprint extends Component {
     this.timer.timerRun();
   };
 
-  keybordListener = async () => {
-    document.addEventListener("keydown", async (e) => {
+  /* Прослушиватель событий клавиатуры */
+  keybordListener = () => {
+    document.addEventListener("keyup",  this.funcForKE);
+  };
 
-      if(localStorage.userId && sprintState.parentNodeInfo === "dictionary" && localStorage.chapter === "6") {
+  /* Функция для прослушивания событий клавиатуры */
+  funcForKE = async (e: KeyboardEvent) => {
 
-        if(e.code === "ArrowRight" && this.sprintGamePage.wordInRu.element.innerText === sprintState.userHardWords[sprintState.userHardWordsCounter].wordTranslate.toString()) {
-          await this.responseProcessing(true, "custom");
-        } else if (e.code === "ArrowRight" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.userHardWords[sprintState.userHardWordsCounter].wordTranslate.toString()) {
-          await this.responseProcessing(false, "custom");
-        }
+    if(localStorage.userId && sprintState.parentNodeInfo === "dictionary" && localStorage.chapter === "6") {
 
-        if(e.code === "ArrowLeft" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.userHardWords[sprintState.userHardWordsCounter].wordTranslate.toString()) {
-          await this.responseProcessing(true, "custom");
-        } else if (e.code === "ArrowLeft" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.userHardWords[sprintState.userHardWordsCounter].wordTranslate.toString()) {
-          await this.responseProcessing(false, "custom");
-        }
-
-      } else {
-        if(e.code === "ArrowRight" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
-          await this.responseProcessing(true, "default");
-        } else if (e.code === "ArrowRight" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
-          await this.responseProcessing(false, "default");
-        }
-
-        if(e.code === "ArrowLeft" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
-          await this.responseProcessing(true, "default");
-        } else if (e.code === "ArrowLeft" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
-          await this.responseProcessing(false, "default");
-        }
+      if(e.code === "ArrowRight" && this.sprintGamePage.wordInRu.element.innerText === sprintState.userHardWords[sprintState.userHardWordsCounter].wordTranslate.toString()) {
+        await this.responseProcessing(true, "custom");
+      } else if (e.code === "ArrowRight" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.userHardWords[sprintState.userHardWordsCounter].wordTranslate.toString()) {this;
+        await this.responseProcessing(false, "custom");
       }
-      if(e.code === "ArrowRight" || e.code === "ArrowLeft") {
-        e.preventDefault();
-        e.stopPropagation();
+
+      if(e.code === "ArrowLeft" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.userHardWords[sprintState.userHardWordsCounter].wordTranslate.toString()) {
+        await this.responseProcessing(true, "custom");
+      } else if (e.code === "ArrowLeft" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.userHardWords[sprintState.userHardWordsCounter].wordTranslate.toString()) {
+        await this.responseProcessing(false, "custom");
       }
+    } else {
+
+      if(e.code === "ArrowRight" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
+        await this.responseProcessing(true, "default");
+      } else if (e.code === "ArrowRight" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
+        await this.responseProcessing(false, "default");
+      }
+
+      if(e.code === "ArrowLeft" && this.sprintGamePage.wordInRu.element.innerText !==  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
+        await this.responseProcessing(true, "default");
+      } else if (e.code === "ArrowLeft" && this.sprintGamePage.wordInRu.element.innerText ===  sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString()) {
+        await this.responseProcessing(false, "default");
+      }
+    }
+  };
+
+  /* Удаление слушателя клавиатуры при покидании страницы */
+
+  removeKBEvent = () => {
+    const exitPoints = document.querySelectorAll(".nav-link");
+
+    exitPoints.forEach(item => {
+      item.addEventListener("click", () => {
+        document.removeEventListener("keyup", this.funcForKE, false);
+      });
     });
   };
+
 
   starterKit = () => {
     this.sprintStart();
@@ -466,5 +475,6 @@ export class Sprint extends Component {
     this.answerBtnsListener();
     this.closeResultsPage();
     this.keybordListener();
+    this.removeKBEvent();
   };
 }
