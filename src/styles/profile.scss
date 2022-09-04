@@ -1,7 +1,7 @@
 .profile {
   display: flex;
   align-items: flex-start;
-  justify-content: flex-start;
+  justify-content: center;
   flex-direction: column;
   max-width: 1440px;
   width: 100%;
@@ -175,8 +175,8 @@
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-
   gap: 30px;
+  max-width: 1440px;
 }
 .allTimeLearnedWords-wrapper, .allTimeProgress-wrapper {
   display: block;
@@ -184,13 +184,8 @@
   justify-content: center;
   -moz-column-gap: 20px;
        column-gap: 20px;
-  width: 50vw;
+  max-width: 50vw;
   height: 25vh;
-  // box-shadow: 3px 3px 10px rgb(168 168 168), inset 5px 5px 10px rgb(255 253 253);
-  // background: #e3e3e305;
-  // padding: 20px;
-  // border-radius: 15px;
-  // border: 2px solid #dfdfdf;
   flex: 0 1 45%;
   max-height: 550px;
 }
@@ -235,19 +230,15 @@
   .todayLearnedWords-wrapper:last-child {
     border-bottom: 2px solid #eeeeee;
   }
-  // .todayLearnedWords-wrapper:first-child {
-  //   justify-content: center;
-  //   box-shadow: none;
-  //   border-radius: 0px;
-  //   border: none;
-  //   border-top: 2px solid #dfdfdf;
-  //   width: 100%;
-  //   border-top: 2px
-  // }
 }
 
 #chart1, #chart2 {
   min-width: 320px;
   min-height: 320px;
+}
+.firstBlock-wrapper, .second-wrapper {
+  min-width: 320px;
+  min-height: 320px;
+  max-width: 350px;
 }
 // calc(32px + 8 * ((100vw - 320px) / (1880 - 320)));
