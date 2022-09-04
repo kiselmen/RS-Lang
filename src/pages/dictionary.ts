@@ -4,7 +4,7 @@ import { DictionaryContent } from "../components/dictionary/content/dictionaryCo
 import { DictionaryPagination } from "../components/dictionary/pagination/dictionaryPagination";
 import { getWordsByChapterAndPage, getAlluserWords} from "../utils/loader";
 import { elementData, wordOptional } from "../interfaces";
-import { preLoad, addWordToUserWords, updateWordInUserWords, removeWordFromDifficult, getAgregatedWordsByPage, getAllAgregatedWords } from "../utils/loader";
+import { preLoad, addWordToUserWords, updateWordInUserWords, removeWordFromDifficult, getAgregatedWordsByPage, getAllAgregatedWords, updateUserStatistics } from "../utils/loader";
 
 export class Dictionary extends Component {
   private dictionaryHeader: DictionaryHeader;
@@ -105,12 +105,18 @@ export class Dictionary extends Component {
       this.checkToken().then( () => {
         const isWordPresent = this.userWords.filter(item => item.wordId === word.id);
         if (isWordPresent.length) {
-          updateWordInUserWords(word, type, {} as wordOptional).then( data => {
+          const lastOtional = JSON.parse(JSON.stringify(isWordPresent[0].optional)) as wordOptional;
+          updateWordInUserWords(word, type, lastOtional).then( data => {
             isWordPresent[0].difficulty = data.difficulty;
             this.onSetupButtons();
           });
         } else {
-          addWordToUserWords(word, type, {} as wordOptional).then( data => {
+          if (type === "study") {
+            localStorage.setItem("learnedWords", String(Number(localStorage.getItem("learnedWords") as string) - 1));
+            updateUserStatistics();
+          }          
+          const optional = this.createEmptyOptional();
+          addWordToUserWords(word, type, optional).then( data => {
             this.userWords.push(data);
             this.onSetupButtons();
           });
@@ -118,9 +124,15 @@ export class Dictionary extends Component {
       });
     } else {
       this.dictionaryContent.loading = true;
+      const lastOtional = JSON.parse(JSON.stringify(word.userWord)).optional; 
       this.dictionaryContent.renderContent();
-      updateWordInUserWords(word, "study", {} as wordOptional).then( data => {
-        this.userWords = this.userWords.filter(item => item.wordId !== data.wordId);
+
+      localStorage.setItem("learnedWords", String(Number(localStorage.getItem("learnedWords") as string) + 1));
+      updateUserStatistics();
+
+      updateWordInUserWords(word, "study", lastOtional).then( data => {
+        const newUserWords = this.userWords.filter(item => item.wordId === data.wordId);
+        newUserWords[0].difficulty ="study";
         this.words = this.words.filter(item => item._id !== data.wordId);
         this.dictionaryContent.loading = false;
         this.dictionaryContent.renderContent(this.words);
@@ -129,25 +141,60 @@ export class Dictionary extends Component {
   };
 
   onRemoveWordFromDifficult =  (word: elementData) => {
-    // const isInHard = this.userWords.filter( item => item.wordId === word.id);
+    const isWordPresent = this.userWords.filter(item => item.wordId === word.id);
+    let lastOtional = {} as wordOptional;
+    if (isWordPresent.length) {
+      if (isWordPresent[0].optional) {
+        lastOtional = isWordPresent[0].optional ? JSON.parse(JSON.stringify(isWordPresent[0].optional)) : this.createEmptyOptional();
+      } else {
+        lastOtional = this.createEmptyOptional();
+      }
+    } else {
+      lastOtional = this.createEmptyOptional();
+    }
+    console.log(lastOtional);
     
     this.checkToken().then( () => {
-      removeWordFromDifficult(word).then( () => {
-        if (this.dictionaryHeader.chapters.chapter !== 6) {
-          this.userWords = this.userWords.filter(item => item.wordId !== word.id);
-          this.words = this.words.filter(item => item.wordId !== word.id);
-        } else {
-          this.dictionaryContent.loading = true;
-          this.dictionaryContent.renderContent();
-          this.userWords = this.userWords.filter(item => item.wordId !== word._id);
-          this.words = this.words.filter(item => item._id !== word._id);
-        }
-        this.dictionaryContent.loading = false;
-        this.dictionaryContent.renderContent(this.words);
-        this.onSetupButtons();
-      });
+      if (isWordPresent.length) {
+        updateWordInUserWords(word, "normal", lastOtional).then( (data) => {
+          const newUserWords = this.userWords.filter(item => item.wordId === data.wordId);
+          newUserWords[0].difficulty ="normal";
+          this.dictionaryContent.loading = false;
+          this.dictionaryContent.renderContent(this.words);
+          this.onSetupButtons();
+        });
+      } else {
+        removeWordFromDifficult(word).then( () => {
+          if (this.dictionaryHeader.chapters.chapter !== 6) {
+            this.userWords = this.userWords.filter(item => item.wordId !== word.id);
+            this.words = this.words.filter(item => item.wordId !== word.id);
+          } else {
+            this.dictionaryContent.loading = true;
+            this.dictionaryContent.renderContent();
+            this.userWords = this.userWords.filter(item => item.wordId !== word._id);
+            this.words = this.words.filter(item => item._id !== word._id);
+          }
+          this.dictionaryContent.loading = false;
+          this.dictionaryContent.renderContent(this.words);
+          this.onSetupButtons();
+        });
+      }
     });
   };
+
+  createEmptyOptional() {
+    const optional = {} as wordOptional;
+    optional.learned = "no";
+    optional.learnDate = "no";
+    const audiocall = { totalAttempts: 0, correctAnswers: 0 };
+    const sprint = { totalAttempts: 0, correctAnswers: 0 };
+    const games = { sprint: sprint, audiocall: audiocall };
+    optional.games = games;
+    optional.totalAttempts = 0;
+    optional.correctAnswers = 0;
+    optional.isNew = false;
+    return optional;
+  }
 
   onClickPlay(word: elementData) {
     const filterWordsElements = this.dictionaryContent.listElement.filter( item => {
@@ -164,6 +211,10 @@ export class Dictionary extends Component {
           return itemInList.word.id === userItem.wordId;
         });
         if (isPresent.length) {
+          itemInList.elementStata.element.classList.add("active");
+          itemInList.elementCorrectAnswers.element.textContent = isPresent[0].optional ? JSON.parse(JSON.stringify(isPresent[0].optional)).correctAnswers : "";
+          itemInList.elementTotalAttempts.element.textContent = isPresent[0].optional ? JSON.parse(JSON.stringify(isPresent[0].optional)).totalAttempts : "";
+          
           if (isPresent[0].difficulty === "hard") {
             itemInList.elementBtnAdd.setDisabled(true);
             itemInList.elementBtnRemove.setDisabled(false);
@@ -171,15 +222,24 @@ export class Dictionary extends Component {
             itemInList.element.classList.remove("element__hard");
             itemInList.element.classList.remove("element__studied");
             itemInList.element.classList.add("element__hard");
-          } else {
+          } else if (isPresent[0].difficulty === "study") {
             itemInList.elementBtnAdd.setDisabled(true);
             itemInList.elementBtnRemove.setDisabled(false);
             itemInList.elementBtnStudied.setDisabled(true);
             itemInList.element.classList.remove("element__hard");
             itemInList.element.classList.remove("element__studied");
             itemInList.element.classList.add("element__studied");
+          } else {
+            itemInList.elementBtnAdd.setDisabled(false);
+            itemInList.elementBtnRemove.setDisabled(true);
+            itemInList.elementBtnStudied.setDisabled(false);
+            itemInList.element.classList.remove("element__hard");
+            itemInList.element.classList.remove("element__studied");
           }
         } else {
+          itemInList.elementCorrectAnswers.element.textContent = "";
+          itemInList.elementTotalAttempts.element.textContent = "";
+          itemInList.elementStata.element.classList.remove("active");
           itemInList.elementBtnAdd?.setDisabled(false);
           itemInList.elementBtnRemove.setDisabled(true);
           itemInList.elementBtnStudied.setDisabled(false);
