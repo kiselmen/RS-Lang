@@ -71,8 +71,6 @@ export class Profile extends Component {
       const response = await getUserStatistics(currentUserId);
       const userStatistics = response.data;
 
-      console.log(response.data);
-      
       const audiocallStatistics = userStatistics.optional.audiocall as {
         currSeria: number,
         maxSeria: number,
