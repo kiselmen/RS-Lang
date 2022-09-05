@@ -125,7 +125,8 @@ export class Profile extends Component {
       // this.allTimeLearnedWords.element.style.cssText = "width: 45%; height: auto;";
 
       /* Sprint */      
-      console.log(sprintStatistics.dayStata);
+      // const a = Array.from(sprintStatistics.dayStata);
+      // console.log(a.reduce((acc, cur:string) => acc + +cur.newWords));
  
 
       // const AllTimeSprintAccuracy = (+sprintStatistics.dayStata[sprintStatistics.dayStata.length - 1].correctAnswers * 100 / +sprintStatistics.dayStata[sprintStatistics.dayStata.length - 1].totalQuestions).toFixed();
