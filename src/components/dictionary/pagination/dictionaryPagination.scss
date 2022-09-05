@@ -1,0 +1,8 @@
+.pagination {
+  padding-bottom: 20px;
+  &-number{
+    &__learned {
+        background-color: var(--select-color);
+    }
+  }
+}

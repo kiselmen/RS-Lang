@@ -1,0 +1,211 @@
+.profile {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  max-width: 1440px;
+  width: 100%;
+  min-height: calc(100vh - 82px);
+  align-self: flex-start;
+  padding: 20px 40px;
+  font-family: Arial;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  font-size: 1.2rem;
+  color: #494a69;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.statisticsHeader-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 10px;
+}
+.statisticsProfileInfo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -moz-column-gap: 15px;
+       column-gap: 15px;
+  padding-bottom: 30px;
+}
+.statistics-title {
+  font-size: calc(28px + 4 * ((100vw - 320px) / (1440 - 320)));
+  font-weight: bold;
+  letter-spacing: 2.2px;
+  line-height: 40px;
+  align-self: start;
+}
+.userProfile-icon {
+  width: 40px;
+  height: 40px;
+  background: url("../../public/profile.svg") no-repeat center;
+}
+.statisticsContent-wrapper {
+  align-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+.statistics-subTitle {
+  font-size: calc(26px + 4 * ((100vw - 320px) / (1440 - 320)));
+  font-weight: bold;
+  letter-spacing: 3px;
+  align-self: center;
+  padding: 30px 0 40px 0;
+}
+.todayStatistics-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 30px;
+  padding-bottom: 50px;
+}
+.statistics-item div{
+  padding-bottom: 10px;
+}
+.audiocall-title, .sprint-title {
+  padding-bottom: 51px;
+}
+.statistics-item .words-title {
+  padding-bottom: 51px;
+}
+.todayLearnedWords-wrapper {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  box-shadow: 3px 3px 10px rgb(168 168 168), inset 5px 5px 10px rgb(255 253 253);
+  background: #e3e3e305;
+  padding: 40px 20px 20px 20px;
+  border-radius: 15px;
+  border: 2px solid #dfdfdf;
+  width: 100%;
+  min-height: 265px;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  min-width: 310px;
+}
+.learnedWords-counter {
+  font-size: 5rem;
+  font-weight: 700;
+}
+.learnedWordsTxtContent-textContent:nth-child(2) {
+  color: #858692;
+  line-height: 30px;
+}
+.learnedWordsTxtContent-textContent:first-child {
+  font-size: 1.6rem;
+}
+.statistics-item {
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+  flex-direction: column;
+  width: 100%;
+}
+.audiocall-title, .sprint-title, .words-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  letter-spacing: 3px;
+  align-self: center;
+  position: relative;
+  padding-left: 80px;
+  text-align: center;
+}
+.words-title::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 0;
+  width: 50px;
+  height: 50px;
+  background: url(../../public/profile-images/word.png) no-repeat center;
+  background-size: cover;
+}
+.audiocallBlock-wrapper, .sprintBlock-wrapper {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.statisticsProfileLogout {
+  font-family: Arial;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 2px;
+  background: #ffffff;
+  cursor: pointer;
+  font-weight: 700;
+  box-shadow: 3px 3px 10px rgb(168 168 168), inset 5px 5px 10px rgb(255 253 253);
+  border-radius: 15px;
+  border: 2px solid #dfdfdf;
+  transition: all 200ms ease-in-out;
+}
+.statisticsProfileLogout:hover {
+  box-shadow: inset 0 0 35px #43b4ff;
+  transition: all 200ms ease-in-out;
+}
+.audiocall-title::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 0;
+  width: 50px;
+  height: 50px;
+  background: url(../../public/profile-images/heardphone.svg) no-repeat center;
+  background-size: cover;
+}
+.sprint-title::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 0;
+  width: 50px;
+  height: 50px;
+  background: url(../../public/profile-images/sprint.svg) no-repeat center;
+  background-size: cover;
+}
+.wordsBlock-wrapper {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+
+@media (max-width: 576px) {
+  .profile {
+    padding: 20px 5px 50px 5px;
+  }
+  .todayStatistics-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  .audiocall-title, .sprint-title {
+    align-self: center;
+  }
+  .statisticsHeader-container {
+    padding: 0 10px;
+  }
+  .statistics-subTitle {
+    align-self: center;
+  }
+ .todayLearnedWords-wrapper  {
+    box-shadow: none;
+    border-radius: 0px;
+    border: none;
+    border-top: 2px solid #eeeeee;
+    width: 100%;
+  }
+}
+

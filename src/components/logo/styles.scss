@@ -1,0 +1,28 @@
+.logo{
+    margin-bottom: -3px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+}
+
+.logo-title{
+    // font-family: Georgia;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 32px;
+    line-height: 35.2px;
+    color: var(--border-color);
+    letter-spacing: 0.06em;
+}
+
+.logo-subtitle{
+    // font-family: Arial;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    color: var(--border-color);
+    letter-spacing: 0.1em;
+}
+

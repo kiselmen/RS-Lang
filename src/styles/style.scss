@@ -1,0 +1,110 @@
+@import "./functions.scss";
+
+@font-face {
+  font-family: "Arial";
+  src: url("./arial.ttf") format("truetype");
+  font-style: normal;
+  font-weight: normal;
+}
+@font-face {
+  font-family: "Georgia";
+  src: url("./georgia.ttf") format("truetype");
+  font-style: normal;
+  font-weight: normal;
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+}
+
+img {
+  display: block;
+}
+
+ul li {
+  list-style: none;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  font-size: 100%;
+  line-height: 1;
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: 400;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+// a:focus,
+a:active {
+  outline: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+:root {
+  --body-color: rgba(48, 197, 255, 0.1);
+  --text-color: white;
+  --button-color: gray;
+  --active-color: #4275d8;
+  --border-color: black;
+  --shadow-color: #30c5ff;
+  --select-color: #5ad67d;
+  --hard-color: #e69691;
+  --alert-color: #d10a22;
+  --chapter-itm-border-color: rgba(137, 105, 180, 0.61);
+}
+
+body {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+.btn-dictionary {
+  max-width: rem(90);
+  width: 100%;
+  text-align: center;
+}
+
+main {
+  width: 100%;
+  flex: 1 0 auto;
+  display: flex;
+  justify-content: center;
+  padding-top: rem(117);
+  align-items: center;
+  font-family: Arial, sans-serif;
+  color: #494a69;
+}

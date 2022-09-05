@@ -1,0 +1,130 @@
+.list-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: rem(10);
+  &__element {
+    // box-shadow: rem(0) rem(0) rem(10) rem(2) rgba(0, 0, 0, 0.185);
+    border-bottom: 1px solid #b3b3b3;
+  }
+}
+
+.element {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  padding: rem(10);
+  max-width: rem(910);
+  border: rem(3) solid #000;
+  border-radius: rem(10);
+  @media (max-width: 767px) {
+    flex-direction: column;
+    align-items: center;
+    row-gap: rem(20);
+  }
+  &-img {
+    width: rem(250);
+    height: 100%;
+  }
+  &-discript {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    row-gap: rem(10);
+    padding: rem(0) rem(10);
+  }
+  &__hard {
+    background-color: var(--hard-color);
+  }
+  &__studied {
+    background-color: var(--select-color);
+  }
+  &-btns {
+    display: flex;
+    justify-content: space-between;
+    column-gap: rem(10);
+    // max-height: rem(38);
+    max-width: rem(440);
+    align-items: center;
+    row-gap: rem(15);
+    & .btn {
+      max-width: rem(90);
+      width: 100%;
+      // padding: rem(3);
+      height: 100%;
+      max-height: rem(38);
+      @media (max-width: 479px) {
+        max-width: unset;
+      }
+    }
+    & .btn-listen {
+      width: unset;
+      padding: rem(10);
+    }
+    @media (max-width: 479px) {
+      flex-direction: column;
+    }
+  }
+  &-stata {
+    display: flex;
+    // max-width: rem(70);
+    width: 100%;
+    column-gap: rem(10);
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    row-gap: 5px;
+    @media (max-width: 505px) {
+      max-width: rem(40);
+    }
+    @media (max-width: 479px) {
+      max-width: unset;
+    }
+  }
+  &-questions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    font-size: rem(12);
+    border-radius: 50%;
+    box-shadow: 0px 0px 3px 3px rgb(245 216 203 / 86%);
+  }
+  &-btn {
+    &__img {
+      margin: auto;
+      display: inline-block;
+      width: rem(20);
+      height: rem(20);
+    }
+  }
+  &-example,
+  &-explain {
+    padding: 10px;
+    border-radius: 10px;
+
+  }
+}
+
+.word {
+  display: flex;
+  column-gap: rem(5);
+  row-gap: rem(5);
+  flex-wrap: wrap;
+  &-en {
+    font-weight: 700;
+  }
+}
+
+.explain,
+.example {
+  &-heading {
+    text-decoration: underline;
+    padding-bottom: rem(7);
+  }
+  &-en {
+    padding-bottom: rem(6);
+  }
+}
