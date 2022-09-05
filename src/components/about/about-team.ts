@@ -14,11 +14,11 @@ class AboutTeam extends Component {
     this.contentWrapper = new Component(this.element, "div", ["about-team__wrapper"]);
 
     this.firstMemberCard = new TeamMemberCard(this.contentWrapper.element, "Vasiliy (Team Leader)", "https://github.com/kiselmen", "kiselmen",
-      ["- Setting up the working environment", "- BackEnd deployment", "- Application framework", "- Header layout and functionality including burger menu", "- Authorization page layout and functionality", "- Dictionary functionality", "- General statistics functionality", "- Code refactoring", "- Project deployment"], "../../../public/about-images/kiselmen.png");
+      ["- Setting up the working environment", "- BackEnd deployment", "- Application framework", "- Header layout and functionality including burger menu", "- Authorization page layout and functionality", "- Dictionary functionality", "- General statistics functionality", "- Code refactoring", "- Project deployment"], "./public/about-images/kiselmen.png");
     this.secondMemberCard = new TeamMemberCard(this.contentWrapper.element, "Max", "https://github.com/maxomeleneckii", "maxomeleneckii",
-      ["- Project analysis", "- Development of the project architecture", "- Dictionary layout", "- Layout of Audiocall mini-game", "- Functionality for Audiocall mini-game", "- Stylization of the project", "- Adaptive layout", "- Project presentation"], "../../../public/about-images/maxomeleneckii.jpg");
+      ["- Project analysis", "- Development of the project architecture", "- Dictionary layout", "- Layout of Audiocall mini-game", "- Functionality for Audiocall mini-game", "- Stylization of the project", "- Adaptive layout", "- Project presentation"], "./public/about-images/maxomeleneckii.jpg");
     this.thirdMemberCard = new TeamMemberCard(this.contentWrapper.element, "Alexander", "https://github.com/pitbrest", "pitbrest",
-      ["- Footer layout", "- Layout of the Sprint mini-game", "- Functionality for the Sprint mini-game", "- Stylization of the Sprint mini-game", "- Page layout About", "- Layout of the general statistics page", "- Layout of statistics graphs"], "../../../public/about-images/pitbrest.jpg");
+      ["- Footer layout", "- Layout of the Sprint mini-game", "- Functionality for the Sprint mini-game", "- Stylization of the Sprint mini-game", "- Page layout About", "- Layout of the general statistics page", "- Layout of statistics graphs"], "./public/about-images/pitbrest.jpg");
 
     this.element.style.display = "none";
   }
