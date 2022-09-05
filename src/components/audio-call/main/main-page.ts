@@ -2,8 +2,8 @@ import { Component } from "../../../utils/component";
 import Circle from "progressbar.js/circle";
 import "./main-page.scss";
 import { UIButton } from "../../UI/button";
-import { getWordsByChapterAndPage } from "../../../utils/loader";
-import { BASE_URL, IStatisticGame, IWordsElement } from "../../../interfaces";
+import { getAlluserWords, getWordById, getWordsByChapterAndPage } from "../../../utils/loader";
+import { BASE_URL, elementData, IGetUsersWords, IStatisticGame, IWordsElement } from "../../../interfaces";
 import { progressBarMixin } from "../progressBar";
 
 export let correctWords: IWordsElement[] = [];
@@ -44,6 +44,7 @@ export class AudioCallMainPage extends Component {
   private infoInfo: Component;
   private infoFullScreen: Component;
   private infoExit: Component;
+  private param: string;
   listBtn!: UIButton;
   listItem!: Component;
   private bar: Circle;
@@ -55,6 +56,7 @@ export class AudioCallMainPage extends Component {
   constructor(parentNode: HTMLElement, parameters: string) {
     super(parentNode, "div", ["audiocall-main", "master"]);
 
+    this.param = parameters;
     this.audioCallHeader = new Component(this.element, "div", ["master-header"]);
     this.audioCallContent = new Component(this.element, "div", ["master-content"]);
     this.audioCallControls = new Component(this.audioCallHeader.element, "div", ["master-controls", "controls"]);
@@ -127,42 +129,7 @@ export class AudioCallMainPage extends Component {
       (<HTMLAudioElement>this.audio.element).play();
     });
 
-    document.addEventListener("keyup", (event) => {
-      const isAudiocallMain = document.querySelector(".audiocall-main") as HTMLElement;
-      if (isAudiocallMain && isAudiocallMain.style.display === "flex") {
-        if (event.key === "Shift") {
-          (<HTMLAudioElement>this.audio.element).play();
-        }
-  
-        document.querySelectorAll(".words-btn").forEach( el => {
-          if (event.key === (<HTMLButtonElement>el).value && !(<HTMLButtonElement>el).disabled) {
-            this.splitEvents((<HTMLButtonElement>el).id, <HTMLElement>el);
-          }
-        });
-  
-        if (event.code === "Space") {
-          if ((<HTMLElement>document.getElementById("Space-Dont")).style.display === "flex") {
-            this.getCorrectWord();
-            wrongWords.push(this.randomNum);
-          } else if ((<HTMLElement>document.getElementById("Space-Next")).style.display === "flex") {
-            this.getWords(this.valChapter, this.valPage +=1);
-          }
-        }
-  
-        if (event.code === "Escape") {
-          this.closeGame(parameters);
-        }
-  
-        if (event.code === "KeyF") {
-          this.getFullScreen();
-        }
-        
-        if (event.code === "KeyI") {
-          this.openInfo();
-        }
-        event.preventDefault();
-      }
-    });
+    document.addEventListener("keyup", (event) => this.activateKeyboard(event, parameters));
 
     this.textDontKnow.element.addEventListener("click", () => {
       this.getCorrectWord();
@@ -174,8 +141,8 @@ export class AudioCallMainPage extends Component {
     this.listWords.element.addEventListener("click", this.guessWord);
     
     if (parameters) {
-      const currPage = Number(localStorage.getItem("page"));
       const currChapter = Number(localStorage.getItem("chapter"));
+      const currPage = Number(localStorage.getItem("page"));
       this.hidenIntroPage(currChapter, currPage);
     }
   }
@@ -190,23 +157,25 @@ export class AudioCallMainPage extends Component {
     this.voiceBtn.element.classList.remove("showPicture");
     this.textDontKnow.element.style.display = "flex";
     this.textNext.element.style.display = "none";
+    if (this.param && Number(localStorage.getItem("chapter")) === 6) {
+      numChapter = 6;
+      numPage = 0;
+    }
     getWordsByChapterAndPage(numChapter, numPage).then( data => {
-      this.shuffleArr(data);
-      this.arrWords = data.map( (dataItm: IWordsElement, idx: number) => {
-        if(idx < 5) {
-          const wordBtn = (<HTMLElement>document.querySelectorAll(".words-btn")[idx]);
-          wordBtn.innerHTML = `${idx + 1}. ${dataItm.wordTranslate}`;
-          wordBtn.setAttribute("id", dataItm.word);
-          return dataItm;
-        }
-      }).filter( (dataItm: IWordsElement) => dataItm !== undefined);
-      
-      this.randomNum = this.getRandomElem(this.arrWords);
-
-      this.audio.element.setAttribute("src", BASE_URL + this.randomNum.audio);
-      this.audio.element.setAttribute("autoplay", "");
-      if (correctWords.length + wrongWords.length === 10) {
-        this.audio.element.removeAttribute("autoplay");
+      if (localStorage.getItem("token")) {
+        getAlluserWords().then( async userWords => {
+          if (this.param && numChapter === 6) {
+            data = [];
+            const difficultArr = userWords.filter( (item: IGetUsersWords) => item.difficulty === "hard").map((word:elementData) => word).map( (el: IGetUsersWords) => el.wordId);
+            for(let i=0; i< difficultArr.length; i+=1) {
+              const word = await getWordById(difficultArr[i]);
+              data.push(word);
+            }
+          } 
+          this.getListCards(data);
+        });
+      } else {
+        this.getListCards(data);
       }
     });
   };
@@ -317,4 +286,68 @@ export class AudioCallMainPage extends Component {
   updateCurrentStatistic(data: IStatisticGame){
     console.log("11111",data);
   }
+
+  activateKeyboard = (event: KeyboardEvent, parameters: string) => {
+    const isAudiocallMain = document.querySelector(".audiocall-main") as HTMLElement;
+    if (isAudiocallMain && isAudiocallMain.style.display === "flex") {
+      if (event.key === "Shift") {
+        (<HTMLAudioElement>this.audio.element).play();
+      }
+
+      document.querySelectorAll(".words-btn").forEach( el => {
+        if (event.key === (<HTMLButtonElement>el).value && !(<HTMLButtonElement>el).disabled) {
+          this.splitEvents((<HTMLButtonElement>el).id, <HTMLElement>el);
+        }
+      });
+
+      if (event.code === "Space" && (<HTMLElement>document.getElementById("Space-Dont")).style.display === "flex") {
+        this.getCorrectWord();
+        wrongWords.push(this.randomNum);
+      } else if (event.code === "Space" && (<HTMLElement>document.getElementById("Space-Next")).style.display === "flex") {
+        this.getWords(this.valChapter, this.valPage +=1);
+      }
+
+      if (event.code === "Escape") {
+        this.closeGame(parameters);
+      }
+
+      if (event.code === "KeyF") {
+        this.getFullScreen();
+      }
+      
+      if (event.code === "KeyI") {
+        this.openInfo();
+      }
+      event.preventDefault();
+    }
+  };
+  getListCards = (data: IWordsElement[]) => {
+    const wordBtn = (document.querySelectorAll(".words-btn"));
+    if (!data.length) {
+      this.audioCallContent.element.prepend("Sorry but the list of hard words is empty");
+      this.voiceBtn.element.setAttribute("disabled", "true");
+      this.actionBtn.element.setAttribute("disabled", "true");
+    } else {
+      this.shuffleArr(data);
+      this.arrWords = data.map( (dataItm: IWordsElement, idx: number) => {
+        if(idx < wordBtn.length) {
+          wordBtn[idx].innerHTML = `${idx + 1}. ${dataItm.wordTranslate}`;
+          wordBtn[idx].setAttribute("id", dataItm.word);
+          return dataItm;
+        }
+      }).filter( (dataItm) => dataItm !== undefined) as IWordsElement[];
+      this.randomNum = this.getRandomElem(this.arrWords);
+      
+      this.audio.element.setAttribute("src", BASE_URL + this.randomNum.audio);
+      this.audio.element.setAttribute("autoplay", "");
+      if (correctWords.length + wrongWords.length === 10) {
+        this.audio.element.removeAttribute("autoplay");
+      }
+    }
+    wordBtn.forEach( btn => {
+      if(btn.innerHTML === "") {
+        btn.setAttribute("disabled", "true");
+      }
+    });
+  };
 }

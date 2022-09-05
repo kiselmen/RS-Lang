@@ -44,7 +44,6 @@ export interface IStatisticGame {
   correctArr: IWordsElement[];
   wrongArr: IWordsElement[];
 }
-
 export interface IGetUsersWords {
   difficulty: string,
   id: string,

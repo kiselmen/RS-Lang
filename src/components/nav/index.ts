@@ -32,6 +32,11 @@ export class Nav extends Component {
     this.linkToAudioCall.element.setAttribute("tabindex", "-1");
     this.linkToSprint.element.setAttribute("tabindex", "-1");
 
+    this.linkToAudioCall.element.addEventListener("click", () => {
+      window.location.hash = "#/audiocall";
+      location.reload();
+    });
+
     // this.element.addEventListener("click", (e: Event) => this.onNavClick(e));
     this.onInitNavSignUser();
 
