@@ -16,5 +16,10 @@ export class Games extends Component {
     this.dictionaryGamesSprint = new Component(this.dictionaryGames.element, "a", ["dictionary-games__sprint", "game", "btn-dictionary"], "Sprint");
     this.dictionaryGamesAudio.element.setAttribute("href", "#/audiocall?type=dictionary");
     this.dictionaryGamesSprint.element.setAttribute("href", "#/sprint?type=dictionary");
+
+    this.dictionaryGamesAudio.element.addEventListener("click", () => {
+      window.location.hash = "#/audiocall?type=dictionary";
+      location.reload();
+    });
   }
 }

@@ -37,7 +37,7 @@ export class AudioCallStatisticPage extends Component {
   totalItem!: Component;
   totalItemAudio!: Component;
 
-  constructor(parentNode: HTMLElement, parameters: string) {
+  constructor(parentNode: HTMLElement) {
     super(parentNode, "div", ["audiocall-stat", "statistic"]);
 
     this.statHeading = new Component(this.element, "h3", ["statistic-heading"],"Here is your result");
@@ -51,24 +51,31 @@ export class AudioCallStatisticPage extends Component {
     this.wrongHeading = new Component(this.totalWrong.element, "h4", ["total-heading"], "Wrong:");
     this.statBtnsCont = new Component(this.element, "div", ["statistic-btns"]);
     this.btnAgain = new UIButton(this.statBtnsCont.element, ["statistic-btns__again"], "Again");
-    this.linkAgain = new Component(this.btnAgain.element, "a", ["statistic-link"], "");
+    this.linkAgain = new Component(this.btnAgain.element, "a", ["statistic-link", "link-again"], "");
     this.btnDictionary = new UIButton(this.statBtnsCont.element, ["statistic-btns__dictionary"], "Dictionary");
-    this.linkDictionary = new Component(this.btnDictionary.element, "a", ["statistic-link"], "");
-
+    this.linkDictionary = new Component(this.btnDictionary.element, "a", ["statistic-link", "link-dict"], "");
+    
     this.linkAgain.element.setAttribute("href", "#/audiocall");
-    if(parameters) {
-      this.linkAgain.element.addEventListener("click", () => {
-        location.reload();
-      });
-    } 
     this.linkDictionary.element.setAttribute("href", "#/dictionary");
     
+    this.statBtnsCont.element.addEventListener("click", (e) => {
+      const eventTarget = e.target as HTMLElement;
+      const btn = eventTarget.closest(".statistic-link");
+      if (!btn) return;
+      if ((!this.statBtnsCont.element.contains(btn))) return;
+
+      if (eventTarget.classList.contains("link-again")) {
+        window.location.hash = "#/audiocall";
+      }
+      location.reload();
+    });
+
     this.progressbarCount = new Component(this.statProgressbar.element, "span", ["master-progressbar__count"],);
     this.bar = progressBarMixin(this.statProgressbar.element);
 
     (<HTMLElement>document.querySelector(".next")).addEventListener("click", this.updateStat);
 
-    document.addEventListener("keydown", (event) => {
+    document.addEventListener("keyup", (event) => {
       const isAudiocallMain = document.querySelector(".audiocall-main") as HTMLElement;
       if (isAudiocallMain && isAudiocallMain.style.display === "flex") {
         if (event.code === "Space") {

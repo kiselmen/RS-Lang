@@ -127,42 +127,7 @@ export class AudioCallMainPage extends Component {
       (<HTMLAudioElement>this.audio.element).play();
     });
 
-    document.addEventListener("keyup", (event) => {
-      const isAudiocallMain = document.querySelector(".audiocall-main") as HTMLElement;
-      if (isAudiocallMain && isAudiocallMain.style.display === "flex") {
-        if (event.key === "Shift") {
-          (<HTMLAudioElement>this.audio.element).play();
-        }
-  
-        document.querySelectorAll(".words-btn").forEach( el => {
-          if (event.key === (<HTMLButtonElement>el).value && !(<HTMLButtonElement>el).disabled) {
-            this.splitEvents((<HTMLButtonElement>el).id, <HTMLElement>el);
-          }
-        });
-  
-        if (event.code === "Space") {
-          if ((<HTMLElement>document.getElementById("Space-Dont")).style.display === "flex") {
-            this.getCorrectWord();
-            wrongWords.push(this.randomNum);
-          } else if ((<HTMLElement>document.getElementById("Space-Next")).style.display === "flex") {
-            this.getWords(this.valChapter, this.valPage +=1);
-          }
-        }
-  
-        if (event.code === "Escape") {
-          this.closeGame(parameters);
-        }
-  
-        if (event.code === "KeyF") {
-          this.getFullScreen();
-        }
-        
-        if (event.code === "KeyI") {
-          this.openInfo();
-        }
-        event.preventDefault();
-      }
-    });
+    document.addEventListener("keyup", (event) => this.activateKeyboard(event, parameters));
 
     this.textDontKnow.element.addEventListener("click", () => {
       this.getCorrectWord();
@@ -317,4 +282,40 @@ export class AudioCallMainPage extends Component {
   updateCurrentStatistic(data: IStatisticGame){
     console.log("11111",data);
   }
+
+  activateKeyboard = (event: KeyboardEvent, parameters: string) => {
+    const isAudiocallMain = document.querySelector(".audiocall-main") as HTMLElement;
+    if (isAudiocallMain && isAudiocallMain.style.display === "flex") {
+      if (event.key === "Shift") {
+        (<HTMLAudioElement>this.audio.element).play();
+      }
+
+      document.querySelectorAll(".words-btn").forEach( el => {
+        if (event.key === (<HTMLButtonElement>el).value && !(<HTMLButtonElement>el).disabled) {
+          this.splitEvents((<HTMLButtonElement>el).id, <HTMLElement>el);
+        }
+      });
+
+      if (event.code === "Space" && (<HTMLElement>document.getElementById("Space-Dont")).style.display === "flex") {
+        this.getCorrectWord();
+        wrongWords.push(this.randomNum);
+      } else if (event.code === "Space" && (<HTMLElement>document.getElementById("Space-Next")).style.display === "flex") {
+        console.log("time");
+        this.getWords(this.valChapter, this.valPage +=1);
+      }
+
+      if (event.code === "Escape") {
+        this.closeGame(parameters);
+      }
+
+      if (event.code === "KeyF") {
+        this.getFullScreen();
+      }
+      
+      if (event.code === "KeyI") {
+        this.openInfo();
+      }
+      event.preventDefault();
+    }
+  };
 }

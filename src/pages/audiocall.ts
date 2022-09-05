@@ -13,6 +13,6 @@ export class AudioCall extends Component {
 
     this.homePage = new AudioCallStartPage(this.element);
     this.mainPage = new AudioCallMainPage(this.element, parameters);
-    this.statPage = new AudioCallStatisticPage(this.element, parameters);
+    this.statPage = new AudioCallStatisticPage(this.element);
   }
 }
