@@ -161,44 +161,22 @@ export class AudioCallMainPage extends Component {
       numChapter = 6;
       numPage = 0;
     }
-    getAlluserWords().then( userWords => {
-      getWordsByChapterAndPage(numChapter, numPage).then( async data => {
-        if (this.param && numChapter === 6) {
-          data = [];
-          const difficultArr = userWords.filter( (item: IGetUsersWords) => item.difficulty === "hard").map((word:elementData) => word).map( (el: IGetUsersWords) => el.wordId);
-          for(let i=0; i< difficultArr.length; i+=1) {
-            const word = await getWordById(difficultArr[i]);
-            data.push(word);
-          }
-        } 
-        const wordBtn = (document.querySelectorAll(".words-btn"));
-        if (!data.length) {
-          this.audioCallContent.element.prepend("Sorry but the list of hard words is empty");
-          this.voiceBtn.element.setAttribute("disabled", "true");
-          this.actionBtn.element.setAttribute("disabled", "true");
-        } else {
-          this.shuffleArr(data);
-          this.arrWords = data.map( (dataItm: IWordsElement, idx: number) => {
-            if(idx < wordBtn.length) {
-              wordBtn[idx].innerHTML = `${idx + 1}. ${dataItm.wordTranslate}`;
-              wordBtn[idx].setAttribute("id", dataItm.word);
-              return dataItm;
+    getWordsByChapterAndPage(numChapter, numPage).then( data => {
+      if (localStorage.getItem("token")) {
+        getAlluserWords().then( async userWords => {
+          if (this.param && numChapter === 6) {
+            data = [];
+            const difficultArr = userWords.filter( (item: IGetUsersWords) => item.difficulty === "hard").map((word:elementData) => word).map( (el: IGetUsersWords) => el.wordId);
+            for(let i=0; i< difficultArr.length; i+=1) {
+              const word = await getWordById(difficultArr[i]);
+              data.push(word);
             }
-          }).filter( (dataItm: IWordsElement) => dataItm !== undefined);
-          this.randomNum = this.getRandomElem(this.arrWords);
-          
-          this.audio.element.setAttribute("src", BASE_URL + this.randomNum.audio);
-          this.audio.element.setAttribute("autoplay", "");
-          if (correctWords.length + wrongWords.length === 10) {
-            this.audio.element.removeAttribute("autoplay");
-          }
-        }
-        wordBtn.forEach( btn => {
-          if(btn.innerHTML === "") {
-            btn.setAttribute("disabled", "true");
-          }
+          } 
+          this.getListCards(data);
         });
-      });
+      } else {
+        this.getListCards(data);
+      }
     });
   };
 
@@ -342,5 +320,34 @@ export class AudioCallMainPage extends Component {
       }
       event.preventDefault();
     }
+  };
+  getListCards = (data: IWordsElement[]) => {
+    const wordBtn = (document.querySelectorAll(".words-btn"));
+    if (!data.length) {
+      this.audioCallContent.element.prepend("Sorry but the list of hard words is empty");
+      this.voiceBtn.element.setAttribute("disabled", "true");
+      this.actionBtn.element.setAttribute("disabled", "true");
+    } else {
+      this.shuffleArr(data);
+      this.arrWords = data.map( (dataItm: IWordsElement, idx: number) => {
+        if(idx < wordBtn.length) {
+          wordBtn[idx].innerHTML = `${idx + 1}. ${dataItm.wordTranslate}`;
+          wordBtn[idx].setAttribute("id", dataItm.word);
+          return dataItm;
+        }
+      }).filter( (dataItm) => dataItm !== undefined) as IWordsElement[];
+      this.randomNum = this.getRandomElem(this.arrWords);
+      
+      this.audio.element.setAttribute("src", BASE_URL + this.randomNum.audio);
+      this.audio.element.setAttribute("autoplay", "");
+      if (correctWords.length + wrongWords.length === 10) {
+        this.audio.element.removeAttribute("autoplay");
+      }
+    }
+    wordBtn.forEach( btn => {
+      if(btn.innerHTML === "") {
+        btn.setAttribute("disabled", "true");
+      }
+    });
   };
 }
