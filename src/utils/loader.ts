@@ -116,8 +116,6 @@ const addWordToUserWords = async (word: elementData, type: string, optional: wor
 };
 
 const updateWordInUserWords = async (word: elementData, type: string, optional: wordOptional) => {
-  console.log("loader", type);
-  
   const wordId = word.id !== undefined ? word.id : word._id;
   const url = "users/" + localStorage.getItem("userId") + "/words/" + wordId;
   const method = createPutSettings();
