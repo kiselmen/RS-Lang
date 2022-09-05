@@ -245,7 +245,6 @@ export class AudioCallMainPage extends Component {
     this.getCorrectWord();
     dataAudiocall.totalWords = correctWords.length + wrongWords.length;
     dataAudiocall.correctWordsPercent = Math.floor((dataAudiocall.correctArr.length / dataAudiocall.totalWords) * 100);
-    // this.updateCurrentStatistic(dataAudiocall);
   };
 
   closeGame = (parameters: string) => {
@@ -282,10 +281,6 @@ export class AudioCallMainPage extends Component {
     this.getWords(numChapter, numPage);
     localStorage.removeItem("progressbarVal");
   };
-
-  updateCurrentStatistic(data: IStatisticGame){
-    console.log("11111",data);
-  }
 
   activateKeyboard = (event: KeyboardEvent, parameters: string) => {
     const isAudiocallMain = document.querySelector(".audiocall-main") as HTMLElement;
