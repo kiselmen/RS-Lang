@@ -100,7 +100,7 @@ export class AudioCallStatisticPage extends Component {
       this.totalItem = new Component(listContainer, "li", ["total-item", "total-correct__item"]);
       this.totalItemBtn = new UIButton(this.totalItem.element, ["total-item__btn"], "");
       this.totalItemImg = new Component(this.totalItemBtn.element, "img", ["total-item__img"]);
-      this.totalItemImg.element.setAttribute("src", "../../../../public/volume.svg");
+      this.totalItemImg.element.setAttribute("src", "./public/volume.svg");
       this.totalItemImg.element.setAttribute("alt", "volume");
       this.totalItemAudio = new Component(this.totalItemBtn.element, "audio", ["total-item__audio"]);
       this.totalItemAudio.element.setAttribute("src", BASE_URL + el.audio);
