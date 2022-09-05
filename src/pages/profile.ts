@@ -1,6 +1,7 @@
 import "../styles/profile.scss";
 import { Component } from "../utils/component";
 import { UIButton } from "../components/UI/button";
+import { getUserStatistics } from "../utils/loader";
 
 export class Profile extends Component {
   profileHeaderContainer;
@@ -12,19 +13,17 @@ export class Profile extends Component {
   todayLearnedWordsStatWrapper;
   todayAudioCallStatWrapper;
   todaySprintStatWrapper;
-  allTimeSubTitle;
-  allTimeContentWrapper;
-  allTimeLearnedWords;
-  allTimeProgress;
-  learnedWordsCounter;
-  learnedWordsTextContentContainer;
+  todayLearnedWordsCounter;
   todayAudioCallStatContent;
   todaySprintStatContent;
+  learnedWords: number;
+
   onUpdateRouter: () => void;
 
   constructor(parentNode: HTMLElement, updateRouter: () => void) {
     super(parentNode, "div", ["profile"]);
     this.onUpdateRouter = () => updateRouter();
+    this.learnedWords = 0;
 
     this.profileHeaderContainer = new Component(this.element, "div", ["statisticsHeader-container"]);
     this.title = new Component(this.profileHeaderContainer.element, "h3", ["statistics-title"], "Statistics");
@@ -38,20 +37,15 @@ export class Profile extends Component {
     this.todayAudioCallStatWrapper = new Component(this.todayContentWrapper.element, "div", ["todayLearnedWords-wrapper"]);
     this.todaySprintStatWrapper = new Component(this.todayContentWrapper.element, "div", ["todayLearnedWords-wrapper"]);
 
-    this.allTimeSubTitle = new Component(this.contentWrapper.element, "h3", ["statistics-subTitle", "allTime-subTitle"], "All Time");
-    this.allTimeContentWrapper = new Component(this.contentWrapper.element, "div", ["allTimeContent-wrapper"]);
-    this.allTimeLearnedWords = new Component(this.allTimeContentWrapper.element, "div", ["allTimeLearnedWords-wrapper"]);
-    this.allTimeProgress = new Component(this.allTimeContentWrapper.element, "div", ["allTimeProgress-wrapper"]);
-
     /* Внутиренние блоки */
-    this.learnedWordsCounter = new Component(this.todayLearnedWordsStatWrapper.element, "div", ["learnedWords-counter"], "0");
-    this.learnedWordsTextContentContainer = new Component(this.todayLearnedWordsStatWrapper.element, "div", ["learnedWordsTxtContent-container"]);
-    new Component(  this.learnedWordsTextContentContainer.element, "div", ["learnedWordsTxtContent-textContent"], "words");
-    new Component(  this.learnedWordsTextContentContainer.element, "div", ["learnedWordsTxtContent-textContent"], "were learned");
 
+    /* Today */
+    this.todayLearnedWordsCounter = new StatisticsContentPart(this.todayLearnedWordsStatWrapper.element, "Words");
     this.todayAudioCallStatContent = new StatisticsContentPart(this.todayAudioCallStatWrapper.element, "Audio call");
     this.todaySprintStatContent = new StatisticsContentPart(this.todaySprintStatWrapper.element, "Sprint");
 
+    this.requestUserStatInfo();
+    // this.createPiechart1();
   }
 
   onLogout() {
@@ -67,10 +61,45 @@ export class Profile extends Component {
     window.location.hash = "#/";
     this.onUpdateRouter();
   }
+
+  /* Вывод статистики */
+  requestUserStatInfo = async () => {
+
+    if(localStorage.userId && localStorage.token) {
+      const currentUserId = localStorage.userId;
+      const response = await getUserStatistics(currentUserId);
+      const userStatistics = response.data;
+
+      const audiocallStatistics = userStatistics.optional.audiocall;
+      const sprintStatistics = userStatistics.optional.sprint;
+      this.learnedWords = +userStatistics.learnedWords;
+
+      //* Еежедневная //*
+
+      /* Sprint */
+      const sprintAccuracy = (+sprintStatistics.dayStata[sprintStatistics.dayStata.length - 1].correctAnswers * 100 / +sprintStatistics.dayStata[sprintStatistics.dayStata.length - 1].totalQuestions).toFixed();
+      this.todaySprintStatContent.setCounter(0, sprintStatistics.dayStata[sprintStatistics.dayStata.length - 1].newWords);
+      this.todaySprintStatContent.setCounter(1,  sprintAccuracy + " %");
+      this.todaySprintStatContent.setCounter(2, sprintStatistics.maxSeria);
+
+      /* Audio Call */
+      const audiocallAccuracy = +audiocallStatistics.dayStata[audiocallStatistics.dayStata.length - 1].correctAnswers * 100 / +audiocallStatistics.dayStata[audiocallStatistics.dayStata.length - 1].totalQuestions;
+      this.todayAudioCallStatContent.setCounter(0, audiocallStatistics.dayStata[audiocallStatistics.dayStata.length-1].newWords);
+      this.todayAudioCallStatContent.setCounter(1, audiocallAccuracy + " %");
+      this.todayAudioCallStatContent.setCounter(2, audiocallStatistics.maxSeria);
+
+      /* Vocabruary */
+      this.todayLearnedWordsCounter.block3Title.element.innerText = "learned words";
+
+      this.todayLearnedWordsCounter.setCounter(0, (+sprintStatistics.dayStata[sprintStatistics.dayStata.length - 1].newWords + +audiocallStatistics.dayStata[audiocallStatistics.dayStata.length-1].newWords).toString());
+      this.todayLearnedWordsCounter.setCounter(1, (+sprintAccuracy + +audiocallAccuracy) / 2 + " %");
+      this.todayLearnedWordsCounter.setCounter(2, "44");
+    }
+  };
 }
 
 
-
+/* Класс для отдельных компонентов статистики - Sprint и Audiocall */
 class StatisticsContentPart extends Component {
   contentWrapper;
   block1Wrapper;
@@ -79,6 +108,9 @@ class StatisticsContentPart extends Component {
   block1Counter;
   block2Counter;
   block3Counter;
+  block1Title;
+  block2Title;
+  block3Title;
 
   constructor(parentNode: HTMLElement, title: string) {
     super(parentNode, "div", ["statistics-item"]);
@@ -92,13 +124,13 @@ class StatisticsContentPart extends Component {
     this.block3Wrapper = new Component(this.contentWrapper.element, "div", [partOfClassName + "Block3-wrapper", partOfClassName + "Block-wrapper"]);
 
     this.block1Counter = new Component(this.block1Wrapper.element, "div", [partOfClassName + "Block1-counter", partOfClassName + "Block-counter"], "0");
-    new Component(this.block1Wrapper.element, "p", [partOfClassName + "Block1-textContent", partOfClassName + "Block-textContent"], "words");
+    this.block1Title = new Component(this.block1Wrapper.element, "p", [partOfClassName + "Block1-textContent", partOfClassName + "Block-textContent"], "new words");
 
     this.block2Counter = new Component(this.block2Wrapper.element, "div", [partOfClassName + "Block2-counter", partOfClassName + "Block-counter"], "0%");
-    new Component(this.block2Wrapper.element, "p", [partOfClassName + "Block2-textContent", partOfClassName + "Block-textContent"], "accuracy");
+    this.block2Title = new Component(this.block2Wrapper.element, "p", [partOfClassName + "Block2-textContent", partOfClassName + "Block-textContent"], "accuracy");
 
     this.block3Counter = new Component(this.block3Wrapper.element, "div", [partOfClassName + "Block3-counter", partOfClassName + "Block-counter"], "0");
-    new Component(this.block3Wrapper.element, "p", [partOfClassName + "Block3-textContent", partOfClassName + "Block-textContent"], "in a row");
+    this.block3Title = new Component(this.block3Wrapper.element, "p", [partOfClassName + "Block3-textContent", partOfClassName + "Block-textContent"], "in line");
   }
 
   setCounter = (counterNumber: number, value: string): string => {
@@ -108,5 +140,4 @@ class StatisticsContentPart extends Component {
   getCounter = (counterNumber: number): string => {
     return [this.block1Counter, this.block2Counter, this.block3Counter][counterNumber].element.innerText;
   };
-
 }

@@ -32,7 +32,7 @@ function sayTheWord(player: HTMLAudioElement, link: string) {
 }
 
 /* Рандомное число из диапазона */
-function getRandomIntInclusive(min = 0, max = 19) {
+function getRandomIntInclusive(min = 0, max = sprintState.currentContent.length) {
   let myMin = min;
   let myMax = max;
   myMin = Math.ceil(myMin);
@@ -47,7 +47,7 @@ function myRandom(currentNum: number, limits?: number[]): number {
   } else {
     randomNum = getRandomIntInclusive();
   }
-  return getRandomIntInclusive(1,3) === 1 ? currentNum : randomNum;
+  return getRandomIntInclusive(1,2) === 1 ? currentNum : randomNum;
 }
 
 /* Сброс стейта при закрытии страницы игры */

@@ -23,8 +23,8 @@ export class Sprint extends Component {
     this.sprintIntroCard = new SprintIntro(this.element);
     this.sprintGamePage = new SprintGamePage(this.element);
     this.sprintResultsPage = new SprintResultesPage(this.element);
-
     this.starterKit();
+    console.log(sprintState);
   }
 
   //* Начало игры, определение откуда совершен переход *//
@@ -69,10 +69,11 @@ export class Sprint extends Component {
         sprintState.currentPage = +localStorage.page;
         sprintState.currentContent = await getInfo(sprintState.currentGroup, sprintState.currentPage );
         const allUserWords = await getAlluserWords();
+        console.log(allUserWords);
 
 
         const supportFunc = async () => {
-          const studiedUserWordsId = allUserWords.filter((word: IGetUsersWords) => word.difficulty !== "hard").map((word: someData) => word.wordId);
+          const studiedUserWordsId = allUserWords.filter((word: IGetUsersWords) => word.difficulty !== "hard" && word.difficulty !== "normal").map((word: someData) => word.wordId);
           for(const id of studiedUserWordsId) {
             sprintState.currentContent = sprintState.currentContent.filter(item => item.id !== id);
           }
@@ -84,7 +85,7 @@ export class Sprint extends Component {
         const allUserWords = await getAlluserWords();
 
         const supportFunc = async () => {
-          const allUserWordId = allUserWords.filter((word: IGetUsersWords) => word.difficulty !== "study").map((word: someData) => word.wordId);
+          const allUserWordId = allUserWords.filter((word: IGetUsersWords) => word.difficulty !== "study" && word.difficulty !== "normal").map((word: someData) => word.wordId);
 
           for(let i=0; i<allUserWordId.length; i+=1) {
             const word = await getWordById(allUserWordId[i]);
@@ -157,7 +158,6 @@ export class Sprint extends Component {
       if(sprintState.userHardWordsCounter === sprintState.userHardWords.length) {
         await makeVisibleCurrentSprintPage(this.sprintGamePage.element, this.sprintIntroCard.element, this.sprintResultsPage.element, "block");
         await this.timer?.timerStop();
-        /* Проверить нужно ли !!! */
         await this.updateSignalLampState(false);
       }
     }
@@ -167,9 +167,6 @@ export class Sprint extends Component {
   showResults = async () => {
     makeVisibleCurrentSprintPage(this.sprintGamePage.element, this.sprintIntroCard.element, this.sprintResultsPage.element, "block");
     this.timer?.timerStop();
-    /* Проверить нужно ли !!! */
-    console.log(sprintState);
-    
     this.updateStata(sprintState);
     this.updateScore(false);
   };
@@ -191,7 +188,7 @@ export class Sprint extends Component {
           if (optional.isNew === true) {
             optional.isNew = false;
             newWordInThisGame++;
-          } 
+          }
           optional.totalAttempts++;
           if (wordInGame.answer) {
             optional.correctAnswers++;
@@ -304,7 +301,8 @@ export class Sprint extends Component {
         localStorage.setItem("sprint", JSON.stringify(sprintStata));
       }
     }
-    // console.log(dataAudiocall);
+    // console.
+    // (dataAudiocall);
   }
 
   /* Озвучка правильных и неправильных ответов */
@@ -377,14 +375,14 @@ export class Sprint extends Component {
   /* Обработка ответов пользователя */
   responseProcessing = async (bool: boolean, options: string) => {
     if(options === "default") {
-      
+
       if(bool) {
         await this.userResponseProcessing(sprintState.currentContent[sprintState.stepCounter].word.toString(), sprintState.currentContent[sprintState.stepCounter].transcription.toString(), sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString(), sprintState.currentContent[sprintState.stepCounter].audio.toString(), true);
 
         if(localStorage.userId) {
           sprintState.userResult.push({"id": sprintState.currentContent[sprintState.stepCounter].id as string, "answer": true});
         }
-
+        console.log(sprintState);
         await updateSprintState("none", true, true, true, false, false);
         await this.updateScore(true);
         await this.updateSignalLampState(true);
@@ -392,12 +390,15 @@ export class Sprint extends Component {
         await this.checkLimit("default");
         await this.updateGameContent("default");
 
+
+
       } else {
         await this.userResponseProcessing(sprintState.currentContent[sprintState.stepCounter].word.toString(), sprintState.currentContent[sprintState.stepCounter].transcription.toString(), sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString(), sprintState.currentContent[sprintState.stepCounter].audio.toString(), false);
 
         if(localStorage.userId) {
           sprintState.userResult.push({"id": sprintState.currentContent[sprintState.stepCounter].id as string, "answer": false});
         }
+        console.log(sprintState);
 
         await updateSprintState("none", true, true, false, false, false);
         await this.updateSignalLampState(true);
