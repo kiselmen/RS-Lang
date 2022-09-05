@@ -4,10 +4,10 @@ import SprintIntro from "../components/sprint/intro-page";
 import SprintGamePage from "../components/sprint/game-page";
 import {SprintResultesPage, SprintResult} from "../components/sprint/sprint-results-page";
 import Timer from "../components/sprint/timer";
-import {sprintState, getInfo, sayTheWord, myRandom, clearSprintState, makeVisibleCurrentSprintPage, updateSprintState} from "../components/sprint/sprint-helpers";
-import { getAlluserWords, getWordById } from "../utils/loader";
-import { IGetUsersWords, someData } from "../interfaces";
-
+import {sprintState, getInfo, sayTheWord, myRandom, clearSprintState, makeVisibleCurrentSprintPage, updateSprintState, IAnswerResultObj, ISprintState} from "../components/sprint/sprint-helpers";
+import { getAlluserWords, getWordById, updateWordInUserWords, addWordToUserWords, updateUserStatistics } from "../utils/loader";
+import { IGetUsersWords, someData, elementData, wordOptional, } from "../interfaces";
+import { getTodayInString, createNewDayStata } from "../utils/helper";
 
 export class Sprint extends Component {
   private sprintIntroCard;
@@ -168,8 +168,144 @@ export class Sprint extends Component {
     makeVisibleCurrentSprintPage(this.sprintGamePage.element, this.sprintIntroCard.element, this.sprintResultsPage.element, "block");
     this.timer?.timerStop();
     /* Проверить нужно ли !!! */
+    console.log(sprintState);
+    
+    this.updateStata(sprintState);
     this.updateScore(false);
   };
+
+  updateStata(sprintState: ISprintState) {
+    this.initStatisticDataSprint();
+    const wordsInGame = sprintState.userResult as IAnswerResultObj[];
+    const sprintStorage = localStorage.getItem("sprint") as string;
+    const sprintStat = JSON.parse(sprintStorage);
+    let maxSeria = sprintStat.maxSeria;
+    let currSeria = sprintStat.currSeria;
+    let newWordInThisGame = 0;
+    let lernedWords = 0;
+    getAlluserWords().then( userWords => {
+      wordsInGame.forEach( wordInGame => {
+        const isInUserWords = userWords.filter( (userWord: elementData) => String(userWord.wordId) === String(wordInGame.id));
+        if (isInUserWords.length) {
+          const optional = isInUserWords[0].optional;
+          if (optional.isNew === true) {
+            optional.isNew = false;
+            newWordInThisGame++;
+          } 
+          optional.totalAttempts++;
+          if (wordInGame.answer) {
+            optional.correctAnswers++;
+            currSeria++;
+          } else {
+            if (maxSeria < currSeria) maxSeria = currSeria;
+            currSeria = 0;
+          }
+          optional.games.sprint.totalAttempts++;
+          if (wordInGame.answer) {
+            optional.games.sprint.correctAnswers++;
+            if (isInUserWords[0].difficulty === "normal") {
+              if (optional.games.sprint.correctAnswers + optional.games.sprint.correctAnswers >= 3) {
+                isInUserWords[0].difficulty = "study";
+                optional.learnDate = getTodayInString();
+                optional.learned = "yes";
+                lernedWords++;
+              }
+            } else if (isInUserWords[0].difficulty === "hard") {
+              if (optional.games.sprint.correctAnswers >= 5) {
+                isInUserWords[0].difficulty = "study";
+                optional.learnDate = getTodayInString();
+                optional.learned = "yes";
+                lernedWords++;
+              }
+            } else {
+              isInUserWords[0].difficulty = "study";
+            }
+          } else {
+            optional.games.sprint.correctAnswers = 0;
+            if (isInUserWords[0].optional.learned === "yes") {
+              isInUserWords[0].difficulty = "normal";
+              optional.learnDate = "no";
+              optional.learned = "no";
+              lernedWords--;
+            } else {
+              optional.learned = "no";
+            }
+          }
+          const _word = { id: wordInGame.id } as elementData;
+          updateWordInUserWords(_word as elementData, isInUserWords[0].difficulty, optional as wordOptional);
+        } else {
+          const difficulty = "normal";
+          const optional = {} as wordOptional;
+          optional.learned = "no";
+          optional.learnDate = "no";
+          const audiocall = { totalAttempts: 0, correctAnswers: 0 };
+          const sprint = { totalAttempts: 1, correctAnswers: 0 };
+          if (wordInGame.answer) {
+            sprint.correctAnswers++;
+            currSeria++;
+          } else {
+            if (maxSeria < currSeria) maxSeria = currSeria;
+            currSeria = 0;
+          }
+          const games = { sprint: sprint, audiocall: audiocall };
+          optional.games = games;
+          optional.totalAttempts = 1;
+          optional.correctAnswers = wordInGame.answer ? 1 : 0;
+          optional.isNew = false;
+          newWordInThisGame++;
+          const _word = { id: wordInGame.id } as elementData;
+          addWordToUserWords(_word as elementData, difficulty, optional as wordOptional);
+        }
+      });
+      const curDay = sprintStat.dayStata.filter( (item: elementData) => item.day === getTodayInString());
+      const correctAnswers = wordsInGame.filter ( word => word.answer === true);
+      curDay[0].correctAnswers = String(Number(curDay[0].correctAnswers) + correctAnswers.length);
+      curDay[0].totalQuestions = String(Number(curDay[0].totalQuestions) + wordsInGame.length);
+      curDay[0].newWords = String(Number(curDay[0].newWords) + newWordInThisGame);
+      curDay[0].learnedWords = String(Number(curDay[0].learnedWords) + lernedWords);
+      sprintStat.maxSeria = (sprintStat.maxSeria < maxSeria) ? maxSeria : sprintStat.maxSeria;
+      sprintStat.currSeria = (sprintStat.currSeria < currSeria) ? currSeria : sprintStat.currSeria;
+      localStorage.setItem("sprint", JSON.stringify(sprintStat));
+      localStorage.setItem("learnedWords", String(Number(localStorage.getItem("learnedWords") as string) + lernedWords));
+      updateUserStatistics();
+    });
+  }
+
+  initStatisticDataSprint(){
+    const isLogin = localStorage.getItem("token");
+    if (isLogin) {
+      // console.log(Авторизован");
+      const sprintStorage = localStorage.getItem("sprint");
+      if (sprintStorage){
+        const sprintStata = JSON.parse(sprintStorage);
+        if (!sprintStata.maxSeria) sprintStata.maxSeria = 0;
+        if (!sprintStata.currSeria) sprintStata.currSeria = 0;
+        if (sprintStata.dayStata) {
+          const day = getTodayInString();
+          const isDay = sprintStata.dayStata.filter( (item: elementData) => item.day === day);
+          if (isDay.length === 0) {
+            const currentDataStata = createNewDayStata();
+            sprintStata.dayStata.push(currentDataStata);
+          }
+        } else {
+          sprintStata.dayStata = [];
+          const currentDataStata = createNewDayStata();
+          sprintStata.dayStata.push(currentDataStata);
+        }
+        localStorage.setItem("sprint", JSON.stringify(sprintStata));
+      } else {
+        const sprintStata = {
+          maxSeria: "0",
+          currSeria: "0",
+          dayStata : [] as elementData[],
+        };
+        const currentDataStata = createNewDayStata();
+        sprintStata.dayStata.push(currentDataStata);
+        localStorage.setItem("sprint", JSON.stringify(sprintStata));
+      }
+    }
+    // console.log(dataAudiocall);
+  }
 
   /* Озвучка правильных и неправильных ответов */
   makeAnswerVoise = async (soundLinkToBool: boolean) => {
@@ -241,6 +377,7 @@ export class Sprint extends Component {
   /* Обработка ответов пользователя */
   responseProcessing = async (bool: boolean, options: string) => {
     if(options === "default") {
+      
       if(bool) {
         await this.userResponseProcessing(sprintState.currentContent[sprintState.stepCounter].word.toString(), sprintState.currentContent[sprintState.stepCounter].transcription.toString(), sprintState.currentContent[sprintState.stepCounter].wordTranslate.toString(), sprintState.currentContent[sprintState.stepCounter].audio.toString(), true);
 
