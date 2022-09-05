@@ -1,1 +1,0 @@
-(()=>{"use strict";(new class{constructor(){console.log()}render(){console.log()}}).render()})();
