@@ -138,15 +138,15 @@ export class AudioCallStatisticPage extends Component {
             optional.games.audiocall.totalAttempts++;
             optional.games.audiocall.correctAnswers++;
             if (isInUserWords[0].difficulty === "normal") {
-              if (optional.games.audiocall.totalAttempts >= 3) {
-                isInUserWords[0].difficulty === "learned";
+              if (optional.games.sprint.correctAnswers + optional.games.sprint.correctAnswers >= 3) {
+                isInUserWords[0].difficulty = "study";
                 optional.learnDate = getTodayInString();
                 optional.learned = "yes";
                 lernedWords++;
               }
             } else if (isInUserWords[0].difficulty === "hard") {
-              if (optional.games.audiocall.totalAttempts >= 5) {
-                isInUserWords[0].difficulty === "learned";
+              if (optional.games.sprint.correctAnswers + optional.games.sprint.correctAnswers >= 5) {
+                isInUserWords[0].difficulty = "study";
                 optional.learnDate = getTodayInString();
                 optional.learned = "yes";
                 lernedWords++;
@@ -180,10 +180,10 @@ export class AudioCallStatisticPage extends Component {
               newWordInThisGame++;
             }  
             optional.totalAttempts++;
-            optional.games.audiocall.totalAttempts = 0;
+            // optional.games.audiocall.totalAttempts = 0;
             optional.games.audiocall.correctAnswers = 0;
-            if (isInUserWords[0].difficulty === "learned") {
-              isInUserWords[0].difficulty === "normal";
+            if (isInUserWords[0].optional.learned === "yes") {
+              isInUserWords[0].difficulty = "normal";
               optional.learnDate = "no";
               optional.learned = "no";
               lernedWords--;
@@ -213,6 +213,7 @@ export class AudioCallStatisticPage extends Component {
         curDay[0].correctAnswers = String(Number(curDay[0].correctAnswers) + correctWords.length);
         curDay[0].totalQuestions = String(Number(curDay[0].totalQuestions) + correctWords.length + wrongWords.length);
         curDay[0].newWords = String(Number(curDay[0].newWords) + newWordInThisGame);
+        curDay[0].learnedWords = String(Number(curDay[0].learnedWords) + lernedWords);
         localStorage.setItem("audiocall", JSON.stringify(audiocallStat));
         localStorage.setItem("learnedWords", String(Number(localStorage.getItem("learnedWords") as string) + lernedWords));
         updateUserStatistics();

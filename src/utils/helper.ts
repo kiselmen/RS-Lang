@@ -11,6 +11,7 @@ export function createNewDayStata(){
   return {
     day: day,
     newWords: "0",
+    learnedWords: "0",
     totalQuestions: "0",
     correctAnswers: "0",
   } as elementData;

@@ -3,6 +3,7 @@ import { DictionaryHeader } from "../components/dictionary/header/dictionaryHead
 import { DictionaryContent } from "../components/dictionary/content/dictionaryContent";
 import { DictionaryPagination } from "../components/dictionary/pagination/dictionaryPagination";
 import { getWordsByChapterAndPage, getAlluserWords} from "../utils/loader";
+import { getTodayInString } from "../utils/helper";
 import { elementData, wordOptional } from "../interfaces";
 import { preLoad, addWordToUserWords, updateWordInUserWords, removeWordFromDifficult, getAgregatedWordsByPage, getAllAgregatedWords, updateUserStatistics } from "../utils/loader";
 
@@ -103,19 +104,23 @@ export class Dictionary extends Component {
   onAddWordToUserWords = (word: elementData, type: string) => {
     if (this.dictionaryHeader.chapters.chapter !== 6) {
       this.checkToken().then( () => {
+        if (type === "study") {
+          localStorage.setItem("learnedWords", String(Number(localStorage.getItem("learnedWords") as string) + 1));
+          updateUserStatistics();
+        }          
         const isWordPresent = this.userWords.filter(item => item.wordId === word.id);
         if (isWordPresent.length) {
           const lastOtional = JSON.parse(JSON.stringify(isWordPresent[0].optional)) as wordOptional;
+          lastOtional.learned = type == "study" ? "yes" : "no";
+          lastOtional.learnDate = type == "study" ?  getTodayInString() : "no";
           updateWordInUserWords(word, type, lastOtional).then( data => {
             isWordPresent[0].difficulty = data.difficulty;
             this.onSetupButtons();
           });
         } else {
-          if (type === "study") {
-            localStorage.setItem("learnedWords", String(Number(localStorage.getItem("learnedWords") as string) - 1));
-            updateUserStatistics();
-          }          
           const optional = this.createEmptyOptional();
+          optional.learned = type == "study" ? "yes" : "no";
+          optional.learnDate = type == "study" ?  getTodayInString() : "no";
           addWordToUserWords(word, type, optional).then( data => {
             this.userWords.push(data);
             this.onSetupButtons();
@@ -125,6 +130,8 @@ export class Dictionary extends Component {
     } else {
       this.dictionaryContent.loading = true;
       const lastOtional = JSON.parse(JSON.stringify(word.userWord)).optional; 
+      lastOtional.learned = "yes";
+      lastOtional.learnDate = getTodayInString();
       this.dictionaryContent.renderContent();
 
       localStorage.setItem("learnedWords", String(Number(localStorage.getItem("learnedWords") as string) + 1));
@@ -149,11 +156,11 @@ export class Dictionary extends Component {
       } else {
         lastOtional = this.createEmptyOptional();
       }
+      lastOtional.learned = "no";
+      lastOtional.learnDate = "no";
     } else {
       lastOtional = this.createEmptyOptional();
     }
-    console.log(lastOtional);
-    
     this.checkToken().then( () => {
       if (isWordPresent.length) {
         updateWordInUserWords(word, "normal", lastOtional).then( (data) => {
