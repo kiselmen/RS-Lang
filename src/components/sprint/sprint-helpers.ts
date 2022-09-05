@@ -2,6 +2,7 @@ import {getWordsByChapterAndPage} from "../../utils/loader";
 import { BASE_URL } from "../../interfaces";
 import { elementData  } from "../../interfaces";
 
+
 const sprintState: ISprintState = {
   currentGroup: 0,
   currentPage: 0,
@@ -177,7 +178,7 @@ async function changeVisible(el: HTMLElement, bool: boolean, displayProp = "none
   }
 }
 
-interface ISprintState {
+export interface ISprintState {
   currentGroup: number;
   currentPage: number,
   stepCounter: number,
@@ -190,7 +191,7 @@ interface ISprintState {
   userResult: IAnswerResultObj[];
 }
 
-interface IAnswerResultObj {
+export interface IAnswerResultObj {
   id: string;
   answer: boolean;
 }
