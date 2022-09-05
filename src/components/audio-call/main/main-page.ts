@@ -225,7 +225,7 @@ export class AudioCallMainPage extends Component {
     const isLogin = localStorage.getItem("token");
     if(this.randomNum.word === id) {
       event.style.background = "#67db67";
-      this.audioResult.element.setAttribute("src", "../../../../public/audio/win.mp3");
+      this.audioResult.element.setAttribute("src", "./public/audio/win.mp3");
       this.bar.animate(this.progressVal += 0.1);
       localStorage.setItem("progressbarVal", `${this.progressVal}`);
       correctWords.push(this.randomNum);
@@ -237,7 +237,7 @@ export class AudioCallMainPage extends Component {
     } else {
       dataAudiocall.series = 0;
       event.style.background = "#ff4c4c";
-      this.audioResult.element.setAttribute("src", "../../../../public/audio/wrong.mp3");
+      this.audioResult.element.setAttribute("src", "./public/audio/wrong.mp3");
       wrongWords.push(this.randomNum);
       dataAudiocall.wrongArr = wrongWords;
     }

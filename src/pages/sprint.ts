@@ -192,6 +192,7 @@ export class Sprint extends Component {
           if (wordInGame.answer) {
             optional.correctAnswers++;
             currSeria++;
+            if (maxSeria < currSeria) maxSeria = currSeria;
           } else {
             if (maxSeria < currSeria) maxSeria = currSeria;
             currSeria = 0;

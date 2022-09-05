@@ -2,6 +2,7 @@ import "../styles/profile.scss";
 import { Component } from "../utils/component";
 import { UIButton } from "../components/UI/button";
 import { getUserStatistics } from "../utils/loader";
+import { elementData } from "../interfaces/index";
 
 export class Profile extends Component {
   profileHeaderContainer;
@@ -70,30 +71,61 @@ export class Profile extends Component {
       const response = await getUserStatistics(currentUserId);
       const userStatistics = response.data;
 
-      const audiocallStatistics = userStatistics.optional.audiocall;
-      const sprintStatistics = userStatistics.optional.sprint;
+      console.log(response.data);
+      
+      const audiocallStatistics = userStatistics.optional.audiocall as {
+        currSeria: number,
+        maxSeria: number,
+        dayStata: Array<elementData>
+      };
+      const sprintStatistics = userStatistics.optional.sprint as {
+        currSeria: number,
+        maxSeria: number,
+        dayStata: Array<elementData>
+      };
+
       this.learnedWords = +userStatistics.learnedWords;
 
       //* Еежедневная //*
 
       /* Sprint */
-      const sprintAccuracy = (+sprintStatistics.dayStata[sprintStatistics.dayStata.length - 1].correctAnswers * 100 / +sprintStatistics.dayStata[sprintStatistics.dayStata.length - 1].totalQuestions).toFixed();
-      this.todaySprintStatContent.setCounter(0, sprintStatistics.dayStata[sprintStatistics.dayStata.length - 1].newWords);
+      let newWordsSprint = 0;
+      let totalQuestionsSprint = 0;
+      let correctAnswerSprint = 0;
+      const sprintStatisticsDayStata = sprintStatistics.dayStata as Array<elementData>;
+      sprintStatisticsDayStata.forEach( item => {
+        newWordsSprint = newWordsSprint + Number(item.newWords);
+        totalQuestionsSprint = totalQuestionsSprint + Number(item.totalQuestions);
+        correctAnswerSprint = correctAnswerSprint + Number(item.correctAnswers);
+      });
+
+      let newWordsAudio = 0;
+      let totalQuestionsAudio = 0;
+      let correctAnswerAudio = 0;
+      const audiocallStatisticsDayStata = audiocallStatistics.dayStata as Array<elementData>;
+      audiocallStatisticsDayStata.forEach( item => {
+        newWordsAudio = newWordsAudio + Number(item.newWords);
+        totalQuestionsAudio = totalQuestionsAudio + Number(item.totalQuestions);
+        correctAnswerAudio = correctAnswerAudio + Number(item.correctAnswers);
+      });
+      
+      const sprintAccuracy = (correctAnswerSprint * 100 / totalQuestionsSprint).toFixed(2);
+      this.todaySprintStatContent.setCounter(0, String(newWordsSprint));
       this.todaySprintStatContent.setCounter(1, Number(sprintAccuracy).toFixed(2) + " %");
-      this.todaySprintStatContent.setCounter(2, sprintStatistics.maxSeria);
+      this.todaySprintStatContent.setCounter(2, String(sprintStatistics.maxSeria));
 
       /* Audio Call */
-      const audiocallAccuracy = +audiocallStatistics.dayStata[audiocallStatistics.dayStata.length - 1].correctAnswers * 100 / +audiocallStatistics.dayStata[audiocallStatistics.dayStata.length - 1].totalQuestions;
-      this.todayAudioCallStatContent.setCounter(0, audiocallStatistics.dayStata[audiocallStatistics.dayStata.length-1].newWords);
+      const audiocallAccuracy = (correctAnswerAudio * 100 / totalQuestionsAudio).toFixed(2);
+      this.todayAudioCallStatContent.setCounter(0, String(newWordsAudio));
       this.todayAudioCallStatContent.setCounter(1, Number(audiocallAccuracy).toFixed(2) + " %");
-      this.todayAudioCallStatContent.setCounter(2, audiocallStatistics.maxSeria);
+      this.todayAudioCallStatContent.setCounter(2, String(audiocallStatistics.maxSeria));
 
       /* Vocabruary */
       this.todayLearnedWordsCounter.block3Title.element.innerText = "learned words";
-
-      this.todayLearnedWordsCounter.setCounter(0, (+sprintStatistics.dayStata[sprintStatistics.dayStata.length - 1].newWords + +audiocallStatistics.dayStata[audiocallStatistics.dayStata.length-1].newWords).toString());
-      this.todayLearnedWordsCounter.setCounter(1, ((+sprintAccuracy + +audiocallAccuracy) / 2).toFixed(2) + " %");
-      this.todayLearnedWordsCounter.setCounter(2, "44");
+      const totalAccuracy = ((correctAnswerSprint + correctAnswerAudio) * 100 / (totalQuestionsSprint + totalQuestionsAudio)).toFixed(2);
+      this.todayLearnedWordsCounter.setCounter(0, (newWordsSprint + newWordsAudio).toString());
+      this.todayLearnedWordsCounter.setCounter(1, Number(totalAccuracy).toFixed(2) + " %");
+      this.todayLearnedWordsCounter.setCounter(2, String(this.learnedWords));
 
 
     }
