@@ -2,8 +2,6 @@ import "../styles/profile.scss";
 import { Component } from "../utils/component";
 import { UIButton } from "../components/UI/button";
 import { getUserStatistics } from "../utils/loader";
-import * as am5 from "@amcharts/amcharts5";
-import * as am5percent from "@amcharts/amcharts5/percent";
 
 export class Profile extends Component {
   profileHeaderContainer;
@@ -18,22 +16,14 @@ export class Profile extends Component {
   todayLearnedWordsCounter;
   todayAudioCallStatContent;
   todaySprintStatContent;
-  allTimeWordsWrap;
-  allTimeGamesWrap;
-  allTimeAudioCallWrap;
-  allTimeSprintWrap;
-  allTimeSubTitle;
-  allTimeContentWrapper;
-  allTimeLWTimeline;
-  allTimeLWTitle;
-  allTimeAudioCallContent;
-  allTimeSprintContent;
-  
+  learnedWords: number;
+
   onUpdateRouter: () => void;
 
   constructor(parentNode: HTMLElement, updateRouter: () => void) {
     super(parentNode, "div", ["profile"]);
     this.onUpdateRouter = () => updateRouter();
+    this.learnedWords = 0;
 
     this.profileHeaderContainer = new Component(this.element, "div", ["statisticsHeader-container"]);
     this.title = new Component(this.profileHeaderContainer.element, "h3", ["statistics-title"], "Statistics");
@@ -47,13 +37,6 @@ export class Profile extends Component {
     this.todayAudioCallStatWrapper = new Component(this.todayContentWrapper.element, "div", ["todayLearnedWords-wrapper"]);
     this.todaySprintStatWrapper = new Component(this.todayContentWrapper.element, "div", ["todayLearnedWords-wrapper"]);
 
-    this.allTimeSubTitle = new Component(this.contentWrapper.element, "h3", ["statistics-subTitle", "allTime-subTitle"], "All Time");
-    this.allTimeContentWrapper = new Component(this.contentWrapper.element, "div", ["allTimeContent-wrapper"]);       
-    this.allTimeWordsWrap = new Component(this.allTimeContentWrapper.element, "div", ["allTimeWords-wrapper"]);
-    this.allTimeGamesWrap = new Component(this.allTimeContentWrapper.element, "div", ["allTimeGames-wrapper"]);
-    this.allTimeAudioCallWrap = new Component(this.allTimeGamesWrap.element, "div", ["allTimeAudioCall-wrapper"]);
-    this.allTimeSprintWrap = new Component(this.allTimeGamesWrap.element, "div", ["allTimeSprint-wrapper"]);
-
     /* Внутиренние блоки */
 
     /* Today */
@@ -61,15 +44,8 @@ export class Profile extends Component {
     this.todayAudioCallStatContent = new StatisticsContentPart(this.todayAudioCallStatWrapper.element, "Audio call");
     this.todaySprintStatContent = new StatisticsContentPart(this.todaySprintStatWrapper.element, "Sprint");
 
-    /* All Time */
-    this.allTimeLWTimeline = new Component(this.allTimeWordsWrap.element, "div", ["allTimeLW-еimeline"]);
-    this.allTimeLWTitle = new Component(this.allTimeWordsWrap.element, "div", ["allTimeLW-title"], "words were learned");
-    this.allTimeAudioCallContent = new StatisticsContentPart(this.allTimeAudioCallWrap.element, "Audio call");
-    this.allTimeSprintContent = new StatisticsContentPart(this.allTimeSprintWrap.element, "Sprint");
-
     this.requestUserStatInfo();
     // this.createPiechart1();
-    // this.createPiechart2();
   }
 
   onLogout() {
@@ -86,8 +62,6 @@ export class Profile extends Component {
     this.onUpdateRouter();
   }
 
-
-
   /* Вывод статистики */
   requestUserStatInfo = async () => {
 
@@ -98,11 +72,11 @@ export class Profile extends Component {
 
       const audiocallStatistics = userStatistics.optional.audiocall;
       const sprintStatistics = userStatistics.optional.sprint;
-      console.log(userStatistics);
+      this.learnedWords = +userStatistics.learnedWords;
 
-      //* Еежедневная //*      
+      //* Еежедневная //*
 
-      /* Sprint */      
+      /* Sprint */
       const sprintAccuracy = (+sprintStatistics.dayStata[sprintStatistics.dayStata.length - 1].correctAnswers * 100 / +sprintStatistics.dayStata[sprintStatistics.dayStata.length - 1].totalQuestions).toFixed();
       this.todaySprintStatContent.setCounter(0, sprintStatistics.dayStata[sprintStatistics.dayStata.length - 1].newWords);
       this.todaySprintStatContent.setCounter(1,  sprintAccuracy + " %");
@@ -120,158 +94,12 @@ export class Profile extends Component {
       this.todayLearnedWordsCounter.setCounter(0, (+sprintStatistics.dayStata[sprintStatistics.dayStata.length - 1].newWords + +audiocallStatistics.dayStata[audiocallStatistics.dayStata.length-1].newWords).toString());
       this.todayLearnedWordsCounter.setCounter(1, (+sprintAccuracy + +audiocallAccuracy) / 2 + " %");
       this.todayLearnedWordsCounter.setCounter(2, "44");
-
-      // //* Общая //*
-      // this.allTimeLearnedWords.element.style.cssText = "width: 45%; height: auto;";
-
-      /* Sprint */      
-      // const a = Array.from(sprintStatistics.dayStata);
-      // console.log(a.reduce((acc, cur:string) => acc + +cur.newWords));
- 
-
-      // const AllTimeSprintAccuracy = (+sprintStatistics.dayStata[sprintStatistics.dayStata.length - 1].correctAnswers * 100 / +sprintStatistics.dayStata[sprintStatistics.dayStata.length - 1].totalQuestions).toFixed();
-      this.allTimeSprintContent.setCounter(0, sprintStatistics.dayStata[sprintStatistics.dayStata.length - 1].newWords);
-      this.allTimeSprintContent.setCounter(1,  sprintAccuracy + " %");
-      this.allTimeSprintContent.setCounter(2, sprintStatistics.maxSeria);
-
-      /* Audio Call */
-      // const AllTimeAudiocallAccuracy = +audiocallStatistics.dayStata[audiocallStatistics.dayStata.length - 1].correctAnswers * 100 / +audiocallStatistics.dayStata[audiocallStatistics.dayStata.length - 1].totalQuestions;
-      this.allTimeAudioCallContent.setCounter(0, audiocallStatistics.dayStata[audiocallStatistics.dayStata.length-1].newWords);
-      this.allTimeAudioCallContent.setCounter(1, audiocallAccuracy + " %");
-      this.allTimeAudioCallContent.setCounter(2, audiocallStatistics.maxSeria);
-
-
-
-      // this.allTimeLearnedWords.element.style.cssText = "width: 45%; height: auto;";
-
     }
-  };
-
-  createPiechart1 = () => {
-    // Create root and chart
-    const root = am5.Root.new("chart1");
-    const chart = root.container.children.push(
-      am5percent.PieChart.new(root, {
-        layout: root.horizontalLayout,
-        radius: am5.percent(70),
-        innerRadius: am5.percent(50),
-
-      })
-    );
-
-    // Define data
-    const data = [{
-      source: "day",
-      value: 100
-    }, {
-      source: "day",
-      value: 100
-    }, 
-    {
-      source: "day",
-      value: 100
-    },{
-      source: "day",
-      value: 100
-    },{
-      source: "day",
-      value: 100
-    },{
-      source: "day",
-      value: 100
-    },{
-      source: "day",
-      value: 100
-    }];
-
-    // Create series
-    const series = chart.series.push(
-      am5percent.PieSeries.new(root, {
-        name: "Words",
-        valueField: "value",
-        categoryField: "source",
-        alignLabels: false
-      })
-    );
-
-    series.data.setAll(data);
-
-    series.slices.template.set("tooltipText", "[bold]{value}");
-    series.labels.template.setAll({
-      radius: 500
-    });
-
-    series.labels.template.setAll({
-      text: "{category}",
-      textType: "circular",
-      inside: false,
-      radius: 25
-    });
-
-    // series.labels.template.set("text", "{category}: [bold]{Total.formatNumber()} ({value})");
-    // series.labels.template.set("forceHidden", true);
-    // // Add legend
-    // const legend = chart.children.push(am5.Legend.new(root, {
-    //   centerX: am5.percent(50),
-    //   x: am5.percent(50),
-    //   layout: root.horizontalLayout
-    // }));
-
-    // legend.data.setAll(series.dataItems);
-  };
-
-  createPiechart2 = () => {
-    // Create root and chart
-    const root = am5.Root.new("chart2");
-    const chart = root.container.children.push(
-      am5percent.PieChart.new(root, {
-        layout: root.horizontalLayout,
-        radius: am5.percent(70),
-        innerRadius: am5.percent(50),
-
-      })
-    );
-
-    // Define data
-    const data = [{
-      source: "vocabruary",
-      value: 100
-    }, {
-      source: "audio call",
-      value: 100
-    }, {
-      source: "sprint",
-      value: 100
-    }];
-
-    // Create series
-    const series = chart.series.push(
-      am5percent.PieSeries.new(root, {
-        name: "Words",
-        valueField: "value",
-        categoryField: "source",
-        alignLabels: false
-      })
-    );
-
-    series.data.setAll(data);
-
-    series.slices.template.set("tooltipText", "[bold]{value}");
-    series.labels.template.setAll({
-      radius: 500
-    });
-
-    series.labels.template.setAll({
-      text: "{category}",
-      textType: "circular",
-      inside: false,
-      radius: 25
-    });
   };
 }
 
-/* Класс для отдельных компонентов статистики - Sprint и Audiocall */
 
+/* Класс для отдельных компонентов статистики - Sprint и Audiocall */
 class StatisticsContentPart extends Component {
   contentWrapper;
   block1Wrapper;
@@ -312,5 +140,4 @@ class StatisticsContentPart extends Component {
   getCounter = (counterNumber: number): string => {
     return [this.block1Counter, this.block2Counter, this.block3Counter][counterNumber].element.innerText;
   };
-
 }

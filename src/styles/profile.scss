@@ -64,23 +64,34 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
   gap: 30px;
   padding-bottom: 50px;
 }
-.statistics-item p {
-  padding-bottom: 20px;
+.statistics-item div{
+  padding-bottom: 10px;
+}
+.audiocall-title, .sprint-title {
+  padding-bottom: 51px;
+}
+.statistics-item .words-title {
+  padding-bottom: 51px;
 }
 .todayLearnedWords-wrapper {
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;  
+  justify-content: space-between;
   box-shadow: 3px 3px 10px rgb(168 168 168), inset 5px 5px 10px rgb(255 253 253);
   background: #e3e3e305;
-  padding: 20px;
+  padding: 40px 20px 20px 20px;
   border-radius: 15px;
   border: 2px solid #dfdfdf;
   width: 100%;
-  min-height: 250px;
+  min-height: 265px;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  min-width: 310px;
 }
 .learnedWords-counter {
   font-size: 5rem;
@@ -97,16 +108,17 @@
   display: flex;
   align-items: stretch;
   justify-content: flex-start;
-  flex-direction: column;  
+  flex-direction: column;
+  width: 100%;
 }
 .audiocall-title, .sprint-title, .words-title {
   font-size: 1.8rem;
   font-weight: bold;
   letter-spacing: 3px;
-  align-self: start;
-  padding: 0 20px 0px 70px;
+  align-self: center;
   position: relative;
-  padding-bottom: 15px;    
+  padding-left: 80px;
+  text-align: center;
 }
 .words-title::before {
   content: "";
@@ -122,9 +134,6 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  -moz-column-gap: 30px;
-       column-gap: 30px;
-  padding: 5px 0;
 }
 .statisticsProfileLogout {
   font-family: Arial;
@@ -163,57 +172,11 @@
   background: url(../../public/profile-images/sprint.svg) no-repeat center;
   background-size: cover;
 }
-.allTimeContent-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  flex-wrap: wrap;
-  gap: 30px;
-  max-width: 630px;
-}
-.allTimeWords-wrapper {
-  max-width: 630px;
-  width: 100%;  
-  display: block;
-  align-items: center;
-  justify-content: space-between;
-  -moz-column-gap: 20px;
-  column-gap: 20px;
-  box-shadow: 3px 3px 10px rgb(168 168 168), inset 5px 5px 10px rgb(255 253 253);
-  background: rgba(227, 227, 227, 0.0196078431);
-  padding: 20px;
-  border-radius: 15px;
-  border: 2px solid #dfdfdf;
-  width: 100%;
-}
-.allTimeGames-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 30px;
-}
-.allTimeAudioCall-wrapper, .allTimeSprint-wrapper {
-  width: 100%;  
-  display: block;
-  align-items: center;
-  justify-content: space-between;
-  -moz-column-gap: 20px;
-  column-gap: 20px;
-  box-shadow: 3px 3px 10px rgb(168 168 168), inset 5px 5px 10px rgb(255 253 253);
-  background: rgba(227, 227, 227, 0.0196078431);
-  padding: 20px;
-  border-radius: 15px;
-  border: 2px solid #dfdfdf;
-  width: 100%;
-}
 .wordsBlock-wrapper {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
 }
-
 
 
 @media (max-width: 576px) {
@@ -227,7 +190,7 @@
     gap: 10px;
     flex-wrap: wrap;
     width: 100%;
-  }  
+  }
   .audiocall-title, .sprint-title {
     align-self: center;
   }
@@ -237,26 +200,12 @@
   .statistics-subTitle {
     align-self: center;
   }
-  .todayLearnedWords-wrapper, 
-  .allTimeWords-wrapper, .allTimeAudioCall-wrapper, .allTimeSprint-wrapper  {
+ .todayLearnedWords-wrapper  {
     box-shadow: none;
     border-radius: 0px;
     border: none;
     border-top: 2px solid #eeeeee;
-    width: 100%;    
-  }
-  .todayLearnedWords-wrapper:last-child {
-    border-bottom: 2px solid #eeeeee;
+    width: 100%;
   }
 }
 
-#chart1, #chart2 {
-  min-width: 320px;
-  min-height: 320px;
-}
-// .firstBlock-wrapper, .second-wrapper {
-//   min-width: 320px;
-//   min-height: 320px;
-//   max-width: 350px;
-// }
-// calc(32px + 8 * ((100vw - 320px) / (1880 - 320)));
