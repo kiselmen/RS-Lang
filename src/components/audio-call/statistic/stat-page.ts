@@ -37,7 +37,7 @@ export class AudioCallStatisticPage extends Component {
   totalItem!: Component;
   totalItemAudio!: Component;
 
-  constructor(parentNode: HTMLElement) {
+  constructor(parentNode: HTMLElement, parameters: string) {
     super(parentNode, "div", ["audiocall-stat", "statistic"]);
 
     this.statHeading = new Component(this.element, "h3", ["statistic-heading"],"Here is your result");
@@ -55,7 +55,7 @@ export class AudioCallStatisticPage extends Component {
     this.btnDictionary = new UIButton(this.statBtnsCont.element, ["statistic-btns__dictionary"], "Dictionary");
     this.linkDictionary = new Component(this.btnDictionary.element, "a", ["statistic-link", "link-dict"], "");
     
-    this.linkAgain.element.setAttribute("href", "#/audiocall");
+    // this.linkAgain.element.setAttribute("href", "#/audiocall");
     this.linkDictionary.element.setAttribute("href", "#/dictionary");
     
     this.statBtnsCont.element.addEventListener("click", (e) => {
@@ -65,9 +65,11 @@ export class AudioCallStatisticPage extends Component {
       if ((!this.statBtnsCont.element.contains(btn))) return;
 
       if (eventTarget.classList.contains("link-again")) {
-        window.location.hash = "#/audiocall";
+        if(!parameters) {
+          window.location.hash = "#/audiocall";
+        }
+        location.reload();
       }
-      location.reload();
     });
 
     this.progressbarCount = new Component(this.statProgressbar.element, "span", ["master-progressbar__count"],);
@@ -94,7 +96,7 @@ export class AudioCallStatisticPage extends Component {
   }
   
   createList = (listContainer: HTMLElement, arrayWords: IWordsElement[]) => {
-    arrayWords.forEach( el => {
+    arrayWords.forEach( (el) => {
       this.totalItem = new Component(listContainer, "li", ["total-item", "total-correct__item"]);
       this.totalItemBtn = new UIButton(this.totalItem.element, ["total-item__btn"], "");
       this.totalItemImg = new Component(this.totalItemBtn.element, "img", ["total-item__img"]);
