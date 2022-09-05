@@ -212,6 +212,7 @@ export class Dictionary extends Component {
 
   setupButtonsForCapter1_6 = () => {
     let countStudy = 0;
+    let countHard = 0;
     this.dictionaryContent.listElement.forEach ( itemInList => {
       if (localStorage.getItem("token")) {
         const isPresent = this.userWords.filter( userItem => {
@@ -219,9 +220,9 @@ export class Dictionary extends Component {
         });
         if (isPresent.length) {
           itemInList.elementStata.element.classList.add("active");
-          itemInList.elementCorrectAnswers.element.textContent = isPresent[0].optional ? JSON.parse(JSON.stringify(isPresent[0].optional)).correctAnswers : "";
-          itemInList.elementTotalAttempts.element.textContent = isPresent[0].optional ? JSON.parse(JSON.stringify(isPresent[0].optional)).totalAttempts : "";
-          
+          itemInList.elementCorrectAnswers.element.textContent = isPresent[0].optional ? JSON.parse(JSON.stringify(isPresent[0].optional)).correctAnswers : "0";
+          itemInList.elementTotalAttempts.element.textContent = isPresent[0].optional ? JSON.parse(JSON.stringify(isPresent[0].optional)).totalAttempts : "0";
+          itemInList.elementStata.element.classList.remove("element-stata__disabled");
           if (isPresent[0].difficulty === "hard") {
             itemInList.elementBtnAdd.setDisabled(true);
             itemInList.elementBtnRemove.setDisabled(false);
@@ -244,8 +245,8 @@ export class Dictionary extends Component {
             itemInList.element.classList.remove("element__studied");
           }
         } else {
-          itemInList.elementCorrectAnswers.element.textContent = "";
-          itemInList.elementTotalAttempts.element.textContent = "";
+          itemInList.elementCorrectAnswers.element.textContent = "0";
+          itemInList.elementTotalAttempts.element.textContent = "0";
           itemInList.elementStata.element.classList.remove("active");
           itemInList.elementBtnAdd?.setDisabled(false);
           itemInList.elementBtnRemove.setDisabled(true);
@@ -254,12 +255,14 @@ export class Dictionary extends Component {
           itemInList.element.classList.remove("element__studied");
         }
         countStudy = countStudy + this.userWords.filter( userItem => itemInList.word.id === userItem.wordId && userItem.difficulty === "study").length;
+        countHard = countHard + this.userWords.filter( userItem => itemInList.word.id === userItem.wordId && userItem.difficulty === "hard").length;
       } else {
         itemInList.elementBtnAdd?.setDisabled(true);
         itemInList.elementBtnRemove.setDisabled(true);
         itemInList.elementBtnStudied.setDisabled(true);
         itemInList.element.classList.remove("element__hard");
         itemInList.element.classList.remove("element__studied");
+        itemInList.elementStata.element.classList.add("element-stata__disabled");
       }
       
     });
@@ -267,6 +270,13 @@ export class Dictionary extends Component {
       this.dictionaryPagination.numberPage.element.classList.add("pagination-number__learned");
     } else {
       this.dictionaryPagination.numberPage.element.classList.remove("pagination-number__learned");
+    }
+    if (countStudy + countHard === 20) {
+      this.dictionaryHeader.games.dictionaryHeading.element.classList.add("games__disabled");
+      this.dictionaryHeader.games.dictionaryGames.element.classList.add("games__disabled");
+    } else {
+      this.dictionaryHeader.games.dictionaryHeading.element.classList.remove("games__disabled");
+      this.dictionaryHeader.games.dictionaryGames.element.classList.remove("games__disabled");
     }
   };
 
