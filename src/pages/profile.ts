@@ -15,16 +15,20 @@ export class Profile extends Component {
   todayLearnedWordsStatWrapper;
   todayAudioCallStatWrapper;
   todaySprintStatWrapper;
-  allTimeSubTitle;
-  allTimeContentWrapper;
-  allTimeLearnedWords;
-  allTimeProgress;
-  learnedWordsCounter;
-  learnedWordsTextContentContainer;
+  todayLearnedWordsCounter;
   todayAudioCallStatContent;
   todaySprintStatContent;
-  allTimeFirstBlockWrap;
-  allTimeSecondBlockWrap;
+  allTimeWordsWrap;
+  allTimeGamesWrap;
+  allTimeAudioCallWrap;
+  allTimeSprintWrap;
+  allTimeSubTitle;
+  allTimeContentWrapper;
+  allTimeLWTimeline;
+  allTimeLWTitle;
+  allTimeAudioCallContent;
+  allTimeSprintContent;
+  
   onUpdateRouter: () => void;
 
   constructor(parentNode: HTMLElement, updateRouter: () => void) {
@@ -44,32 +48,28 @@ export class Profile extends Component {
     this.todaySprintStatWrapper = new Component(this.todayContentWrapper.element, "div", ["todayLearnedWords-wrapper"]);
 
     this.allTimeSubTitle = new Component(this.contentWrapper.element, "h3", ["statistics-subTitle", "allTime-subTitle"], "All Time");
-    this.allTimeContentWrapper = new Component(this.contentWrapper.element, "div", ["allTimeContent-wrapper"]);
-
-    this.allTimeFirstBlockWrap = new Component(this.allTimeContentWrapper.element, "div", ["firstBlock-wrapper"],);
-    new Component(this.allTimeFirstBlockWrap.element, "div", ["allTimeLearnedWords-title", "allTime-title"], "Learned words");
-    this.allTimeLearnedWords = new Component(this.allTimeFirstBlockWrap.element, "div", ["allTimeLearnedWords-wrapper"]);
-
-    this.allTimeSecondBlockWrap = new Component(this.allTimeContentWrapper.element, "div", ["second-wrapper"],);
-    new Component(this.allTimeSecondBlockWrap.element, "div", ["allTimeProgress-title", "allTime-title"], "New Words");
-    this.allTimeProgress = new Component(this.allTimeSecondBlockWrap.element, "div", ["allTimeLearnedWords-wrapper"]);
-
-    this.allTimeLearnedWords.element.id = "chart1";
-    this.allTimeProgress.element.id = "chart2";
+    this.allTimeContentWrapper = new Component(this.contentWrapper.element, "div", ["allTimeContent-wrapper"]);       
+    this.allTimeWordsWrap = new Component(this.allTimeContentWrapper.element, "div", ["allTimeWords-wrapper"]);
+    this.allTimeGamesWrap = new Component(this.allTimeContentWrapper.element, "div", ["allTimeGames-wrapper"]);
+    this.allTimeAudioCallWrap = new Component(this.allTimeGamesWrap.element, "div", ["allTimeAudioCall-wrapper"]);
+    this.allTimeSprintWrap = new Component(this.allTimeGamesWrap.element, "div", ["allTimeSprint-wrapper"]);
 
     /* Внутиренние блоки */
-    this.learnedWordsCounter = new Component(this.todayLearnedWordsStatWrapper.element, "div", ["learnedWords-counter"], "0");
-    this.learnedWordsTextContentContainer = new Component(this.todayLearnedWordsStatWrapper.element, "div", ["learnedWordsTxtContent-container"]);
-    new Component(  this.learnedWordsTextContentContainer.element, "div", ["learnedWordsTxtContent-textContent"], "words");
-    new Component(  this.learnedWordsTextContentContainer.element, "div", ["learnedWordsTxtContent-textContent"], "were learned");
 
+    /* Today */
+    this.todayLearnedWordsCounter = new StatisticsContentPart(this.todayLearnedWordsStatWrapper.element, "Words");
     this.todayAudioCallStatContent = new StatisticsContentPart(this.todayAudioCallStatWrapper.element, "Audio call");
     this.todaySprintStatContent = new StatisticsContentPart(this.todaySprintStatWrapper.element, "Sprint");
 
+    /* All Time */
+    this.allTimeLWTimeline = new Component(this.allTimeWordsWrap.element, "div", ["allTimeLW-еimeline"]);
+    this.allTimeLWTitle = new Component(this.allTimeWordsWrap.element, "div", ["allTimeLW-title"], "words were learned");
+    this.allTimeAudioCallContent = new StatisticsContentPart(this.allTimeAudioCallWrap.element, "Audio call");
+    this.allTimeSprintContent = new StatisticsContentPart(this.allTimeSprintWrap.element, "Sprint");
 
     this.requestUserStatInfo();
-    this.createPiechart1();
-    this.createPiechart2();
+    // this.createPiechart1();
+    // this.createPiechart2();
   }
 
   onLogout() {
@@ -97,30 +97,50 @@ export class Profile extends Component {
       const userStatistics = response.data;
 
       const audiocallStatistics = userStatistics.optional.audiocall;
-
+      const sprintStatistics = userStatistics.optional.sprint;
       console.log(userStatistics);
 
-      // const sprintStatistics = userStatistics.optional.sprint;
+      //* Еежедневная //*      
 
-      //* Еежедневная //*
+      /* Sprint */      
+      const sprintAccuracy = (+sprintStatistics.dayStata[sprintStatistics.dayStata.length - 1].correctAnswers * 100 / +sprintStatistics.dayStata[sprintStatistics.dayStata.length - 1].totalQuestions).toFixed();
+      this.todaySprintStatContent.setCounter(0, sprintStatistics.dayStata[sprintStatistics.dayStata.length - 1].newWords);
+      this.todaySprintStatContent.setCounter(1,  sprintAccuracy + " %");
+      this.todaySprintStatContent.setCounter(2, sprintStatistics.maxSeria);
+
+      /* Audio Call */
+      const audiocallAccuracy = +audiocallStatistics.dayStata[audiocallStatistics.dayStata.length - 1].correctAnswers * 100 / +audiocallStatistics.dayStata[audiocallStatistics.dayStata.length - 1].totalQuestions;
+      this.todayAudioCallStatContent.setCounter(0, audiocallStatistics.dayStata[audiocallStatistics.dayStata.length-1].newWords);
+      this.todayAudioCallStatContent.setCounter(1, audiocallAccuracy + " %");
+      this.todayAudioCallStatContent.setCounter(2, audiocallStatistics.maxSeria);
 
       /* Vocabruary */
-      this.learnedWordsCounter.element.innerText = userStatistics.learnedWords;
-      /* Sprint */
-      const audiocallAccuracy = +audiocallStatistics.dayStata[audiocallStatistics.dayStata.length - 1].correctAnswers * 100 / +audiocallStatistics.dayStata[audiocallStatistics.dayStata.length - 1]?.totalQuestions;
-      // const sprintAccuracy = +sprintStatistics.dayStata[0].correctAnswers * 100 / +sprintStatistics.dayStata[0].totalQuestions;
+      this.todayLearnedWordsCounter.block3Title.element.innerText = "learned words";
 
-      // this.todaySprintStatContent.setCounter(0, sprintStatistics.dayStata[0].totalQuestions);
-      // this.todaySprintStatContent.setCounter(1,  sprintAccuracy + " %");
-      // this.todaySprintStatContent.setCounter(2, sprintStatistics.maxSeria);
-      /* Audio Call */
-       
-      
-      this.todayAudioCallStatContent.setCounter(0, audiocallStatistics.dayStata[audiocallStatistics.dayStata.length-1].totalQuestions);
-      this.todayAudioCallStatContent.setCounter(1, audiocallStatistics.dayStata[audiocallStatistics.dayStata.length-1].newWords);
-      this.todayAudioCallStatContent.setCounter(2, audiocallAccuracy + " %");
+      this.todayLearnedWordsCounter.setCounter(0, (+sprintStatistics.dayStata[sprintStatistics.dayStata.length - 1].newWords + +audiocallStatistics.dayStata[audiocallStatistics.dayStata.length-1].newWords).toString());
+      this.todayLearnedWordsCounter.setCounter(1, (+sprintAccuracy + +audiocallAccuracy) / 2 + " %");
+      this.todayLearnedWordsCounter.setCounter(2, "44");
 
       // //* Общая //*
+      // this.allTimeLearnedWords.element.style.cssText = "width: 45%; height: auto;";
+
+      /* Sprint */      
+      console.log(sprintStatistics.dayStata);
+ 
+
+      // const AllTimeSprintAccuracy = (+sprintStatistics.dayStata[sprintStatistics.dayStata.length - 1].correctAnswers * 100 / +sprintStatistics.dayStata[sprintStatistics.dayStata.length - 1].totalQuestions).toFixed();
+      this.allTimeSprintContent.setCounter(0, sprintStatistics.dayStata[sprintStatistics.dayStata.length - 1].newWords);
+      this.allTimeSprintContent.setCounter(1,  sprintAccuracy + " %");
+      this.allTimeSprintContent.setCounter(2, sprintStatistics.maxSeria);
+
+      /* Audio Call */
+      // const AllTimeAudiocallAccuracy = +audiocallStatistics.dayStata[audiocallStatistics.dayStata.length - 1].correctAnswers * 100 / +audiocallStatistics.dayStata[audiocallStatistics.dayStata.length - 1].totalQuestions;
+      this.allTimeAudioCallContent.setCounter(0, audiocallStatistics.dayStata[audiocallStatistics.dayStata.length-1].newWords);
+      this.allTimeAudioCallContent.setCounter(1, audiocallAccuracy + " %");
+      this.allTimeAudioCallContent.setCounter(2, audiocallStatistics.maxSeria);
+
+
+
       // this.allTimeLearnedWords.element.style.cssText = "width: 45%; height: auto;";
 
     }
@@ -259,6 +279,9 @@ class StatisticsContentPart extends Component {
   block1Counter;
   block2Counter;
   block3Counter;
+  block1Title;
+  block2Title;
+  block3Title;
 
   constructor(parentNode: HTMLElement, title: string) {
     super(parentNode, "div", ["statistics-item"]);
@@ -272,13 +295,13 @@ class StatisticsContentPart extends Component {
     this.block3Wrapper = new Component(this.contentWrapper.element, "div", [partOfClassName + "Block3-wrapper", partOfClassName + "Block-wrapper"]);
 
     this.block1Counter = new Component(this.block1Wrapper.element, "div", [partOfClassName + "Block1-counter", partOfClassName + "Block-counter"], "0");
-    new Component(this.block1Wrapper.element, "p", [partOfClassName + "Block1-textContent", partOfClassName + "Block-textContent"], "words learned");
+    this.block1Title = new Component(this.block1Wrapper.element, "p", [partOfClassName + "Block1-textContent", partOfClassName + "Block-textContent"], "new words");
 
     this.block2Counter = new Component(this.block2Wrapper.element, "div", [partOfClassName + "Block2-counter", partOfClassName + "Block-counter"], "0%");
-    new Component(this.block2Wrapper.element, "p", [partOfClassName + "Block2-textContent", partOfClassName + "Block-textContent"], "new words");
+    this.block2Title = new Component(this.block2Wrapper.element, "p", [partOfClassName + "Block2-textContent", partOfClassName + "Block-textContent"], "accuracy");
 
     this.block3Counter = new Component(this.block3Wrapper.element, "div", [partOfClassName + "Block3-counter", partOfClassName + "Block-counter"], "0");
-    new Component(this.block3Wrapper.element, "p", [partOfClassName + "Block3-textContent", partOfClassName + "Block-textContent"], "accuracy");
+    this.block3Title = new Component(this.block3Wrapper.element, "p", [partOfClassName + "Block3-textContent", partOfClassName + "Block-textContent"], "in line");
   }
 
   setCounter = (counterNumber: number, value: string): string => {
