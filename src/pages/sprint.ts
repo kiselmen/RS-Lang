@@ -24,7 +24,6 @@ export class Sprint extends Component {
     this.sprintGamePage = new SprintGamePage(this.element);
     this.sprintResultsPage = new SprintResultesPage(this.element);
     this.starterKit();
-    console.log(sprintState);
   }
 
   //* Начало игры, определение откуда совершен переход *//
@@ -69,8 +68,6 @@ export class Sprint extends Component {
         sprintState.currentPage = +localStorage.page;
         sprintState.currentContent = await getInfo(sprintState.currentGroup, sprintState.currentPage );
         const allUserWords = await getAlluserWords();
-        console.log(allUserWords);
-
 
         const supportFunc = async () => {
           const studiedUserWordsId = allUserWords.filter((word: IGetUsersWords) => word.difficulty !== "hard" && word.difficulty !== "normal").map((word: someData) => word.wordId);
@@ -167,9 +164,9 @@ export class Sprint extends Component {
   showResults = async () => {
     makeVisibleCurrentSprintPage(this.sprintGamePage.element, this.sprintIntroCard.element, this.sprintResultsPage.element, "block");
     this.timer?.timerStop();
-    this.updateStata(sprintState);
-    this.updateScore(false);
-  };
+    if (localStorage.getItem("token")) {
+      this.updateStata(sprintState);
+    }
 
   updateStata(sprintState: ISprintState) {
     this.initStatisticDataSprint();
@@ -193,6 +190,7 @@ export class Sprint extends Component {
           if (wordInGame.answer) {
             optional.correctAnswers++;
             currSeria++;
+            if (maxSeria < currSeria) maxSeria = currSeria;
           } else {
             if (maxSeria < currSeria) maxSeria = currSeria;
             currSeria = 0;
@@ -271,7 +269,6 @@ export class Sprint extends Component {
   initStatisticDataSprint(){
     const isLogin = localStorage.getItem("token");
     if (isLogin) {
-      // console.log(Авторизован");
       const sprintStorage = localStorage.getItem("sprint");
       if (sprintStorage){
         const sprintStata = JSON.parse(sprintStorage);
@@ -301,8 +298,6 @@ export class Sprint extends Component {
         localStorage.setItem("sprint", JSON.stringify(sprintStata));
       }
     }
-    // console.
-    // (dataAudiocall);
   }
 
   /* Озвучка правильных и неправильных ответов */
@@ -382,7 +377,6 @@ export class Sprint extends Component {
         if(localStorage.userId) {
           sprintState.userResult.push({"id": sprintState.currentContent[sprintState.stepCounter].id as string, "answer": true});
         }
-        console.log(sprintState);
         await updateSprintState("none", true, true, true, false, false);
         await this.updateScore(true);
         await this.updateSignalLampState(true);
@@ -398,7 +392,6 @@ export class Sprint extends Component {
         if(localStorage.userId) {
           sprintState.userResult.push({"id": sprintState.currentContent[sprintState.stepCounter].id as string, "answer": false});
         }
-        console.log(sprintState);
 
         await updateSprintState("none", true, true, false, false, false);
         await this.updateSignalLampState(true);
@@ -530,7 +523,6 @@ export class Sprint extends Component {
   /* Задачи при закрытиее игры */
   closeGameActions = async () => {
     await makeVisibleCurrentSprintPage(this.sprintGamePage.element, this.sprintResultsPage.element, this.sprintIntroCard.element, "flex");
-    console.log(sprintState.userResult);
     clearSprintState();
     this.sprintResultsPage.clearResults();
     this.timer?.timerStop();
