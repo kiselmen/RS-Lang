@@ -107,20 +107,20 @@ export class Profile extends Component {
         correctAnswerAudio = correctAnswerAudio + Number(item.correctAnswers);
       });
       
-      const sprintAccuracy = (correctAnswerSprint * 100 / totalQuestionsSprint).toFixed(2);
+      const sprintAccuracy = totalQuestionsSprint ? (correctAnswerSprint * 100 / totalQuestionsSprint).toFixed(2) : 0.00;
       this.todaySprintStatContent.setCounter(0, String(newWordsSprint));
       this.todaySprintStatContent.setCounter(1, Number(sprintAccuracy).toFixed(2) + " %");
       this.todaySprintStatContent.setCounter(2, String(sprintStatistics.maxSeria));
 
       /* Audio Call */
-      const audiocallAccuracy = (correctAnswerAudio * 100 / totalQuestionsAudio).toFixed(2);
+      const audiocallAccuracy = totalQuestionsAudio ? (correctAnswerAudio * 100 / totalQuestionsAudio).toFixed(2) : 0.00;
       this.todayAudioCallStatContent.setCounter(0, String(newWordsAudio));
       this.todayAudioCallStatContent.setCounter(1, Number(audiocallAccuracy).toFixed(2) + " %");
       this.todayAudioCallStatContent.setCounter(2, String(audiocallStatistics.maxSeria));
 
       /* Vocabruary */
       this.todayLearnedWordsCounter.block3Title.element.innerText = "learned words";
-      const totalAccuracy = ((correctAnswerSprint + correctAnswerAudio) * 100 / (totalQuestionsSprint + totalQuestionsAudio)).toFixed(2);
+      const totalAccuracy = totalQuestionsSprint + totalQuestionsAudio ? ((correctAnswerSprint + correctAnswerAudio) * 100 / (totalQuestionsSprint + totalQuestionsAudio)).toFixed(2) : 0.00;
       this.todayLearnedWordsCounter.setCounter(0, (newWordsSprint + newWordsAudio).toString());
       this.todayLearnedWordsCounter.setCounter(1, Number(totalAccuracy).toFixed(2) + " %");
       this.todayLearnedWordsCounter.setCounter(2, String(this.learnedWords));
