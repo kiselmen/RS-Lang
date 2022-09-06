@@ -167,7 +167,7 @@ export class Sprint extends Component {
     if (localStorage.getItem("token")) {
       this.updateStata(sprintState);
     }
-  }  
+  };
 
   updateStata(sprintState: ISprintState) {
     this.initStatisticDataSprint();
