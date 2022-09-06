@@ -33,14 +33,12 @@ export class AudioCallStartPage extends Component {
 
     this.linkMainPage.element.setAttribute("href", "#/");
     this.linkMainPage.element.setAttribute("tabindex", "0");
-    // console.log("Start game");
     this.initStatisticDataAudioCall();
   }
 
   initStatisticDataAudioCall(){
     const isLogin = localStorage.getItem("token");
     if (isLogin) {
-      // console.log(Авторизован");
       const audiocallStorage = localStorage.getItem("audiocall");
       if (audiocallStorage){
         const audioCallStata = JSON.parse(audiocallStorage);
@@ -74,7 +72,6 @@ export class AudioCallStartPage extends Component {
         dataAudiocall.series = Number(audioCallStata.currSeria);
       }
     }
-    // console.log(dataAudiocall);
   }
 }
 

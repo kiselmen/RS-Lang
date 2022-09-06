@@ -61,7 +61,7 @@ export class DictionaryContentElement extends Component {
 
     this.elementBtnListen = new UIButton(this.elementBtns.element, ["btn", "btn-listen"], "");
     this.elementBtnImg = new Component(this.elementBtnListen.element, "img", ["element-btn__img"],);
-    this.elementBtnImg.element.setAttribute("src", "../../../../../sprint-images/sound-on.svg");
+    this.elementBtnImg.element.setAttribute("src", "./public/sprint-images/sound-on.svg");
     this.elementBtnImg.element.setAttribute("alt", "play");
 
     this.elementBtnAdd = new UIButton(this.elementBtns.element, ["btn"], "Hard");
@@ -100,7 +100,7 @@ export class DictionaryContentElement extends Component {
     const audioExample = this.elementAudioExample.element as HTMLAudioElement;
     this.onClickPLay(this.word);
     if (this.isPlaying) {
-      this.elementBtnImg.element.setAttribute("src", "../../../../../sprint-images/sound-on.svg");
+      this.elementBtnImg.element.setAttribute("src", "./public/sprint-images/sound-on.svg");
       this.elementBtnImg.element.setAttribute("alt", "stop");
       audio.pause();
       audioMeaning.pause();
@@ -108,7 +108,7 @@ export class DictionaryContentElement extends Component {
       this.isPlaying = !this.isPlaying;
     } else {
       this.isPlaying = !this.isPlaying;
-      this.elementBtnImg.element.setAttribute("src", "../../../../../sprint-images/sound-off.svg");
+      this.elementBtnImg.element.setAttribute("src", "./public/sprint-images/sound-off.svg");
       this.elementBtnImg.element.setAttribute("alt", "play");
       audio.play();
       audio.onended = () => {
@@ -116,7 +116,7 @@ export class DictionaryContentElement extends Component {
         audioMeaning.onended = () => {
           audioExample.play();
           audioExample.onended = () => {
-            this.elementBtnImg.element.setAttribute("src", "../../../../../sprint-images/sound-on.svg");
+            this.elementBtnImg.element.setAttribute("src", "./public/sprint-images/sound-on.svg");
             this.elementBtnImg.element.setAttribute("alt", "stop");
             this.isPlaying = !this.isPlaying;
           };

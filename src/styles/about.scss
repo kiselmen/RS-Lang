@@ -99,7 +99,9 @@
 }
 
 /*** About team page ***/
-
+.about-team__page {
+  width: 100%;
+}
 .about-team__title {
   margin-bottom: 30px;
 }
@@ -113,11 +115,13 @@
 .team-member__card {
   display: flex;
   align-items: center;
-  justify-content: center;
   flex-direction: column;
   row-gap: 15px;
   padding-bottom: 10px;
   box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
+  max-width: 475px;
+  width: 100%;
+  min-height: 687px;
   @media (max-width: 320px) {
     box-shadow: unset;
   }
@@ -149,6 +153,7 @@
   row-gap: 10px;
   font-size: 18px;
   min-height: 105px;
+  padding: 15px;
 }
 
 /*** About RS-Lang page ***/

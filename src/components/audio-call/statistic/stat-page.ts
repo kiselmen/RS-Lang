@@ -100,7 +100,7 @@ export class AudioCallStatisticPage extends Component {
       this.totalItem = new Component(listContainer, "li", ["total-item", "total-correct__item"]);
       this.totalItemBtn = new UIButton(this.totalItem.element, ["total-item__btn"], "");
       this.totalItemImg = new Component(this.totalItemBtn.element, "img", ["total-item__img"]);
-      this.totalItemImg.element.setAttribute("src", "../../../../public/volume.svg");
+      this.totalItemImg.element.setAttribute("src", "./public/volume.svg");
       this.totalItemImg.element.setAttribute("alt", "volume");
       this.totalItemAudio = new Component(this.totalItemBtn.element, "audio", ["total-item__audio"]);
       this.totalItemAudio.element.setAttribute("src", BASE_URL + el.audio);
@@ -119,107 +119,109 @@ export class AudioCallStatisticPage extends Component {
       this.createList(this.totalCorrect.element, correctWords);
       this.createList(this.totalWrong.element, wrongWords);
 
-      const audioCallStorage = localStorage.getItem("audiocall") as string;
-      const audiocallStat = JSON.parse(audioCallStorage);
-      audiocallStat.maxSeria = dataAudiocall.maxSeries;
-      audiocallStat.currSeria = dataAudiocall.series;
-      let newWordInThisGame = 0;
-      let lernedWords = 0;
-      
-      getAlluserWords().then( userWords => {
-        correctWords.forEach(correctWord => {
-          const isInUserWords = userWords.filter( (userWord: elementData) => String(userWord.wordId) === String(correctWord.id));
-          if (isInUserWords.length) {
-            const optional = isInUserWords[0].optional;
-            if (optional.isNew === true) {
-              optional.isNew = false;
-              newWordInThisGame++;
-            } 
-            optional.totalAttempts++;
-            optional.correctAnswers++;
-            optional.games.audiocall.totalAttempts++;
-            optional.games.audiocall.correctAnswers++;
-            if (isInUserWords[0].difficulty === "normal") {
-              if (optional.games.sprint.correctAnswers + optional.games.sprint.correctAnswers >= 3) {
-                isInUserWords[0].difficulty = "study";
-                optional.learnDate = getTodayInString();
-                optional.learned = "yes";
-                lernedWords++;
+      if (localStorage.getItem("token")) {
+        const audioCallStorage = localStorage.getItem("audiocall") as string;
+        const audiocallStat = JSON.parse(audioCallStorage);
+        audiocallStat.maxSeria = dataAudiocall.maxSeries;
+        audiocallStat.currSeria = dataAudiocall.series;
+        let newWordInThisGame = 0;
+        let lernedWords = 0;
+        
+        getAlluserWords().then( userWords => {
+          correctWords.forEach(correctWord => {
+            const isInUserWords = userWords.filter( (userWord: elementData) => String(userWord.wordId) === String(correctWord.id));
+            if (isInUserWords.length) {
+              const optional = isInUserWords[0].optional;
+              if (optional.isNew === true) {
+                optional.isNew = false;
+                newWordInThisGame++;
+              } 
+              optional.totalAttempts++;
+              optional.correctAnswers++;
+              optional.games.audiocall.totalAttempts++;
+              optional.games.audiocall.correctAnswers++;
+              if (isInUserWords[0].difficulty === "normal") {
+                if (optional.games.sprint.correctAnswers + optional.games.sprint.correctAnswers >= 3) {
+                  isInUserWords[0].difficulty = "study";
+                  optional.learnDate = getTodayInString();
+                  optional.learned = "yes";
+                  lernedWords++;
+                }
+              } else if (isInUserWords[0].difficulty === "hard") {
+                if (optional.games.sprint.correctAnswers + optional.games.sprint.correctAnswers >= 5) {
+                  isInUserWords[0].difficulty = "study";
+                  optional.learnDate = getTodayInString();
+                  optional.learned = "yes";
+                  lernedWords++;
+                }
               }
-            } else if (isInUserWords[0].difficulty === "hard") {
-              if (optional.games.sprint.correctAnswers + optional.games.sprint.correctAnswers >= 5) {
-                isInUserWords[0].difficulty = "study";
-                optional.learnDate = getTodayInString();
-                optional.learned = "yes";
-                lernedWords++;
-              }
-            }
-            const _word = { id: correctWord.id } as elementData;
-            updateWordInUserWords(_word as elementData, isInUserWords[0].difficulty, optional as wordOptional);
-          } else {
-            const difficulty = "normal";
-            const optional = {} as wordOptional;
-            optional.learned = "no";
-            optional.learnDate = "no";
-            const audiocall = { totalAttempts: 1, correctAnswers: 1 };
-            const sprint = { totalAttempts: 0, correctAnswers: 0 };
-            const games = { sprint: sprint, audiocall: audiocall };
-            optional.games = games;
-            optional.totalAttempts = 1;
-            optional.correctAnswers = 1;
-            optional.isNew = false;
-            newWordInThisGame++;
-            const _word = { id: correctWord.id } as elementData;
-            addWordToUserWords(_word as elementData, difficulty, optional as wordOptional);
-          }
-        });
-        wrongWords.forEach(wrongWord => {
-          const isInUserWords = userWords.filter( (userWord: elementData) => String(userWord.wordId) === String(wrongWord.id));
-          if (isInUserWords.length) {
-            const optional = isInUserWords[0].optional;
-            if (optional.isNew === true) {
-              optional.isNew = false;
-              newWordInThisGame++;
-            }  
-            optional.totalAttempts++;
-            // optional.games.audiocall.totalAttempts = 0;
-            optional.games.audiocall.correctAnswers = 0;
-            if (isInUserWords[0].optional.learned === "yes") {
-              isInUserWords[0].difficulty = "normal";
-              optional.learnDate = "no";
-              optional.learned = "no";
-              lernedWords--;
+              const _word = { id: correctWord.id } as elementData;
+              updateWordInUserWords(_word as elementData, isInUserWords[0].difficulty, optional as wordOptional);
             } else {
+              const difficulty = "normal";
+              const optional = {} as wordOptional;
               optional.learned = "no";
+              optional.learnDate = "no";
+              const audiocall = { totalAttempts: 1, correctAnswers: 1 };
+              const sprint = { totalAttempts: 0, correctAnswers: 0 };
+              const games = { sprint: sprint, audiocall: audiocall };
+              optional.games = games;
+              optional.totalAttempts = 1;
+              optional.correctAnswers = 1;
+              optional.isNew = false;
+              newWordInThisGame++;
+              const _word = { id: correctWord.id } as elementData;
+              addWordToUserWords(_word as elementData, difficulty, optional as wordOptional);
             }
-            const _word = { id: wrongWord.id } as elementData;
-            updateWordInUserWords(_word as elementData, isInUserWords[0].difficulty, optional as wordOptional);
-          } else {
-            const difficulty = "normal";
-            const optional = {} as wordOptional;
-            optional.learned = "no";
-            optional.learnDate = "no";
-            const audiocall = { totalAttempts: 1, correctAnswers: 0 };
-            const sprint = { totalAttempts: 0, correctAnswers: 0 };
-            const games = { sprint: sprint, audiocall: audiocall };
-            optional.games = games;
-            optional.totalAttempts = 1;
-            optional.correctAnswers = 0;
-            optional.isNew = false;
-            newWordInThisGame++;
-            const _word = { id: wrongWord.id } as elementData;
-            addWordToUserWords(_word as elementData, difficulty, optional as wordOptional);
-          }
+          });
+          wrongWords.forEach(wrongWord => {
+            const isInUserWords = userWords.filter( (userWord: elementData) => String(userWord.wordId) === String(wrongWord.id));
+            if (isInUserWords.length) {
+              const optional = isInUserWords[0].optional;
+              if (optional.isNew === true) {
+                optional.isNew = false;
+                newWordInThisGame++;
+              }  
+              optional.totalAttempts++;
+              // optional.games.audiocall.totalAttempts = 0;
+              optional.games.audiocall.correctAnswers = 0;
+              if (isInUserWords[0].optional.learned === "yes") {
+                isInUserWords[0].difficulty = "normal";
+                optional.learnDate = "no";
+                optional.learned = "no";
+                lernedWords--;
+              } else {
+                optional.learned = "no";
+              }
+              const _word = { id: wrongWord.id } as elementData;
+              updateWordInUserWords(_word as elementData, isInUserWords[0].difficulty, optional as wordOptional);
+            } else {
+              const difficulty = "normal";
+              const optional = {} as wordOptional;
+              optional.learned = "no";
+              optional.learnDate = "no";
+              const audiocall = { totalAttempts: 1, correctAnswers: 0 };
+              const sprint = { totalAttempts: 0, correctAnswers: 0 };
+              const games = { sprint: sprint, audiocall: audiocall };
+              optional.games = games;
+              optional.totalAttempts = 1;
+              optional.correctAnswers = 0;
+              optional.isNew = false;
+              newWordInThisGame++;
+              const _word = { id: wrongWord.id } as elementData;
+              addWordToUserWords(_word as elementData, difficulty, optional as wordOptional);
+            }
+          });
+          const curDay = audiocallStat.dayStata.filter( (item: elementData) => item.day === getTodayInString());
+          curDay[0].correctAnswers = String(Number(curDay[0].correctAnswers) + correctWords.length);
+          curDay[0].totalQuestions = String(Number(curDay[0].totalQuestions) + correctWords.length + wrongWords.length);
+          curDay[0].newWords = String(Number(curDay[0].newWords) + newWordInThisGame);
+          curDay[0].learnedWords = String(Number(curDay[0].learnedWords) + lernedWords);
+          localStorage.setItem("audiocall", JSON.stringify(audiocallStat));
+          localStorage.setItem("learnedWords", String(Number(localStorage.getItem("learnedWords") as string) + lernedWords));
+          updateUserStatistics();
         });
-        const curDay = audiocallStat.dayStata.filter( (item: elementData) => item.day === getTodayInString());
-        curDay[0].correctAnswers = String(Number(curDay[0].correctAnswers) + correctWords.length);
-        curDay[0].totalQuestions = String(Number(curDay[0].totalQuestions) + correctWords.length + wrongWords.length);
-        curDay[0].newWords = String(Number(curDay[0].newWords) + newWordInThisGame);
-        curDay[0].learnedWords = String(Number(curDay[0].learnedWords) + lernedWords);
-        localStorage.setItem("audiocall", JSON.stringify(audiocallStat));
-        localStorage.setItem("learnedWords", String(Number(localStorage.getItem("learnedWords") as string) + lernedWords));
-        updateUserStatistics();
-      });
+      }
     }
   };
 

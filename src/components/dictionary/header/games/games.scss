@@ -12,6 +12,9 @@
       color: var(--border-color)
     }
   }
+  &__disabled {
+    display: none;
+  }
 }
 
 .game {

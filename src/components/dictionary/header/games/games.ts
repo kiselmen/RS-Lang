@@ -2,8 +2,8 @@ import { Component } from "../../../../utils/component";
 import "../dictionary.scss";
 
 export class Games extends Component {
-  private dictionaryGames: Component;
-  private dictionaryHeading: Component;
+  dictionaryGames: Component;
+  dictionaryHeading: Component;
   private dictionaryGamesAudio: Component;
   private dictionaryGamesSprint: Component;
 

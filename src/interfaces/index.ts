@@ -12,11 +12,8 @@ export type statisticsData = {
   optional : userOptional
 }
 
-export const BASE_URL = "http://localhost:8081/";
-
-// export type IdValue = {
-//   $oid: string
-// }
+// export const BASE_URL = "http://localhost:8081/";
+export const BASE_URL = "https://react-learnwords-team74.herokuapp.com/";
 
 export interface IWordsElement {
   id: string,

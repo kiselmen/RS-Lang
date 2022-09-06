@@ -4,7 +4,7 @@ import { Games } from "./games/games";
 
 export class DictionaryHeader extends Component {
   chapters: Chapters;
-  private games: Games;
+  games: Games;
   onChangePage: () => void;
 
   constructor(parentNode: HTMLElement, onChangePage: () => void) {
