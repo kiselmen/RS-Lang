@@ -51,6 +51,7 @@
   align-items: center;
   justify-content: flex-start;
   flex-direction: column;
+  border-bottom: 1px solid #494a69;
 }
 .statistics-subTitle {
   font-size: calc(28px + 6 * ((100vw - 320px) / (1440 - 320)));
@@ -150,7 +151,7 @@
   justify-content: space-between;
 }
 .statisticsProfileLogout {
-  font-family: Arial;  
+  font-family: Arial;
   font-weight: 700;
   background: #ffffff;
   cursor: pointer;
