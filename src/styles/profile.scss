@@ -1,11 +1,10 @@
 .profile {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   flex-direction: column;
   max-width: 1440px;
   width: 100%;
-  // min-height: calc(100vh - 82px);
   align-self: flex-start;
   padding: 20px 40px;
   font-family: Arial;
@@ -54,7 +53,7 @@
   flex-direction: column;
 }
 .statistics-subTitle {
-  font-size: calc(26px + 4 * ((100vw - 320px) / (1440 - 320)));
+  font-size: calc(28px + 6 * ((100vw - 320px) / (1440 - 320)));
   font-weight: bold;
   letter-spacing: 3px;
   align-self: center;
@@ -92,6 +91,21 @@
   width: -moz-max-content;
   width: max-content;
   min-width: 310px;
+  transition: linear 0.3s;
+}
+.todayLearnedWords-wrapper:hover {
+  box-shadow: 3px 3px 10px rgb(168 168 168);
+  background: rgb(231, 244, 255);
+  transform: scale(1.1);
+  -webkit-transform: scale(1.07);
+  -moz-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+  -o-transform: scale(1.1);
+  transition: linear 0.3s;
+  -webkit-transition: linear 0.3s;
+  -moz-transition: linear 0.3s;
+  -ms-transition: linear 0.3s;
+  -o-transition: linear 0.3s;
 }
 .learnedWords-counter {
   font-size: 5rem;
@@ -112,7 +126,7 @@
   width: 100%;
 }
 .audiocall-title, .sprint-title, .words-title {
-  font-size: 1.8rem;
+  font-size: calc(24px + 2 * (100vw - 320px) / 1120);
   font-weight: bold;
   letter-spacing: 3px;
   align-self: center;
@@ -136,21 +150,30 @@
   justify-content: space-between;
 }
 .statisticsProfileLogout {
-  font-family: Arial;
-  font-style: normal;
+  font-family: Arial;  
   font-weight: 700;
-  letter-spacing: 2px;
   background: #ffffff;
   cursor: pointer;
   font-weight: 700;
-  box-shadow: 3px 3px 10px rgb(168 168 168), inset 5px 5px 10px rgb(255 253 253);
+  box-shadow: 3px 3px 10px rgb(168 168 168);
+  box-shadow: inset 0 0 0 0 #43b4ff;
   border-radius: 15px;
   border: 2px solid #dfdfdf;
-  transition: all 200ms ease-in-out;
+  transition: linear 0.4s;
+  -webkit-transition: linear 0.4s;
+  -moz-transition: linear 0.4s;
+  -ms-transition: linear 0.4s;
+  -o-transition: linear 0.4s;
+  font-size: 20px;
 }
 .statisticsProfileLogout:hover {
-  box-shadow: inset 0 0 35px #43b4ff;
-  transition: all 200ms ease-in-out;
+  box-shadow: inset 0 0 40px 40px rgb(231, 244, 255);
+  border: 2px solid #dfdfdf00;
+  transition: linear 0.4s;
+  -webkit-transition: linear 0.4s;
+  -moz-transition: linear 0.4s;
+  -ms-transition: linear 0.4s;
+  -o-transition: linear 0.4s;
 }
 .audiocall-title::before {
   content: "";

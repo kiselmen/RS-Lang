@@ -1,12 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Serif:wght@300;400;500;700&display=swap');
 
 .footer {
-  font-family: 'Roboto Serif', serif;
+  font-family: Arial;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  font-size: 1.2rem;
+  color: #494a69;
   display: flex;
   align-items: center;
   justify-content: space-around;
-  font-size: 18px;
-  font-weight: 700;
+
   padding: 30px 10px;
   border-top: 1px solid #f1f1f1;
   &__disabled {
@@ -36,17 +40,41 @@
     row-gap: 5px;
   }
 }
-
 .footer a {
   text-decoration: none;
-  color: #000000;
-  transition: 0.5s ease;
+  color: #494a69;
+  transition: 0.3s linear;
+  -webkit-transition: 0.3s linear;
+  -moz-transition: 0.3s linear;
+  -ms-transition: 0.3s linear;
+  -o-transition: 0.3s linear;
+  font-weight: bold;
+  padding: 2.5px;
 }
-.footer a:hover, .footer img:hover {
-  transition: 0.5s ease;
-  // -webkit-filter: invert(16%) sepia(87%) saturate(4665%) hue-rotate(276deg) brightness(70%) contrast(122%);
-  //         filter: invert(16%) sepia(87%) saturate(4665%) hue-rotate(276deg) brightness(70%) contrast(122%);
+.footer a:hover {
+  transition: 0.3s linear;
   color: #49b9ff;
+  -webkit-transition: 0.3s linear;
+  -moz-transition: 0.3s linear;
+  -ms-transition: 0.3s linear;
+  -o-transition: 0.3s linear;
+  transform: scale(1.08);
+  -webkit-transform: scale(1.08);
+  -moz-transform: scale(1.08);
+  -ms-transform: scale(1.08);
+  -o-transform: scale(1.08);
+}
+.rs-link__logo {
+  transition: 0.3s linear;
+}
+.rs-link__logo:hover {
+  transition: 0.3s linear;
+  -webkit-filter: invert(63%) sepia(87%) saturate(1846%) hue-rotate(177deg) brightness(102%) contrast(101%);
+          filter: invert(63%) sepia(87%) saturate(1846%) hue-rotate(177deg) brightness(102%) contrast(101%);
+  -webkit-transition: 0.3s linear;
+  -moz-transition: 0.3s linear;
+  -ms-transition: 0.3s linear;
+  -o-transition: 0.3s linear;
 }
 .footer-left, .footer-right {
   display: flex;
