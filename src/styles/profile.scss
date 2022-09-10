@@ -156,25 +156,24 @@
   background: #ffffff;
   cursor: pointer;
   font-weight: 700;
-  box-shadow: 3px 3px 10px rgb(168 168 168);
-  box-shadow: inset 0 0 0 0 #43b4ff;
-  border-radius: 15px;
-  border: 2px solid #dfdfdf;
-  transition: linear 0.4s;
-  -webkit-transition: linear 0.4s;
-  -moz-transition: linear 0.4s;
-  -ms-transition: linear 0.4s;
-  -o-transition: linear 0.4s;
-  font-size: 20px;
+  border-radius: 10px;
+  border: 2px solid #49b9ff;
+  box-shadow: 0 0 40px 40px #49b9ff inset, 0 5px 0 0 #3498db;
+  border-color: #49b9ff;
+  transition: all 200ms ease-in-out;
+  font-size: 18px;
+  letter-spacing: 1.2px;
+  padding: 10px 15px;
+  color: #494a69;
 }
 .statisticsProfileLogout:hover {
-  box-shadow: inset 0 0 40px 40px rgb(231, 244, 255);
-  border: 2px solid #dfdfdf00;
-  transition: linear 0.4s;
-  -webkit-transition: linear 0.4s;
-  -moz-transition: linear 0.4s;
-  -ms-transition: linear 0.4s;
-  -o-transition: linear 0.4s;
+  border: 2px solid #49b9ff;
+  box-shadow: 0 0 0 0 #49b9ff inset, 0 0 0 0 #49b9ff;
+  transition: all 200ms ease-in-out;
+  -webkit-transition: all 200ms ease-in-out;
+  -moz-transition: all 200ms ease-in-out;
+  -ms-transition: all 200ms ease-in-out;
+  -o-transition: all 200ms ease-in-out;
 }
 .audiocall-title::before {
   content: "";

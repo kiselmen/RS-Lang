@@ -8,12 +8,14 @@
   flex-direction: column;
   justify-content: center;
   padding: rem(0) rem(10) rem(30) rem(10);
+  padding-top: 1.25rem;
   &-header {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    column-gap: rem(60);
+    -moz-column-gap: rem(60);
+         column-gap: rem(60);
     padding-bottom: rem(20);
   }
   &-separator {
@@ -52,7 +54,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    column-gap: rem(30);
+    -moz-column-gap: rem(30);
+         column-gap: rem(30);
   }
   &-wrapper__games {
     max-width: rem(200);
@@ -69,7 +72,7 @@
   & .element-questions {
     box-shadow: 0px 0px 3px 3px rgba(162, 219, 254, 0.862745098);
   }
-  // & .explain, 
+  // & .explain,
   // & .example,
   & .btn {
     background: rgba(228, 244, 255, 0.5215686275);
@@ -84,7 +87,7 @@
   & .element-questions {
     box-shadow: 0px 0px 3px 3px #f0f2b6dc;
   }
-  // & .explain, 
+  // & .explain,
   // & .example,
   & .btn {
     background: #f0f2b6dc;
@@ -99,7 +102,7 @@
   & .element-questions {
     box-shadow: 0px 0px 3px 3px #d7f5dddc;
   }
-  // & .explain, 
+  // & .explain,
   // & .example,
   & .btn {
     background: #d7f5dddc;
@@ -114,7 +117,7 @@
   & .element-questions {
     box-shadow: 0px 0px 3px 3px #f5d8cbdc;
   }
-  // & .explain, 
+  // & .explain,
   // & .example,
   & .btn {
     background: #f5d8cbdc;
@@ -129,7 +132,7 @@
   & .element-questions {
     box-shadow: 0px 0px 3px 3px #cfcef0dc;
   }
-  // & .explain, 
+  // & .explain,
   // & .example,
   & .btn {
     background: #cfcef0dc;
@@ -144,7 +147,7 @@
   & .element-questions {
     box-shadow: 0px 0px 3px 3px #e4cef0dc;
   }
-  // & .explain, 
+  // & .explain,
   // & .example,
   & .btn {
     background: #e4cef0dc;
@@ -159,7 +162,7 @@
   & .element-questions {
     box-shadow: 0px 0px 3px 3px #bbbdbddc;
   }
-  // & .explain, 
+  // & .explain,
   // & .example,
   & .btn {
     background: #bbbdbddc;

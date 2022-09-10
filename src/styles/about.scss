@@ -45,7 +45,7 @@
   -o-transition: all 200ms ease-in-out;
 }
 .about-btn.active {
-  box-shadow: 0 0 40px 40px #4276d9 inset, 0 0 0 0 #2C3D82;
+  box-shadow: 0 0 0 0 #4276d9 inset, 0 0 0 0 #2c3d8200;
   border-color: #4276d9;
   transform: translateY(5px);
   -webkit-transform: translateY(5px);
@@ -80,7 +80,7 @@
 .about-btn:hover {
   color: black;
   background: #ffff;
-  box-shadow: 0 0 10px 0 #3498db inset, 0 5px 0 0 #3498db;
+  box-shadow: 0 0 10px 0 #3498db inset, 0 0 0 0 #3498db;
   transition: all 200ms ease-in-out;
   -webkit-transition: all 200ms ease-in-out;
   -moz-transition: all 200ms ease-in-out;
@@ -197,7 +197,7 @@
     align-self: center;
     justify-content: center;
   }
-  .about {    
+  .about {
     padding: 40px 0 10px 0;
   }
 }
