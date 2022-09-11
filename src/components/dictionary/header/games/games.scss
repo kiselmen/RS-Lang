@@ -1,7 +1,7 @@
 .games {
   display: flex;
   justify-content: space-between;
-  padding: rem(3.2);
+
   & a {
     text-decoration: none;
     color: inherit;
@@ -9,7 +9,7 @@
     background: white;
     &:visited {
       text-decoration: none;
-      color: var(--border-color)
+      color: var(--active-color)
     }
   }
   &__disabled {

@@ -1,10 +1,11 @@
 .chapters {
   width: rem(220);
-  border: rem(4) solid #a2dbfedc;
-  padding: rem(3.2) rem(16) rem(3.2) rem(3.2);
+  border: rem(4) solid #49b9ff;
+  padding: 8px;
   position: relative;
   border-radius: rem(30);
   background: white;
+  font-weight: 700;
   cursor: pointer;
   &-list {
     position: absolute;
@@ -47,6 +48,10 @@
       padding: rem(3.2);
       border-bottom: rem(1) solid white;
       cursor: pointer;
+      flex-wrap: 500;
+      padding: 3px 0;
+      padding: 5px 6px;
+      font-weight: 600;
       &:hover {
         background: rgba(255, 255, 255, 0.329);
       }
@@ -56,6 +61,8 @@
     }
     &.open {
       display: block;
+      margin-top: 5px;
+      border-radius: 5px;
     }
   }
 }
