@@ -1,11 +1,10 @@
 .profile {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   flex-direction: column;
   max-width: 1440px;
   width: 100%;
-  // min-height: calc(100vh - 82px);
   align-self: flex-start;
   padding: 20px 40px;
   font-family: Arial;
@@ -54,7 +53,7 @@
   flex-direction: column;
 }
 .statistics-subTitle {
-  font-size: calc(26px + 4 * ((100vw - 320px) / (1440 - 320)));
+  font-size: calc(28px + 6 * ((100vw - 320px) / (1440 - 320)));
   font-weight: bold;
   letter-spacing: 3px;
   align-self: center;
@@ -112,7 +111,7 @@
   width: 100%;
 }
 .audiocall-title, .sprint-title, .words-title {
-  font-size: 1.8rem;
+  font-size: calc(24px + 2 * (100vw - 320px) / 1120);
   font-weight: bold;
   letter-spacing: 3px;
   align-self: center;
