@@ -18,7 +18,7 @@ class AboutTeam extends Component {
     this.secondMemberCard = new TeamMemberCard(this.contentWrapper.element, "Max", "https://github.com/maxomeleneckii", "maxomeleneckii",
       ["- Project analysis", "- Development of the project architecture", "- Dictionary layout", "- Layout of Audiocall mini-game", "- Functionality for Audiocall mini-game", "- Stylization of the project", "- Adaptive layout", "- Project presentation"], "./public/about-images/maxomeleneckii.jpg");
     this.thirdMemberCard = new TeamMemberCard(this.contentWrapper.element, "Alexander", "https://github.com/pitbrest", "pitbrest",
-      ["- About layout, styling and adaptive", "- Sprint layout, styling and adaptive", "- Profile layout, styling and adaptive", "- Functionality for the Sprint mini-game", "- Implementation Profile statistics and graphs", "- Footer layout"], "./public/about-images/pitbrest.jpg");
+      ["- About layout, styling and adaptive", "- Sprint layout, styling and adaptive", "- Profile layout, styling and adaptive", "- Functionality for the Sprint mini-game", "- Implementation Profile statistics and graphs", "- Footer layout"], "./public/about-images/me.jpg");
 
     this.element.style.display = "none";
   }
