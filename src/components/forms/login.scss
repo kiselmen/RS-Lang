@@ -5,14 +5,16 @@
   font-family: 'Roboto Serif', serif;
   width: rem(380);
   height: rem(380);
-  box-shadow: 0px 0px 5px 1px;
-  border-radius: 50%;
+  box-shadow: 0px 0px 5px 1px #ffff;
+  border-radius: 10px;
   padding: rem(10);
-  background: #0061ff54;
-  color: black;
+  background: #a2dafe;
+  color: #494a69;
   font-weight: 500;
   margin: 20px 0px;
-  @media (max-width:380px) {
+  @media(max-width:380px)
+
+{
     box-shadow: none;
     border-radius: 0;
     margin: 0;
@@ -45,19 +47,21 @@
     }
     @media (max-width: 480px) {
       box-shadow: unset;
+      padding: 0;
+      margin: 0;
     }
 }
 
 .item{
-  &-label{  
-    margin-right: 20px;
-  }
   &-checkbox{
+    border-radius: 4px;
     width: 20px;
     height: 20px;
     cursor: pointer;
-    background: rgba(255, 255, 255, 0.301);
-    &__active{
+    background: rgb(255, 255, 255);
+    &__active
+
+{
       background: url(../../../public/Checked_Checkbox.svg) no-repeat;
       background-size: 100%;
     }
@@ -67,33 +71,69 @@
   }
   &-input {
     height: 25px;
-    background-color: transparent;
+    background-color: #ffff;
     outline: none;
     border: none;
-    border-bottom: 2px solid #fff;
+    border-radius: 5px;
+    box-shadow: inset 0 0 10px 20px #ffff;
     text-align: center;
     font-family: inherit;
     font-size: 18px;
     width: 100%;
     color: black;
-  }
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+}
 }
 
-.btn-login {
-  background: transparent;
-  box-shadow: unset;
-  border: 3px solid white;
-  &:hover {
-    background: rgba(255, 255, 255, 0.349);
-    color: white;
-  }
+// .btn-login {
+//   background: transparent;
+//   box-shadow: unset;
+//   border: 3px solid white;
+//   &:hover {
+//     background: rgba(255, 255, 255, 0.349);
+//     color: white;
+//   }
+// }
+// .btn-register {
+//   background: transparent;
+//   box-shadow: unset;
+//   &:hover {
+//     color: white;
+//     text-decoration: underline;
+//   }
+// }
+.container-login:hover {
+  transform: scale(1.01);
+  -webkit-transform: scale(1.01);
+  -moz-transform: scale(1.01);
+  -ms-transform: scale(1.01);
+  -o-transform: scale(1.01);
 }
-
-.btn-register {
-  background: transparent;
-  box-shadow: unset;
-  &:hover {
-    color: white;
-    text-decoration: underline;
-  }
+.form .item:nth-child(4) {
+  margin-top: 13px !important;
+}
+.form .btn {
+  color: #494a69;
+  border: 2px solid #49b9ff;
+  box-shadow: 0 0 40px 40px #49b9ff inset;
+  transition: all 200ms ease-in-out;
+  -moz-transition: all 200ms ease-in-out;
+  -ms-transition: all 200ms ease-in-out;
+  -o-transition: all 200ms ease-in-out;
+  letter-spacing: 1.25px;
+  width: 115px;
+  margin: 0 5px;
+}
+.form .btn:hover {
+  border: 2px solid #3498db;
+  background: #ffff;
+  box-shadow: 0 0 0 0 #49b9ff inset;
+  transition: all 200ms ease-in-out;
+  -webkit-transition: all 200ms ease-in-out;
+  -moz-transition: all 200ms ease-in-out;
+  -ms-transition: all 200ms ease-in-out;
+  -o-transition: all 200ms ease-in-out;
 }

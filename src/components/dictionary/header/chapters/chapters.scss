@@ -3,11 +3,12 @@
   border: rem(4) solid #49b9ff;
   padding: 8px;
   position: relative;
-  border-radius: rem(30);
+  border-radius:10px;
   background: white;
   font-weight: 700;
   cursor: pointer;
-  &-list {
+  &-list
+{
     position: absolute;
     width: 100%;
     left: 0;
