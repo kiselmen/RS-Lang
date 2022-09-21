@@ -31,7 +31,7 @@ export class LoginForm extends Component {
 
     const showPassContainer = new Component(this.element, "div", ["form-item", "item"]);
     this.showPass = new Component(showPassContainer.element, "div", ["item-checkbox"], "");
-    new Component(showPassContainer.element, "label", ["item-label"], "Show password");
+    new Component(showPassContainer.element, "label", ["item-label"], "show password");
     this.showPass.element.addEventListener("click", () => this.toggleShow());
 
     const messageContainer = new Component(this.element, "div", ["form-item", "item"], "");
@@ -50,4 +50,4 @@ export class LoginForm extends Component {
       this.passInput.element.setAttribute("type", "password");
     }
   }
-}  
+}

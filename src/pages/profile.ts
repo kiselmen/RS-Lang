@@ -100,20 +100,20 @@ export class Profile extends Component {
       /* Sprint */
       const sprintAccuracy = (+sprintStatistics.dayStata[sprintStatistics.dayStata.length - 1].correctAnswers * 100 / +sprintStatistics.dayStata[sprintStatistics.dayStata.length - 1].totalQuestions).toFixed();
       this.todaySprintStatContent.setCounter(0, sprintStatistics.dayStata[sprintStatistics.dayStata.length - 1].newWords);
-      this.todaySprintStatContent.setCounter(1,  sprintAccuracy + " %");
+      this.todaySprintStatContent.setCounter(1,  Number(sprintAccuracy || 0) + " %");
       this.todaySprintStatContent.setCounter(2, sprintStatistics.maxSeria);
 
       /* Audio Call */
       const audiocallAccuracy = +audiocallStatistics.dayStata[audiocallStatistics.dayStata.length - 1].correctAnswers * 100 / +audiocallStatistics.dayStata[audiocallStatistics.dayStata.length - 1].totalQuestions;
       this.todayAudioCallStatContent.setCounter(0, audiocallStatistics.dayStata[audiocallStatistics.dayStata.length-1].newWords);
-      this.todayAudioCallStatContent.setCounter(1, audiocallAccuracy + " %");
+      this.todayAudioCallStatContent.setCounter(1, Number(audiocallAccuracy || 0) + " %");
       this.todayAudioCallStatContent.setCounter(2, audiocallStatistics.maxSeria);
 
       /* Vocabruary */
       this.todayLearnedWordsCounter.block3Title.element.innerText = "learned words";
 
       this.todayLearnedWordsCounter.setCounter(0, (+sprintStatistics.dayStata[sprintStatistics.dayStata.length - 1].newWords + +audiocallStatistics.dayStata[audiocallStatistics.dayStata.length-1].newWords).toString());
-      this.todayLearnedWordsCounter.setCounter(1, (+sprintAccuracy + +audiocallAccuracy) / 2 + " %");
+      this.todayLearnedWordsCounter.setCounter(1, (((+sprintAccuracy + +audiocallAccuracy) / 2) || 0) + " %");
       this.todayLearnedWordsCounter.setCounter(2, "44");
     }
   };
