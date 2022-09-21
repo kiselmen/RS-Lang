@@ -16,6 +16,10 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 
 *::before,
@@ -76,8 +80,8 @@ button {
   --active-color: #4275d8;
   --border-color: black;
   --shadow-color: #30c5ff;
-  --select-color: #5ad67d;
-  --hard-color: #e69691;
+  --select-color: #e0ffee;
+  --hard-color: #ffdad8;
   --alert-color: #d10a22;
   --chapter-itm-border-color: rgba(137, 105, 180, 0.61);
 }
@@ -93,9 +97,33 @@ body {
 }
 
 .btn-dictionary {
-  max-width: rem(90);
-  width: 100%;
+  color: #FFFF !important;
   text-align: center;
+  padding: 10px;
+  font-weight: 500;
+  letter-spacing: 1.2px;
+  background: #FFFF;
+  border: 2px solid #49b9ff;
+  border-radius: 10px;
+  box-shadow: 0 0 40px 40px #49b9ff inset;
+  transition: all 200ms ease-in-out;
+  -moz-transition: all 200ms ease-in-out;
+  -ms-transition: all 200ms ease-in-out;
+
+}
+.btn-dictionary:hover {
+  color: #494a69 !important;
+  box-shadow: 0 0 0 0 rgb(162 219 254 / 86%) inset;
+  transform: scale(1);
+  transition: all 200ms ease-in-out;
+  -moz-transition: all 200ms ease-in-out;
+  -ms-transition: all 200ms ease-in-out;
+}
+.btn-dictionary:active {
+  transform: translateY(3px);
+  transition: all 200ms ease-in-out;
+  -moz-transition: all 200ms ease-in-out;
+  -ms-transition: all 200ms ease-in-out;
 }
 
 main {
@@ -106,5 +134,8 @@ main {
   padding-top: rem(117);
   align-items: center;
   font-family: Arial, sans-serif;
+  color: #494a69;
+}
+header .logo {
   color: #494a69;
 }

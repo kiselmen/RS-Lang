@@ -8,12 +8,14 @@
   flex-direction: column;
   justify-content: center;
   padding: rem(0) rem(10) rem(30) rem(10);
+  padding-top: 1.25rem;
   &-header {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     flex-wrap: wrap;
-    column-gap: rem(60);
+    -moz-column-gap: rem(60);
+         column-gap: rem(60);
     padding-bottom: rem(20);
   }
   &-separator {
@@ -32,7 +34,7 @@
       position: absolute;
       width: rem(9.6);
       height: rem(9.6);
-      right: rem(4);
+      right: rem(8);
       top: calc(50% - rem(4));
       background: url(../../../../public/downarrow.svg) no-repeat;
     }
@@ -52,116 +54,93 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    column-gap: rem(30);
+    -moz-column-gap: rem(30);
+         column-gap: rem(30);
   }
   &-wrapper__games {
     max-width: rem(200);
     width: 100%;
   }
 }
+.dictionary-pagination .btn {
+  border: 2px solid #2592d7;
+  box-shadow: 0 0 40px 40px #2592d7 inset;
+  transition: all 200ms ease-in-out;
+  -moz-transition: all 200ms ease-in-out;
+  -ms-transition: all 200ms ease-in-out;
+  -o-transition: all 200ms ease-in-out;
+  color: #ffff;
+  letter-spacing: 1.2px;
+}
+.dictionary-pagination .btn:hover {
+  color: #494a69;
+  border: 2px solid #2592d7;
+  box-shadow: 0 0 0 0 #49b9ff inset;
+  transition: all 200ms ease-in-out;
+  -webkit-transition: all 200ms ease-in-out;
+  -moz-transition: all 200ms ease-in-out;
+  -ms-transition: all 200ms ease-in-out;
+  -o-transition: all 200ms ease-in-out;
+  background-color: #ffff;
+}
+.pagination-number {
+  font-weight: 700;
+  color: #494a69;
+}
 
 .dictionary-chapter-1 {
-  & .chapters,
-  & .game,
   & .element {
     border: 0.25rem solid rgba(162, 219, 254, 0.862745098);
   }
   & .element-questions {
     box-shadow: 0px 0px 3px 3px rgba(162, 219, 254, 0.862745098);
   }
-  // & .explain, 
-  // & .example,
-  & .btn {
-    background: rgba(228, 244, 255, 0.5215686275);
-  }
 }
 .dictionary-chapter-2 {
-  & .chapters,
-  & .game,
   & .element {
     border: 0.25rem solid #f0f2b6dc;
   }
   & .element-questions {
     box-shadow: 0px 0px 3px 3px #f0f2b6dc;
   }
-  // & .explain, 
-  // & .example,
-  & .btn {
-    background: #f0f2b6dc;
-  }
 }
 .dictionary-chapter-3 {
-  & .chapters,
-  & .game,
   & .element {
     border: 0.25rem solid #d7f5dddc;
   }
   & .element-questions {
     box-shadow: 0px 0px 3px 3px #d7f5dddc;
   }
-  // & .explain, 
-  // & .example,
-  & .btn {
-    background: #d7f5dddc;
-  }
 }
 .dictionary-chapter-4 {
-  & .chapters,
-  & .game,
   & .element {
     border: 0.25rem solid #f5d8cbdc;
   }
   & .element-questions {
     box-shadow: 0px 0px 3px 3px #f5d8cbdc;
   }
-  // & .explain, 
-  // & .example,
-  & .btn {
-    background: #f5d8cbdc;
-  }
 }
 .dictionary-chapter-5 {
-  & .chapters,
-  & .game,
   & .element {
     border: 0.25rem solid #cfcef0dc;
   }
   & .element-questions {
     box-shadow: 0px 0px 3px 3px #cfcef0dc;
   }
-  // & .explain, 
-  // & .example,
-  & .btn {
-    background: #cfcef0dc;
-  }
 }
 .dictionary-chapter-6 {
-  & .chapters,
-  & .game,
   & .element {
     border: 0.25rem solid #e4cef0dc;
   }
   & .element-questions {
     box-shadow: 0px 0px 3px 3px #e4cef0dc;
   }
-  // & .explain, 
-  // & .example,
-  & .btn {
-    background: #e4cef0dc;
-  }
 }
 .dictionary-chapter-7 {
-  & .chapters,
-  & .game,
   & .element {
     border: 0.25rem solid #bbbdbddc;
   }
   & .element-questions {
     box-shadow: 0px 0px 3px 3px #bbbdbddc;
-  }
-  // & .explain, 
-  // & .example,
-  & .btn {
-    background: #bbbdbddc;
   }
 }

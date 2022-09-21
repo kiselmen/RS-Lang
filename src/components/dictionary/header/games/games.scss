@@ -1,15 +1,17 @@
 .games {
   display: flex;
   justify-content: space-between;
-  padding: rem(3.2);
+
   & a {
     text-decoration: none;
     color: inherit;
-    border-radius: rem(30);
+
     background: white;
-    &:visited {
+    &:visited
+
+{
       text-decoration: none;
-      color: var(--border-color)
+      color: var(--active-color)
     }
   }
   &__disabled {

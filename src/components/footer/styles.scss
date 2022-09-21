@@ -9,9 +9,9 @@
   color: #494a69;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
 
-  padding: 30px 10px;
+  padding: 30px 37px;
   border-top: 1px solid #f1f1f1;
   &__disabled {
     display: none;
@@ -42,12 +42,14 @@
 }
 .footer a {
   text-decoration: none;
-  color: #000000;
+  color: #494a69;
   transition: 0.3s linear;
   -webkit-transition: 0.3s linear;
   -moz-transition: 0.3s linear;
   -ms-transition: 0.3s linear;
   -o-transition: 0.3s linear;
+  font-weight: bold;
+  padding: 2.5px;
 }
 .footer a:hover {
   transition: 0.3s linear;
@@ -67,7 +69,8 @@
 }
 .rs-link__logo:hover {
   transition: 0.3s linear;
-  filter: invert(63%) sepia(87%) saturate(1846%) hue-rotate(177deg) brightness(102%) contrast(101%);
+  -webkit-filter: invert(63%) sepia(87%) saturate(1846%) hue-rotate(177deg) brightness(102%) contrast(101%);
+          filter: invert(63%) sepia(87%) saturate(1846%) hue-rotate(177deg) brightness(102%) contrast(101%);
   -webkit-transition: 0.3s linear;
   -moz-transition: 0.3s linear;
   -ms-transition: 0.3s linear;
