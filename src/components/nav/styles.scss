@@ -15,7 +15,8 @@
     font-weight: 400;
     font-size: 18px;
     line-height: 24px;
-    color: var(--border-color);
+    color: #494a69;
+    font-weight: 500;
     text-decoration: none;
     transition: 0.3s;
     &:hover{
@@ -46,15 +47,19 @@
       left: 0;
       width: 100%;
       overflow: hidden;
-      animation-duration: 1s;
-      animation-name: slidein;
+      -webkit-animation-duration: 1s;
+              animation-duration: 1s;
+      -webkit-animation-name: slidein;
+              animation-name: slidein;
     }
     &.close{
       left: 100%;
       width: 0;
       overflow: hidden;
-      animation-duration: 1s;
-      animation-name: slideout;
+      -webkit-animation-duration: 1s;
+              animation-duration: 1s;
+      -webkit-animation-name: slideout;
+              animation-name: slideout;
     }
     &-body{
       position: absolute;
@@ -83,6 +88,17 @@
   }
 }
 
+@-webkit-keyframes slidein {
+  from {
+    width: 0;
+    left: 100%;
+  }
+  to {
+    width: 100%;
+    left: 0;
+  }
+}
+
 @keyframes slidein {
   from {
     width: 0;
@@ -91,6 +107,17 @@
   to {
     width: 100%;
     left: 0;
+  }
+}
+
+@-webkit-keyframes slideout {
+  from {
+    width: 100%;
+    left: 0;
+  }
+  to {
+    width: 0;
+    left: 100%;
   }
 }
 
